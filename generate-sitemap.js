@@ -16,10 +16,12 @@ const path = require("path");
 
 const ROOT_DIR = __dirname;
 const INDEX_PATH = path.join(ROOT_DIR, "index.html");
-const MARKER = "const SHELVES = ";
+const SHELVES_MARKER = "const SHELVES = ";
+const MATERIALS_MARKER = "const ORIGINAL_MATERIALS = ";
+const MATERI_FOLDER_NAME = "Materi";
 
 // Folder yang dilewati saat scan. Edit sesuai kebutuhan.
-const EXCLUDE_DIRS = new Set(["node_modules", ".git", ".github", "dist", "build"]);
+const EXCLUDE_DIRS = new Set(["node_modules", ".git", ".github", "dist", "build", MATERI_FOLDER_NAME]);
 
 // Warna punggung buku, diambil dari palet HAPPY PRISM, dipakai bergiliran.
 const BOOK_COLORS = [
@@ -33,22 +35,29 @@ function main() {
         process.exit(1);
     }
 
-    const source = fs.readFileSync(INDEX_PATH, "utf8");
-    const block = findArrayBlock(source, MARKER);
+    let source = fs.readFileSync(INDEX_PATH, "utf8");
 
     const shelves = scanShelves(ROOT_DIR);
+    source = replaceArrayBlock(source, SHELVES_MARKER, serializeShelves(shelves));
 
-    const newSource =
-        source.slice(0, block.arrStart) +
-        serializeShelves(shelves) +
-        source.slice(block.arrEnd);
+    const materialGroups = scanOriginalMaterials(ROOT_DIR);
+    source = replaceArrayBlock(source, MATERIALS_MARKER, serializeMaterials(materialGroups));
 
-    fs.writeFileSync(INDEX_PATH, newSource, "utf8");
+    fs.writeFileSync(INDEX_PATH, source, "utf8");
 
     const totalBooks = shelves.reduce((sum, s) => sum + s.books.length, 0);
+    const totalFiles = materialGroups.reduce((sum, g) => sum + g.files.length, 0);
+
     console.log(`✅ index.html diperbarui.`);
-    console.log(`   Rak (mata kuliah) : ${shelves.length}`);
-    console.log(`   Buku (file .html) : ${totalBooks}`);
+    console.log(`   Rak (mata kuliah)      : ${shelves.length}`);
+    console.log(`   Buku (file .html)      : ${totalBooks}`);
+    console.log(`   Grup materi original   : ${materialGroups.length}`);
+    console.log(`   File materi original   : ${totalFiles}`);
+}
+
+function replaceArrayBlock(source, marker, newArrayText) {
+    const block = findArrayBlock(source, marker);
+    return source.slice(0, block.arrStart) + newArrayText + source.slice(block.arrEnd);
 }
 
 /* ---------- Scan folder ---------- */
@@ -90,6 +99,45 @@ function scanShelves(rootDir) {
 
     shelves.sort((a, b) => a.title.localeCompare(b.title, "id"));
     return shelves;
+}
+
+/* ---------- Scan folder Materi/ (materi original, campur jenis file) ---------- */
+
+function scanOriginalMaterials(rootDir) {
+    const materiDir = path.join(rootDir, MATERI_FOLDER_NAME);
+    if (!fs.existsSync(materiDir) || !fs.statSync(materiDir).isDirectory()) {
+        return [];
+    }
+
+    const groups = [];
+    const courseEntries = fs.readdirSync(materiDir, { withFileTypes: true });
+
+    for (const course of courseEntries) {
+        if (!course.isDirectory()) continue;
+        if (course.name.startsWith(".")) continue;
+
+        const courseDir = path.join(materiDir, course.name);
+        const files = fs
+            .readdirSync(courseDir, { withFileTypes: true })
+            .filter((f) => f.isFile() && !f.name.startsWith("."));
+
+        if (files.length === 0) continue;
+
+        const items = files.map((f) => ({
+            name: f.name,
+            url: `${MATERI_FOLDER_NAME}/${course.name}/${f.name}`,
+            ext: path.extname(f.name).replace(".", "").toLowerCase(),
+            _sortKey: f.name
+        }));
+
+        items.sort((a, b) => naturalCompare(normalizeOrdinals(a._sortKey), normalizeOrdinals(b._sortKey)));
+        items.forEach((it) => delete it._sortKey);
+
+        groups.push({ title: course.name, files: items });
+    }
+
+    groups.sort((a, b) => a.title.localeCompare(b.title, "id"));
+    return groups;
 }
 
 /* ---------- Helper ---------- */
@@ -232,6 +280,31 @@ function serializeShelves(shelves) {
     });
 
     return "[\n" + shelfStrs.join(",\n") + "\n  ]";
+}
+
+function serializeMaterials(groups) {
+    const groupStrs = groups.map((group) => {
+        const fileStrs = group.files.map((f) => {
+            return [
+                "              {",
+                `                  name: ${JSON.stringify(f.name)},`,
+                `                  url: ${JSON.stringify(f.url)},`,
+                `                  ext: ${JSON.stringify(f.ext)}`,
+                "              }"
+            ].join("\n");
+        });
+
+        return [
+            "      {",
+            `          title: ${JSON.stringify(group.title)},`,
+            "          files: [",
+            fileStrs.join(",\n"),
+            "          ]",
+            "      }"
+        ].join("\n");
+    });
+
+    return "[\n" + groupStrs.join(",\n") + "\n  ]";
 }
 
 main();
