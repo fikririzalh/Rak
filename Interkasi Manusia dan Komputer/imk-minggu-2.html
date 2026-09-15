@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IMK Minggu 2 — Faktor Manusia dalam Interaksi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#3CB4E6; --emerald:#32B18E; --pink:#F05696; --orange:#FF8040; --yellow:#FFD730;
+  --snow:#F0F0F0; --lightgrey:#D0D0D0; --silver:#959595; --bronze:#B89C57; --magenta:#9C208C; --ink:#001F4F;
+  --paper:#F0F0F0; --card:#FFFFFF; --muted:#46587A; --rule:#D0D0D0;
+  --serif:"Source Serif 4", Georgia, serif;
+  --grot:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --measure:68ch;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:5.5rem;}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:1.0625rem; line-height:1.72; -webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:var(--grot); line-height:1.1; margin:0; font-weight:800; letter-spacing:-0.015em;}
+p{margin:0 0 1.1em;}
+a{color:var(--ink);}
+strong{font-weight:600;}
+code{font-family:var(--grot); background:var(--card); padding:.1em .35em; font-size:.92em;}
+
+.topbar{position:sticky; top:0; z-index:60; background:var(--ink); color:var(--snow); border-bottom:3px solid var(--sky);}
+.topbar-inner{max-width:1220px; margin:0 auto; padding:.6rem 1.25rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;}
+.brandmark{display:flex; align-items:center; gap:.6rem; font-family:var(--grot); font-weight:800; font-size:.95rem;}
+.brandmark .chips{display:flex;}
+.brandmark .chips i{width:9px; height:18px; display:block;}
+.topnav{display:flex; gap:1.1rem; font-family:var(--grot); font-size:.85rem; font-weight:600; flex-wrap:wrap;}
+.topnav a{color:#C9D8EC; text-decoration:none; padding:.2rem 0; border-bottom:2px solid transparent;}
+.topnav a:hover,.topnav a:focus-visible{color:#fff; border-bottom-color:var(--yellow);}
+
+.hero{background:var(--ink); color:var(--snow); padding:3.2rem 1.25rem 3.6rem; position:relative; overflow:hidden;}
+.hero-inner{max-width:1220px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.95fr); gap:3rem; align-items:center;}
+.eyebrow-course{font-family:var(--grot); font-weight:600; font-size:.9rem; color:var(--sky); margin-bottom:1rem;}
+.hero h1{font-size:clamp(2.2rem,5vw,3.7rem); letter-spacing:-0.035em;}
+.hero h1 em{font-style:normal; display:block;}
+.hero-lede{font-size:1.13rem; color:#C9D8EC; max-width:46ch; margin-top:1.3rem;}
+.hero-meta{display:flex; gap:.5rem; flex-wrap:wrap; margin-top:1.8rem;}
+.hero-meta span{font-family:var(--grot); font-size:.78rem; font-weight:600; padding:.35rem .7rem; border:1px solid rgba(240,240,240,.28); border-radius:100px; color:#C9D8EC;}
+
+.stack-diagram{width:100%; height:auto; display:block;}
+.chan{opacity:0; transform:translateX(-14px); animation:slidein .55s ease-out forwards;}
+.chan:nth-of-type(1){animation-delay:.15s} .chan:nth-of-type(2){animation-delay:.3s} .chan:nth-of-type(3){animation-delay:.45s}
+.proc{opacity:0; transform:scale(.85); animation:popin .5s cubic-bezier(.2,.9,.3,1) forwards; transform-origin:center;}
+.proc:nth-of-type(1){animation-delay:.7s} .proc:nth-of-type(2){animation-delay:.85s} .proc:nth-of-type(3){animation-delay:1s}
+.flowline{stroke-dasharray:120; stroke-dashoffset:120; animation:draw .6s ease-out forwards;}
+.flowline.a{animation-delay:1.2s} .flowline.b{animation-delay:1.35s}
+@keyframes slidein{to{opacity:1; transform:none}}
+@keyframes popin{to{opacity:1; transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.chan,.proc,.flowline{opacity:1; transform:none; animation:none; stroke-dashoffset:0}}
+
+.shell{max-width:1220px; margin:0 auto; padding:0 1.25rem; display:grid; grid-template-columns:238px minmax(0,1fr); gap:3.5rem; align-items:start;}
+.sidebar{position:sticky; top:5rem; padding:3rem 0; font-family:var(--grot); font-size:.85rem;}
+.sidebar h4{font-size:.8rem; font-weight:800; color:var(--muted); margin-bottom:.8rem;}
+.sidebar ol{list-style:none; margin:0 0 1.8rem; padding:0;}
+.sidebar li{margin-bottom:.45rem;}
+.sidebar a{text-decoration:none; color:var(--muted); display:block; padding-left:.7rem; border-left:2px solid var(--lightgrey);}
+.sidebar a:hover,.sidebar a:focus-visible{color:var(--ink); border-left-color:var(--pink);}
+.sidebar a.on{color:var(--ink); font-weight:600; border-left-color:var(--pink);}
+
+main{padding:3rem 0 5rem; min-width:0;}
+section{margin-bottom:4.5rem; scroll-margin-top:5.5rem;}
+main > section > p, main > section > ul, main > section > ol{max-width:var(--measure);}
+
+.week-open{margin:0 0 3rem; padding:2rem 2rem 2.2rem; color:var(--snow); background:linear-gradient(115deg,#001F4F 0%, #6A1A6B 55%, #F05696 140%);}
+.week-open .num{font-family:var(--grot); font-weight:800; font-size:.9rem; color:var(--yellow);}
+.week-open h2{font-size:clamp(1.7rem,3.4vw,2.4rem); margin:.5rem 0 .8rem; letter-spacing:-0.03em;}
+.week-open p{color:#D6E3F2; max-width:58ch; margin:0;}
+.week-open .goals{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.9rem; margin-top:1.6rem;}
+.week-open .goals div{font-family:var(--grot); font-size:.85rem; line-height:1.4; color:#EAF2FB; border-top:2px solid rgba(255,255,255,.35); padding-top:.6rem;}
+
+h2.sec{font-size:1.55rem; letter-spacing:-0.025em; margin-bottom:.35rem;}
+.sec-no{font-family:var(--grot); font-weight:600; font-size:.85rem; color:var(--muted); display:block; margin-bottom:.4rem;}
+h3.sub{font-size:1.1rem; margin:2rem 0 .6rem; font-weight:600;}
+.lead-rule{width:64px; height:4px; margin:.9rem 0 1.5rem;}
+
+ul.plain, ol.plain{padding-left:1.15rem; margin:0 0 1.2em;}
+ul.plain li, ol.plain li{margin-bottom:.5em;}
+
+.note{border-left:5px solid var(--bronze); background:#FBF7EC; padding:1.1rem 1.3rem; margin:1.8rem 0; max-width:var(--measure);}
+.note h4{font-family:var(--grot); font-size:.95rem; color:#6E5A20; margin-bottom:.45rem;}
+.note p:last-child{margin-bottom:0;}
+
+.verdict{display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1.8rem 0;}
+.verdict > div{padding:1.1rem 1.2rem; background:var(--card);}
+.verdict .good{border-top:5px solid var(--emerald);}
+.verdict .bad{border-top:5px solid var(--pink);}
+.verdict h4{font-family:var(--grot); font-size:.92rem; margin-bottom:.5rem;}
+.verdict p{font-size:.95rem; margin:0;}
+
+table{border-collapse:collapse; width:100%; margin:1.6rem 0; font-size:.94rem; background:var(--card);}
+th,td{text-align:left; padding:.7rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top;}
+th{font-family:var(--grot); font-size:.82rem; font-weight:700; background:var(--ink); color:var(--snow); border-bottom:none;}
+tbody tr:last-child td{border-bottom:none;}
+
+.concept-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--rule); margin:1.8rem 0; border:1px solid var(--rule);}
+.concept-grid > div{background:var(--card); padding:1.15rem 1.2rem;}
+.concept-grid h4{font-family:var(--grot); font-size:.95rem; margin-bottom:.4rem;}
+.concept-grid p{font-size:.92rem; margin:0; color:#2B3E5E;}
+.concept-grid .tag{display:inline-block; width:26px; height:5px; margin-bottom:.7rem;}
+
+.lab{background:var(--card); border:1px solid var(--rule); padding:1.4rem 1.5rem 1.6rem; margin:2rem 0;}
+.lab-head{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:.8rem;}
+.lab-head h4{font-family:var(--grot); font-size:1.05rem;}
+.lab-kind{font-family:var(--grot); font-size:.75rem; font-weight:700; color:var(--ink); background:var(--yellow); padding:.2rem .55rem;}
+.lab p.hint{font-size:.94rem; color:#2B3E5E;}
+button{font-family:var(--grot); font-weight:700; font-size:.88rem; cursor:pointer;}
+.btn{background:var(--ink); color:var(--snow); border:none; padding:.6rem 1.1rem;}
+.btn:hover{background:#0A3F7A;}
+.btn.ghost{background:transparent; color:var(--ink); border:2px solid var(--ink);}
+.btn.ghost:hover{background:var(--ink); color:var(--snow);}
+:focus-visible{outline:3px solid var(--orange); outline-offset:2px;}
+
+#fittsArena{position:relative; height:250px; background:var(--paper); border:1px dashed var(--silver); margin:1rem 0; overflow:hidden;}
+#fittsTarget{position:absolute; border:none; border-radius:50%; background:var(--sky); cursor:pointer;}
+.readout{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:.9rem; margin-top:1rem;}
+.readout div{border-top:3px solid var(--lightgrey); padding-top:.5rem;}
+.readout .v{font-family:var(--grot); font-weight:800; font-size:1.5rem; display:block; line-height:1.1;}
+.readout .k{font-family:var(--grot); font-size:.76rem; color:var(--muted);}
+
+#stroopWord{font-family:var(--grot); font-weight:800; font-size:3rem; text-align:center; padding:1.6rem 0; letter-spacing:-0.02em;}
+.stroop-btns{display:grid; grid-template-columns:repeat(4,1fr); gap:.6rem;}
+.stroop-btns button{padding:.65rem .3rem; border:2px solid var(--ink); background:var(--card); color:var(--ink);}
+.stroop-btns button:hover{background:var(--ink); color:var(--snow);}
+
+.gestalt-controls{display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem;}
+.gestalt-controls button{padding:.45rem .8rem; border:2px solid var(--lightgrey); background:var(--card); color:var(--muted);}
+.gestalt-controls button[aria-pressed="true"]{border-color:var(--ink); background:var(--ink); color:var(--snow);}
+#gestaltStage{background:var(--paper); border:1px dashed var(--silver); padding:1rem;}
+#gestaltStage svg{display:block; width:100%; height:auto;}
+.gdot{transition:fill .35s ease, transform .35s ease, r .35s ease;}
+@media (prefers-reduced-motion:reduce){ .gdot{transition:none} }
+
+#peripheryStage{position:relative; height:230px; background:var(--paper); border:1px dashed var(--silver); overflow:hidden;}
+#peripheryDot{position:absolute; width:16px; height:16px; border-radius:50%; background:var(--pink); top:50%; left:8%; transform:translateY(-50%);}
+#peripheryFocus{position:absolute; right:8%; top:50%; transform:translate(50%,-50%); font-family:var(--grot); font-weight:800; font-size:1.6rem; color:var(--ink);}
+
+.swatch-row{display:flex; align-items:center; gap:.6rem;}
+.swatch{width:26px; height:26px; border:1px solid rgba(0,31,79,.2); flex:none;}
+.pass{font-family:var(--grot); font-weight:700; font-size:.78rem; padding:.15rem .5rem; color:#fff;}
+.pass.ok{background:var(--emerald);}
+.pass.no{background:var(--magenta);}
+.pass.mid{background:var(--bronze);}
+
+.task{background:var(--card); border-left:5px solid var(--sky); padding:1.2rem 1.3rem; margin:1.2rem 0; max-width:var(--measure);}
+.task h4{font-family:var(--grot); font-size:1rem; margin-bottom:.5rem;}
+.task.b{border-left-color:var(--emerald);}
+.task.c{border-left-color:var(--orange);}
+.task p{font-size:.96rem;}
+.task p:last-child{margin-bottom:0;}
+
+details{border-bottom:1px solid var(--rule); max-width:var(--measure);}
+details summary{cursor:pointer; padding:.85rem 0; font-family:var(--grot); font-weight:600; font-size:.98rem; list-style:none; display:flex; gap:.7rem;}
+details summary::-webkit-details-marker{display:none;}
+details summary::before{content:"+"; color:var(--pink); font-weight:800;}
+details[open] summary::before{content:"–";}
+details .body{padding:0 0 1.1rem 1.4rem; font-size:.96rem; color:#2B3E5E;}
+details .body p:last-child{margin-bottom:0;}
+
+footer{background:var(--ink); color:#C9D8EC; padding:3rem 1.25rem 3.5rem; font-size:.94rem;}
+.footer-inner{max-width:1220px; margin:0 auto;}
+footer h4{font-family:var(--grot); color:var(--snow); font-size:1.05rem; margin-bottom:.9rem;}
+footer ul{list-style:none; padding:0; margin:0;}
+footer li{margin-bottom:.6rem; max-width:62ch;}
+.spectrum-bar{display:flex; height:8px; margin-top:2.5rem;}
+.spectrum-bar i{flex:1;}
+
+@media (max-width:980px){
+  .hero-inner{grid-template-columns:1fr; gap:2.2rem;}
+  .shell{grid-template-columns:1fr; gap:0;}
+  .sidebar{position:static; padding:2rem 0 0;}
+  .sidebar ol{columns:2; column-gap:1.5rem;}
+}
+@media (max-width:620px){
+  body{font-size:1rem;}
+  .verdict{grid-template-columns:1fr;}
+  .sidebar ol{columns:1;}
+  .stroop-btns{grid-template-columns:repeat(2,1fr);}
+  .week-open{padding:1.5rem 1.3rem 1.8rem;}
+  #stroopWord{font-size:2.2rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brandmark">
+      <span class="chips">
+        <i style="background:#3CB4E6"></i><i style="background:#32B18E"></i><i style="background:#FFD730"></i><i style="background:#FF8040"></i><i style="background:#F05696"></i>
+      </span>
+      IMK · Teknik Informatika
+    </div>
+    <nav class="topnav" aria-label="Navigasi utama">
+      <a href="#kanal">Kanal masuk</a>
+      <a href="#proses">Pemrosesan</a>
+      <a href="#keluar">Kanal keluar</a>
+      <a href="#lab">Ruang uji</a>
+      <a href="#latihan">Latihan</a>
+      <a href="#referensi">Referensi</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow-course">Modul 1 · Pertemuan 2</div>
+      <h1>Faktor Manusia<em>dalam Interaksi</em></h1>
+      <p class="hero-lede">Sebelum merancang satu piksel pun, kenali dulu spesifikasi perangkat yang akan memakainya: mata dengan sudut tajam sempit, memori kerja empat kotak, dan tangan yang bisa cepat atau tepat tapi jarang keduanya sekaligus.</p>
+      <div class="hero-meta">
+        <span>Persepsi &amp; kanal indera</span>
+        <span>Atensi &amp; memori</span>
+        <span>Model mental &amp; kesalahan</span>
+        <span>Fitts &amp; Hick</span>
+        <span>3 percobaan interaktif</span>
+      </div>
+    </div>
+    <div>
+      <svg class="stack-diagram" viewBox="0 0 560 300" role="img" aria-label="Diagram manusia sebagai sistem input, proses, output: mata telinga kulit menuju atensi memori kognisi menuju gerak tangan suara tatapan">
+        <g font-family="Bricolage Grotesque, sans-serif" font-size="13" font-weight="700" fill="#EAF2FB">
+          <g class="chan"><rect x="20" y="30" width="130" height="46" fill="none" stroke="#3CB4E6" stroke-width="2.5"/><text x="35" y="58">Penglihatan</text></g>
+          <g class="chan"><rect x="20" y="90" width="130" height="46" fill="none" stroke="#32B18E" stroke-width="2.5"/><text x="42" y="118">Pendengaran</text></g>
+          <g class="chan"><rect x="20" y="150" width="130" height="46" fill="none" stroke="#FFD730" stroke-width="2.5"/><text x="55" y="178">Peraba</text></g>
+        </g>
+        <path class="flowline a" d="M150 108 C 220 108, 220 150, 270 150" fill="none" stroke="#959595" stroke-width="2"/>
+        <g font-family="Bricolage Grotesque, sans-serif" font-size="13" font-weight="800" fill="#001F4F">
+          <g class="proc"><circle cx="330" cy="90" r="42" fill="#F05696"/><text x="330" y="95" text-anchor="middle" fill="#fff">Atensi</text></g>
+          <g class="proc"><circle cx="330" cy="180" r="46" fill="#FF8040"/><text x="330" y="177" text-anchor="middle" fill="#fff">Memori</text><text x="330" y="192" text-anchor="middle" fill="#fff" font-size="11">kerja</text></g>
+          <g class="proc"><circle cx="330" cy="270" r="42" fill="#9C208C"/><text x="330" y="275" text-anchor="middle" fill="#fff">Kognisi</text></g>
+        </g>
+        <path class="flowline b" d="M372 180 C 440 180, 440 60, 500 60" fill="none" stroke="#959595" stroke-width="2"/>
+        <g font-family="Bricolage Grotesque, sans-serif" font-size="12" font-weight="700" fill="#C9D8EC">
+          <text x="440" y="45">gerak tangan</text>
+          <text x="440" y="175" text-anchor="end" dx="60">suara</text>
+          <text x="440" y="290" text-anchor="end" dx="60">tatapan</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <h4>Isi modul</h4>
+    <ol>
+      <li><a href="#kerangka">2.1 Kerangka IPO manusia</a></li>
+      <li><a href="#kanal">2.2 Penglihatan</a></li>
+      <li><a href="#kanal-lain">2.3 Pendengaran &amp; haptik</a></li>
+      <li><a href="#warna">2.4 Warna &amp; kontras</a></li>
+      <li><a href="#gestalt">2.5 Hukum Gestalt</a></li>
+      <li><a href="#proses">2.6 Atensi</a></li>
+      <li><a href="#memori">2.7 Memori kerja</a></li>
+      <li><a href="#kognisi">2.8 Model mental &amp; beban kognitif</a></li>
+      <li><a href="#error">2.9 Slip &amp; mistake</a></li>
+      <li><a href="#keluar">2.10 Fitts &amp; Hick</a></li>
+      <li><a href="#individu">2.11 Perbedaan individu</a></li>
+      <li><a href="#studi-kasus">2.12 Bedah kasus: konfirmasi transfer</a></li>
+      <li><a href="#lab">Ruang uji</a></li>
+      <li><a href="#latihan">Latihan</a></li>
+      <li><a href="#kritis">Pertanyaan kritis</a></li>
+      <li><a href="#referensi">Referensi</a></li>
+    </ol>
+  </aside>
+
+  <main>
+
+  <div class="week-open">
+    <div class="num">Minggu 2</div>
+    <h2>Faktor manusia dalam interaksi</h2>
+    <p>Minggu lalu kita menetapkan bahwa sistem harus menyesuaikan diri pada manusia. Minggu ini kita membedah manusianya: kapasitas kanal inderanya, batas ruang kerjanya, dan mode kegagalannya yang bisa diprediksi sebelum satu baris kode pun ditulis.</p>
+    <div class="goals">
+      <div>Memetakan manusia sebagai sistem input–proses–output</div>
+      <div>Menjelaskan batas persepsi, atensi, dan memori kerja</div>
+      <div>Menerapkan hukum Gestalt pada tata letak</div>
+      <div>Menghitung Hukum Fitts dan Hukum Hick pada kasus nyata</div>
+      <div>Membedakan slip dan mistake serta solusinya</div>
+    </div>
+  </div>
+
+  <section id="kerangka">
+    <span class="sec-no">2.1</span>
+    <h2 class="sec">Kerangka besar: manusia sebagai sistem input–proses–output</h2>
+    <div class="lead-rule" style="background:var(--sky)"></div>
+    <p>Semua materi minggu ini duduk di satu kerangka yang sama: <strong>saluran masuk</strong> (mata, telinga, kulit) mengumpulkan rangsangan, <strong>pemrosesan</strong> (atensi, memori, penalaran) mengubahnya menjadi keputusan, dan <strong>saluran keluar</strong> (gerak tangan, suara, tatapan) mengeksekusinya kembali ke dunia.</p>
+    <p>Kegunaan kerangka ini muncul saat Anda menemukan masalah usability. Anda tidak berhenti pada kesimpulan "susah dipakai" — Anda bertanya: <strong>tahap mana yang gagal?</strong> Pengguna tidak melihatnya (input), tidak memahaminya (proses), atau tidak berhasil mengeksekusinya (output)? Tiga diagnosis ini menghasilkan tiga solusi yang sama sekali berbeda. Kesalahan paling umum pada tugas mahasiswa adalah memperbaiki tampilan padahal yang rusak justru model mental pengguna.</p>
+    <div class="note">
+      <h4>Cara memakai kerangka ini saat mengevaluasi</h4>
+      <p>Untuk setiap temuan usability, paksa diri Anda menulis satu kalimat: <em>"Ini kegagalan input, proses, atau output?"</em> Tanpa langkah ini, laporan evaluasi Anda berhenti pada opini seperti "kurang menarik" — dan itu bukan temuan IMK.</p>
+    </div>
+  </section>
+
+  <section id="kanal">
+    <span class="sec-no">2.2</span>
+    <h2 class="sec">Saluran masuk yang mendominasi: penglihatan</h2>
+    <div class="lead-rule" style="background:var(--emerald)"></div>
+    <p>Sekitar 80% informasi antarmuka masuk lewat mata, sehingga inilah kanal yang paling penting Anda kenali detailnya.</p>
+    <p><strong>Fovea sangat sempit.</strong> Area penglihatan tajam hanya sekitar 1–2 derajat sudut pandang — kira-kira selebar kuku ibu jari pada jarak lengan. Artinya pada satu waktu pengguna hanya benar-benar <em>membaca</em> beberapa karakter. Segala sesuatu di luar itu adalah penglihatan perifer: buram, buta warna sebagian, tetapi sangat peka terhadap gerakan dan kontras. Coba sendiri seberapa buram penglihatan perifer Anda pada <a href="#lab-periphery">percobaan di ruang uji</a>.</p>
+    <div class="concept-grid">
+      <div><span class="tag" style="background:var(--sky)"></span><h4>Notifikasi yang tak terlihat</h4><p>Elemen penting jauh dari titik pandang tidak akan terdeteksi kecuali bergerak atau sangat kontras — penjelasan mekanistik untuk <em>change blindness</em>.</p></div>
+      <div><span class="tag" style="background:var(--emerald)"></span><h4>Kedekatan umpan balik</h4><p>Letakkan pesan hasil aksi dekat tempat aksi terjadi. Error di atas halaman untuk field di bawah melawan anatomi mata.</p></div>
+      <div><span class="tag" style="background:var(--pink)"></span><h4>Animasi yang membajak perhatian</h4><p>Iklan berkedip bekerja karena membajak sensitivitas perifer terhadap gerakan — alasan etis mengapa animasi tanpa tujuan adalah bentuk pencurian atensi.</p></div>
+    </div>
+    <p><strong>Membaca bukan proses linear.</strong> Mata melompat (<em>saccade</em>) 4–5 kali per detik dengan fiksasi 200–250 ms. Di layar, orang tidak membaca — mereka memindai. Nielsen menemukan pola-F: baris atas dibaca relatif penuh, sisanya diperiksa di tepi kiri. Implikasinya: <strong>kata pertama tiap baris dan tiap item menanggung beban informasi terbesar</strong>. "Klik di sini untuk melihat riwayat transaksi" lebih buruk daripada "Riwayat transaksi" — bukan karena lebih panjang, tapi karena kata pembawa maknanya tersembunyi di belakang.</p>
+  </section>
+
+  <section id="kanal-lain">
+    <span class="sec-no">2.3</span>
+    <h2 class="sec">Dua kanal yang sering dilupakan</h2>
+    <div class="lead-rule" style="background:var(--yellow)"></div>
+    <div class="verdict">
+      <div class="good"><h4>Pendengaran</h4><p>Telinga tidak punya "kelopak" dan tidak perlu diarahkan — sangat efektif untuk peringatan mendesak. Tapi bersifat sementara: begitu lewat, hilang. Gunakan untuk menarik perhatian ke layar, jangan untuk menyampaikan isi rinci.</p></div>
+      <div class="good"><h4>Haptik</h4><p>Getaran bekerja saat mata sibuk dan telinga terganggu. Getaran halus keyboard ponsel menggantikan umpan balik taktil tombol fisik yang hilang — pemindahan prinsip <em>feedback</em> ke kanal lain.</p></div>
+    </div>
+    <p>Aplikasi yang hanya mengandalkan bunyi "transaksi berhasil" gagal total di lingkungan bising seperti pasar atau jalan raya. Ini alasan mengapa status penting tidak boleh bergantung pada satu kanal indera saja — prinsip yang sama dengan larangan menjadikan warna sebagai satu-satunya pembawa makna.</p>
+  </section>
+
+  <section id="warna">
+    <span class="sec-no">2.4</span>
+    <h2 class="sec">Warna: saluran yang paling sering disalahgunakan</h2>
+    <div class="lead-rule" style="background:var(--orange)"></div>
+    <p>Retina memiliki tiga jenis sel kerucut. Sekitar 8% laki-laki dan 0,5% perempuan memiliki defisiensi penglihatan warna, mayoritas pada sumbu merah-hijau. Pada kelas berisi 40 mahasiswa, kemungkinan besar ada yang tidak melihat perbedaan status "berhasil" hijau dan "gagal" merah pada aplikasi Anda.</p>
+    <p>Karena itu berlaku aturan keras: <strong>warna tidak boleh menjadi satu-satunya pembawa makna</strong> — harus selalu disertai ikon, teks, bentuk, atau posisi. Ini bukan sekadar anjuran etis, ini persyaratan WCAG 1.4.1. Kontras luminansi juga mengalahkan kontras warna: teks kuning di atas putih tetap tidak terbaca meski warnanya sangat berbeda, karena sistem visual memisahkan kanal terang-gelap dari kanal warna, dan kanal terang-gelap jauh lebih tajam.</p>
+
+    <div class="lab">
+      <div class="lab-head">
+        <h4>Rasio kontras palet HAPPY PRISM terhadap Snow White (#F0F0F0)</h4>
+        <span class="lab-kind">dihitung otomatis</span>
+      </div>
+      <table id="contrastTable">
+        <thead><tr><th>Warna</th><th style="width:16%">Rasio</th><th style="width:18%">Teks biasa</th><th style="width:18%">Teks besar</th><th>Pemakaian yang tepat</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="hint" style="margin-bottom:0">Ambang WCAG AA: <strong>4.5:1</strong> untuk teks biasa, <strong>3:1</strong> untuk teks besar. Warna yang gagal tetap boleh dipakai sebagai bidang latar dengan teks gelap di atasnya, bukan sebagai warna teks itu sendiri.</p>
+    </div>
+  </section>
+
+  <section id="gestalt">
+    <span class="sec-no">2.5</span>
+    <h2 class="sec">Hukum Gestalt: aturan otomatis penyusun struktur</h2>
+    <div class="lead-rule" style="background:var(--pink)"></div>
+    <p>Otak menyusun dugaan tentang struktur halaman secara otomatis, di antara lompatan mata yang hanya berhenti 200–250 ms per titik. Karena bekerja otomatis, hukum ini <strong>mengalahkan niat perancang</strong>.</p>
+    <ul class="plain">
+      <li><strong>Kedekatan (proximity).</strong> Elemen berdekatan dianggap satu kelompok — hukum terkuat. Label yang lebih dekat ke field di bawahnya akan dibaca sebagai milik field bawah, sekeras apa pun niat perancang sebaliknya.</li>
+      <li><strong>Kesamaan (similarity).</strong> Elemen dengan bentuk, warna, atau ukuran serupa dianggap sejenis. Memberi warna tombol utama pada elemen yang bukan tombol akan membuat pengguna mengkliknya.</li>
+      <li><strong>Ketertutupan (closure).</strong> Otak melengkapi bentuk tak utuh — berguna untuk ikon minimalis, tapi bila terlalu direduksi, tiap orang melengkapinya berbeda.</li>
+      <li><strong>Kesinambungan (continuity).</strong> Mata mengikuti garis dan penjajaran — alasan grid bukan urusan estetika, melainkan urusan pemindaian informasi.</li>
+      <li><strong>Wilayah bersama (common region).</strong> Elemen dalam satu kotak atau latar dianggap satu kelompok meski berjauhan — dasar kerja kartu dan panel.</li>
+      <li><strong>Nasib bersama (common fate).</strong> Elemen yang bergerak bersama dianggap satu kesatuan — dasar animasi transisi yang menjelaskan asal-usul sebuah panel.</li>
+    </ul>
+    <div class="note">
+      <h4>Kesalahan paling sering pada tugas mahasiswa</h4>
+      <p>Jarak antar elemen dibuat seragam agar "rapi". Hasilnya justru <strong>hierarki hilang</strong>: mata tidak bisa menentukan mana yang satu kelompok. Ruang kosong bukan sisa — ruang kosong adalah alat pengelompokan paling murah dan paling kuat yang Anda punya.</p>
+    </div>
+    <p>Rasakan pengaruh tiap hukum pada <a href="#lab-gestalt">percobaan Gestalt</a> di ruang uji.</p>
+  </section>
+
+  <section id="proses">
+    <span class="sec-no">2.6</span>
+    <h2 class="sec">Atensi: sumber daya paling langka</h2>
+    <div class="lead-rule" style="background:var(--sky)"></div>
+    <p>Atensi bersifat selektif dan hampir sepenuhnya zero-sum: perhatian yang diberikan pada satu elemen diambil dari elemen lain. Klaim "semua bagian ini penting" dalam rapat desain sebenarnya berarti "tidak ada yang penting".</p>
+    <ul class="plain">
+      <li><strong>Pencarian pre-attentive.</strong> Atribut seperti warna, orientasi, ukuran, dan gerakan diproses sebelum perhatian sadar, di bawah 250 ms, nyaris tidak terpengaruh jumlah objek lain. Tapi bila ada lima warna sekaligus, efek ini hilang total.</li>
+      <li><strong>Buta perubahan (change blindness).</strong> Perubahan yang terjadi saat mata berpindah sering tidak terdeteksi — sebab pesan sukses di pojok kanan atas sering terlewat karena pengguna menatap tombol yang baru ditekannya di bagian bawah.</li>
+      <li><strong>Interferensi kognitif.</strong> Ketika dua sumber informasi bertabrakan, respons melambat dan kesalahan naik. Efek Stroop adalah demonstrasi klasiknya; analoginya di antarmuka: tombol merah bertuliskan "Simpan", atau ikon centang berwarna oranye peringatan.</li>
+    </ul>
+    <p>Uji sendiri interferensi ini pada <a href="#lab-stroop">percobaan Stroop</a>.</p>
+    <div class="note">
+      <h4>Implikasi perancangan</h4>
+      <p>Tetapkan <strong>satu</strong> aksi utama per layar dan beri ia satu-satunya penanda visual terkuat. Layar dengan tiga tombol sama mencoloknya memindahkan beban keputusan dari perancang ke pengguna — dan pengguna membayarnya dengan waktu serta keraguan.</p>
+    </div>
+  </section>
+
+  <section id="memori">
+    <span class="sec-no">2.7</span>
+    <h2 class="sec">Memori kerja: titik kegagalan paling mahal</h2>
+    <div class="lead-rule" style="background:var(--emerald)"></div>
+    <table>
+      <thead><tr><th style="width:24%">Jenis</th><th style="width:22%">Kapasitas &amp; durasi</th><th>Relevansi antarmuka</th></tr></thead>
+      <tbody>
+        <tr><td>Memori sensorik</td><td>Besar, &lt;1 detik</td><td>Menampung kesan visual sesaat; hilang bila tak diberi perhatian. Notifikasi yang lewat terlalu cepat tak pernah sampai ke kesadaran.</td></tr>
+        <tr><td>Memori kerja</td><td>±4 chunk, 15–30 detik</td><td>Titik kegagalan utama. Kode OTP, langkah wizard, dan instruksi multi-langkah bersaing di ruang yang sangat sempit ini.</td></tr>
+        <tr><td>Memori jangka panjang</td><td>Praktis tak terbatas</td><td>Sumber model mental, kebiasaan, dan harapan pengguna dari aplikasi lain yang sudah ia pakai.</td></tr>
+      </tbody>
+    </table>
+    <p>Miller (1956) menyebut angka 7±2, tetapi Cowan (2001) menunjukkan angka lebih realistis: <strong>sekitar 4 chunk</strong> tanpa pengulangan. Yang penting bukan angkanya, melainkan konsep <em>chunk</em> — satu satuan bermakna. Pengelompokan memperbesar isi tanpa memperbesar beban: bandingkan <code>081234567890</code> dengan <code>0812 3456 7890</code>. Jumlah digitnya identik, beban memorinya tidak.</p>
+    <p>Contoh yang bisa Anda verifikasi sore ini: alur transfer antar bank yang meminta Anda menyalin nomor rekening dari aplikasi chat, berpindah aplikasi, mengetik ulang, lalu memverifikasi nama penerima yang muncul. Setiap perpindahan aplikasi adalah ancaman terhadap isi memori kerja.</p>
+    <div class="verdict">
+      <div class="bad"><h4>Membebani memori</h4><p>Kode OTP dikirim lewat SMS, lalu notifikasi ditutup dan pengguna diminta mengingat enam digit sambil berpindah aplikasi.</p></div>
+      <div class="good"><h4>Menghapus beban</h4><p>Aplikasi membaca OTP otomatis, atau sistem menawarkan pengisian dari clipboard. Tugas mengingat dihapus, bukan dipercepat — dan menghapus tugas selalu lebih baik.</p></div>
+    </div>
+    <p>Prinsip payungnya dari Nielsen: <strong>recognition rather than recall</strong>. Mengenali jauh lebih murah secara kognitif daripada mengingat.</p>
+  </section>
+
+  <section id="kognisi">
+    <span class="sec-no">2.8</span>
+    <h2 class="sec">Model mental dan beban kognitif</h2>
+    <div class="lead-rule" style="background:var(--magenta)"></div>
+    <p><strong>Model mental</strong> adalah teori pribadi pengguna tentang cara kerja sistem, sering keliru secara teknis tetapi itulah yang dipakainya untuk mengambil keputusan. Tugas perancang bukan membetulkan model mental pengguna, melainkan merancang sistem yang cocok dengannya.</p>
+    <p>Contoh sehari-hari: banyak orang menutup paksa semua aplikasi latar belakang karena percaya itu menghemat baterai. Pada Android/iOS modern hal ini sering justru merugikan, tapi modelnya masuk akal ("yang berjalan memakan tenaga"), sehingga perilakunya bertahan. Sistem yang baik mengantisipasi model keliru semacam ini, bukan menghukum penggunanya.</p>
+    <p>Konsekuensi terbesarnya di dunia aplikasi adalah <strong>konsistensi eksternal</strong>: pengguna datang dengan model mental yang dibentuk aplikasi lain. Ikon tiga garis berarti menu, ikon keranjang berarti belanja, tarik ke bawah berarti muat ulang. Melanggar konvensi ini hanya bisa dibenarkan bila Anda punya bukti terukur bahwa alternatif Anda lebih baik.</p>
+    <h3 class="sub">Tiga jenis beban kognitif</h3>
+    <div class="concept-grid">
+      <div><span class="tag" style="background:var(--emerald)"></span><h4>Intrinsik</h4><p>Kerumitan bawaan tugas itu sendiri. Mengisi SPT pajak memang rumit — beban ini tak bisa dihapus, hanya dipecah jadi langkah-langkah.</p></div>
+      <div><span class="tag" style="background:var(--pink)"></span><h4>Extraneous</h4><p>Beban ciptaan desain: istilah membingungkan, tata letak berantakan, alur berputar. Ini seluruhnya milik perancang, bukan pengguna.</p></div>
+      <div><span class="tag" style="background:var(--sky)"></span><h4>Germane</h4><p>Beban produktif yang membangun pemahaman. Onboarding yang baik menambah beban ini sedikit untuk mengurangi beban lain secara permanen.</p></div>
+    </div>
+    <p>Dua strategi langsung pakai: <strong>progressive disclosure</strong> (tampilkan yang penting dulu, sembunyikan opsi lanjutan) dan <strong>chunking alur</strong> (pecah formulir panjang menjadi tahap dengan indikator kemajuan).</p>
+  </section>
+
+  <section id="error">
+    <span class="sec-no">2.9</span>
+    <h2 class="sec">Kesalahan manusia: slip dan mistake</h2>
+    <div class="lead-rule" style="background:var(--bronze)"></div>
+    <table>
+      <thead><tr><th style="width:18%">Jenis</th><th style="width:34%">Definisi</th><th>Solusi desain</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Slip</strong></td><td>Niat benar, eksekusi meleset. Biasa terjadi pada pengguna mahir yang bertindak otomatis.</td><td>Perbesar dan jauhkan target berbahaya, gunakan constraint, sediakan undo. Konfirmasi berulang justru memperburuk karena diklik otomatis.</td></tr>
+        <tr><td><strong>Mistake</strong></td><td>Eksekusi benar, niat yang salah — model mental keliru sejak awal.</td><td>Perbaiki visibility dan feedback agar keadaan sistem terbaca. Konfirmasi bermakna di sini, asal menjelaskan konsekuensi konkret.</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <h4>Mengapa "Apakah Anda yakin?" hampir selalu desain yang malas</h4>
+      <p>Dialog itu tidak memberi informasi baru. Bandingkan dengan Gmail: hapus langsung dijalankan, lalu muncul "Percakapan dipindahkan ke sampah — Urungkan". Cepat bagi pengguna mahir, tetap aman bagi yang tergelincir. Prinsipnya: <strong>izinkan aksi, sediakan jalan pulang</strong>.</p>
+    </div>
+  </section>
+
+  <section id="keluar">
+    <span class="sec-no">2.10</span>
+    <h2 class="sec">Saluran keluar: Hukum Fitts dan Hukum Hick</h2>
+    <div class="lead-rule" style="background:var(--orange)"></div>
+    <p style="font-family:var(--grot); font-size:1.1rem; font-weight:700; background:var(--card); padding:1rem 1.2rem; border-left:5px solid var(--sky); max-width:var(--measure);">MT = a + b · log₂(2D / W)</p>
+    <p>D adalah jarak ke target, W lebar target. Karena hubungannya logaritmik, <strong>memperbesar target kecil memberi keuntungan jauh lebih besar daripada memperbesar target yang sudah besar</strong>. Sudut dan tepi layar bersifat istimewa (W efektif tak terhingga) — alasan menu bar di tepi layar lebih cepat dijangkau. Pada layar sentuh, target minimal sekitar 44×44 pt / 48×48 dp.</p>
+    <p style="font-family:var(--grot); font-size:1.1rem; font-weight:700; background:var(--card); padding:1rem 1.2rem; border-left:5px solid var(--emerald); max-width:var(--measure);">RT = a + b · log₂(n + 1)</p>
+    <p>Waktu keputusan tumbuh logaritmik terhadap jumlah pilihan yang setara — tetapi hanya berlaku untuk pilihan yang diproses satu per satu dan setara. Menu yang dikelompokkan baik dipindai jauh lebih cepat dari prediksi rumus, karena pengguna mengeliminasi kelompok sekaligus. Solusi atas menu panjang bukan otomatis "kurangi jumlah item", melainkan "kelompokkan dan beri hierarki".</p>
+    <div class="note">
+      <h4>Kecepatan dan akurasi bisa dipertukarkan</h4>
+      <p>Manusia dapat bergerak lebih cepat dengan menerima lebih banyak kesalahan, dan sebaliknya. Yang menentukan pilihan itu adalah <strong>biaya kesalahan yang dipersepsikan</strong>. Karena itu tombol "Hapus akun" tidak cukup hanya diberi warna merah — perlu jarak lebih jauh dari aksi lain (menaikkan D) atau target lebih kecil relatif terhadap aksi aman. Warna mengandalkan pengguna membaca; geometri bekerja meski pengguna tidak membaca.</p>
+    </div>
+    <p>Buktikan sendiri pada <a href="#lab-fitts">percobaan Fitts</a> di ruang uji.</p>
+  </section>
+
+  <section id="individu">
+    <span class="sec-no">2.11</span>
+    <h2 class="sec">Perbedaan individu: bagian yang paling sering hilang</h2>
+    <div class="lead-rule" style="background:var(--magenta)"></div>
+    <p>Semua angka di atas adalah rata-rata orang dewasa sehat dalam kondisi tenang. Populasi nyata menyimpang jauh dari rata-rata itu.</p>
+    <table>
+      <thead><tr><th style="width:22%">Faktor</th><th style="width:34%">Perubahan</th><th>Konsekuensi desain</th></tr></thead>
+      <tbody>
+        <tr><td>Usia lanjut</td><td>Waktu reaksi naik, akomodasi lensa dan sensitivitas kontras turun</td><td>Target lebih besar, teks dapat diperbesar, hindari batas waktu ketat</td></tr>
+        <tr><td>Stres / terburu-buru</td><td>Penyempitan atensi, memori kerja menyusut</td><td>Kurangi langkah, jangan andalkan teks panjang</td></tr>
+        <tr><td>Defisiensi warna (±8% pria)</td><td>Sumbu merah-hijau terganggu</td><td>Warna tidak boleh jadi satu-satunya pembawa makna</td></tr>
+        <tr><td>Keahlian tinggi</td><td>Aksi menjadi otomatis</td><td>Rawan slip; butuh undo, bukan konfirmasi</td></tr>
+        <tr><td>Konteks fisik</td><td>Matahari, satu tangan, sinyal lemah</td><td>Kontras tinggi, zona jempol, toleransi jaringan</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <h4>Kondisi ekstrem adalah alat perancangan, bukan kasus tepi</h4>
+      <p>Merancang untuk orang yang terburu-buru, satu tangan, di bawah matahari menghasilkan antarmuka yang juga lebih baik untuk semua orang. Ini prinsip <em>curb-cut effect</em> — trotoar landai dibuat untuk kursi roda, tetapi menguntungkan orang membawa koper, kereta bayi, dan sepeda.</p>
+    </div>
+  </section>
+
+  <section id="studi-kasus">
+    <span class="sec-no">2.12</span>
+    <h2 class="sec">Bedah kasus: layar konfirmasi transfer</h2>
+    <div class="lead-rule" style="background:var(--sky)"></div>
+    <p>Ambil layar konfirmasi transfer di aplikasi mobile banking apa pun. Petakan tiap faktor manusia ke keputusan desain yang terlihat:</p>
+    <table>
+      <thead><tr><th style="width:22%">Faktor manusia</th><th style="width:38%">Pertanyaan yang harus dijawab layar</th><th>Yang biasanya terjadi</th></tr></thead>
+      <tbody>
+        <tr><td>Memori kerja</td><td>Apakah pengguna harus mengingat nominal dari layar sebelumnya?</td><td>Sering ya, karena nominal ditampilkan kecil</td></tr>
+        <tr><td>Persepsi</td><td>Apakah nama penerima elemen paling menonjol?</td><td>Sering tidak — yang menonjol justru tombol</td></tr>
+        <tr><td>Chunking</td><td>Apakah nomor rekening dikelompokkan?</td><td>Sering tidak, ditampilkan sebagai deret panjang</td></tr>
+        <tr><td>Slip</td><td>Seberapa dekat "Konfirmasi" dengan "Batal"?</td><td>Sering berdampingan, ukuran sama</td></tr>
+        <tr><td>Pemulihan</td><td>Adakah jalan kembali tanpa mengulang dari awal?</td><td>Sering tidak ada</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <h4>Kesimpulan teoretisnya</h4>
+      <p>Nama penerima adalah <strong>satu-satunya informasi yang mencegah kesalahan tidak dapat dipulihkan</strong>, karena transfer yang sudah dieksekusi tidak bisa di-undo. Maka secara teori IMK, nama penerima seharusnya menjadi elemen dengan bobot visual tertinggi di layar itu, bukan tombolnya. Sebagian besar aplikasi membalik urutan ini karena mengoptimalkan konversi, bukan pencegahan kesalahan — bukti bahwa keputusan desain adalah keputusan nilai, bukan sekadar teknis.</p>
+    </div>
+  </section>
+
+  <!-- ==================== RUANG UJI ==================== -->
+  <section id="lab">
+    <span class="sec-no">Praktikum</span>
+    <h2 class="sec">Ruang uji: rasakan teorinya pada diri sendiri</h2>
+    <div class="lead-rule" style="background:var(--orange)"></div>
+    <p>Empat percobaan berikut versi ringkas dari eksperimen klasik IMK. Jalankan sendiri, catat angkanya, dan gunakan sebagai data pada latihan di bawah. Data ini tidak dikirim ke mana pun.</p>
+
+    <div class="lab" id="lab-periphery">
+      <div class="lab-head">
+        <h4>Percobaan 1 — Sempitnya penglihatan tajam</h4>
+        <span class="lab-kind">pengamatan</span>
+      </div>
+      <p class="hint">Tatap terus angka di kanan tanpa menggerakkan mata. Perhatikan titik merah di kiri — Anda bisa mendeteksi geraknya, tapi sulit memastikan bentuknya tanpa melirik. Itulah bedanya fovea dan penglihatan perifer.</p>
+      <div id="peripheryStage" aria-hidden="true">
+        <div id="peripheryDot"></div>
+        <div id="peripheryFocus">4 8 1</div>
+      </div>
+      <button class="btn" id="peripheryStart">Gerakkan titik</button>
+    </div>
+
+    <div class="lab" id="lab-fitts">
+      <div class="lab-head">
+        <h4>Percobaan 2 — Hukum Fitts</h4>
+        <span class="lab-kind">10 percobaan</span>
+      </div>
+      <p class="hint">Klik lingkaran secepat dan seakurat mungkin. Ukuran dan jarak target berubah tiap kali. Bandingkan waktu rata-rata target besar dan kecil setelah selesai.</p>
+      <div id="fittsArena" aria-live="polite">
+        <button id="fittsTarget" style="display:none" aria-label="Target">​</button>
+        <p id="fittsMsg" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; margin:0; color:var(--muted); font-family:var(--grot); font-weight:600; text-align:center; padding:1rem;">Tekan "Mulai" untuk memulai percobaan</p>
+      </div>
+      <button class="btn" id="fittsStart">Mulai</button>
+      <button class="btn ghost" id="fittsReset">Ulang</button>
+      <div class="readout">
+        <div><span class="v" id="fTrial">0/10</span><span class="k">Percobaan</span></div>
+        <div><span class="v" id="fBig">—</span><span class="k">Rata-rata target besar</span></div>
+        <div><span class="v" id="fSmall">—</span><span class="k">Rata-rata target kecil</span></div>
+        <div><span class="v" id="fID">—</span><span class="k">Index of Difficulty tertinggi</span></div>
+      </div>
+      <p class="hint" id="fittsConclusion" style="margin-top:1rem; margin-bottom:0"></p>
+    </div>
+
+    <div class="lab" id="lab-stroop">
+      <div class="lab-head">
+        <h4>Percobaan 3 — Efek Stroop</h4>
+        <span class="lab-kind">12 percobaan</span>
+      </div>
+      <p class="hint">Pilih <strong>warna tinta</strong> kata yang muncul, bukan kata yang tertulis. Separuh percobaan selaras, separuh bertentangan.</p>
+      <div id="stroopWord" aria-live="polite">Siap?</div>
+      <div class="stroop-btns" id="stroopBtns">
+        <button data-c="BIRU" disabled>Biru</button>
+        <button data-c="HIJAU" disabled>Hijau</button>
+        <button data-c="MERAH" disabled>Merah</button>
+        <button data-c="ORANYE" disabled>Oranye</button>
+      </div>
+      <div style="margin-top:1rem">
+        <button class="btn" id="stroopStart">Mulai</button>
+        <button class="btn ghost" id="stroopReset">Ulang</button>
+      </div>
+      <div class="readout">
+        <div><span class="v" id="sTrial">0/12</span><span class="k">Percobaan</span></div>
+        <div><span class="v" id="sCong">—</span><span class="k">Rata-rata selaras</span></div>
+        <div><span class="v" id="sInc">—</span><span class="k">Rata-rata bertentangan</span></div>
+        <div><span class="v" id="sErr">0</span><span class="k">Kesalahan</span></div>
+      </div>
+      <p class="hint" id="stroopConclusion" style="margin-top:1rem; margin-bottom:0"></p>
+    </div>
+
+    <div class="lab" id="lab-gestalt">
+      <div class="lab-head">
+        <h4>Percobaan 4 — Hukum Gestalt</h4>
+        <span class="lab-kind">pengamatan</span>
+      </div>
+      <p class="hint">Titik-titiknya sama persis pada tiap mode. Yang berubah hanya satu variabel visual. Perhatikan bagaimana pengelompokan yang Anda "lihat" berubah tanpa Anda kehendaki.</p>
+      <div class="gestalt-controls" id="gestaltControls" role="group" aria-label="Pilih hukum Gestalt">
+        <button data-g="none" aria-pressed="true">Netral</button>
+        <button data-g="proximity" aria-pressed="false">Kedekatan</button>
+        <button data-g="similarity" aria-pressed="false">Kesamaan</button>
+        <button data-g="region" aria-pressed="false">Wilayah bersama</button>
+        <button data-g="continuity" aria-pressed="false">Kesinambungan</button>
+      </div>
+      <div id="gestaltStage">
+        <svg viewBox="0 0 560 220" role="img" aria-label="Kisi titik yang pengelompokannya berubah sesuai hukum Gestalt yang dipilih">
+          <g id="gRegions"></g>
+          <g id="gDots"></g>
+          <path id="gLine" d="" fill="none" stroke="#001F4F" stroke-width="2.5" opacity="0"/>
+        </svg>
+      </div>
+      <p class="hint" id="gestaltNote" style="margin-top:1rem; margin-bottom:0">Pada mode netral, mata membaca kisi ini sebagai satu blok tanpa struktur.</p>
+    </div>
+  </section>
+
+  <!-- ==================== LATIHAN ==================== -->
+  <section id="latihan">
+    <span class="sec-no">Tugas</span>
+    <h2 class="sec">Latihan penerapan</h2>
+    <div class="lead-rule" style="background:var(--emerald)"></div>
+    <p>Kerjakan minimal dua dari tiga tugas berikut. Setiap jawaban wajib menyebut <strong>teori atau prinsip yang mendasarinya</strong> — jawaban tanpa rujukan teori dinilai sebagai opini, bukan analisis.</p>
+
+    <div class="task">
+      <h4>Tugas A — Peta faktor manusia</h4>
+      <p>Ambil satu layar dari aplikasi pilihan Anda. Buat tabel seperti pada bagian 2.12: kolom faktor manusia, pertanyaan yang harus dijawab layar, dan yang benar-benar terjadi. Isi lima faktor, lalu usulkan satu perubahan tunggal dengan perbaikan terbesar. Argumentasikan mengapa perubahan itu yang dipilih, bukan yang lain.</p>
+    </div>
+
+    <div class="task b">
+      <h4>Tugas B — Uji chunking</h4>
+      <p>Minta tiga orang mengingat nomor 12 digit: satu versi tanpa spasi, satu versi dikelompokkan 4-4-4. Catat tingkat keberhasilan masing-masing. Tulis satu paragraf tentang batas kesimpulan yang boleh Anda tarik dari sampel sekecil n=3.</p>
+    </div>
+
+    <div class="task c">
+      <h4>Tugas C — Simulasi kondisi ekstrem</h4>
+      <p>Gunakan satu aplikasi dengan satu tangan sambil berjalan, atau dengan kecerahan layar 20% di luar ruangan. Catat setiap kegagalan yang muncul, lalu klasifikasikan masing-masing sebagai masalah persepsi, kognisi, atau motorik menggunakan kerangka input–proses–output di bagian 2.1.</p>
+    </div>
+  </section>
+
+  <section id="kritis">
+    <span class="sec-no">Diskusi</span>
+    <h2 class="sec">Pertanyaan kritis</h2>
+    <div class="lead-rule" style="background:var(--magenta)"></div>
+    <p>Tidak ada jawaban tunggal untuk pertanyaan berikut. Buka petunjuknya hanya setelah Anda menuliskan pendapat sendiri.</p>
+
+    <details>
+      <summary>Jika memori kerja hanya menampung ±4 chunk, mengapa aplikasi seperti Tokopedia bisa menampilkan puluhan elemen sekaligus tanpa membuat pengguna kewalahan?</summary>
+      <div class="body"><p>Karena sebagian besar elemen itu tidak diproses sebagai chunk individual — mata memindai secara pre-attentive dan mengelompokkannya lewat Gestalt (kedekatan, wilayah bersama) menjadi beberapa chunk visual yang lebih besar: "satu baris kategori", "satu kartu produk". Batas ±4 berlaku untuk unit yang benar-benar masuk memori kerja secara sadar, bukan untuk semua yang tampak di retina.</p></div>
+    </details>
+
+    <details>
+      <summary>Fitts memprediksi target besar lebih cepat dijangkau. Kapan memperbesar tombol justru merugikan desain secara keseluruhan?</summary>
+      <div class="body"><p>Ketika memperbesar satu target memaksa target lain mengecil atau menjauh, atau ketika ukuran besar itu memakan ruang yang seharusnya menampilkan informasi pencegah kesalahan (seperti nama penerima pada studi kasus 2.12). Fitts mengoptimalkan kecepatan gerak, bukan kebenaran keputusan — dua hal yang bisa bertentangan.</p></div>
+    </details>
+
+    <details>
+      <summary>Antarmuka suara menghilangkan seluruh kanal visual. Prinsip minggu ini mana yang masih berlaku, dan mana yang perlu dirumuskan ulang?</summary>
+      <div class="body"><p>Atensi zero-sum dan batas memori kerja tetap berlaku bahkan lebih ketat, karena suara bersifat sementara dan tidak bisa "dilirik ulang" seperti teks di layar. Yang perlu dirumuskan ulang adalah Gestalt dan Fitts, karena keduanya berbasis ruang visual dan gerak penunjuk — tidak punya padanan langsung ketika interaksinya berupa ucapan.</p></div>
+    </details>
+  </section>
+
+  </main>
+</div>
+
+<footer id="referensi">
+  <div class="footer-inner">
+    <h4>Referensi utama</h4>
+    <ul>
+      <li>Card, S. K., Moran, T. P., &amp; Newell, A. (1983). <em>The Psychology of Human–Computer Interaction</em>. Lawrence Erlbaum. — Sumber asli Model Human Processor.</li>
+      <li>Norman, D. A. (2013). <em>The Design of Everyday Things: Revised and Expanded Edition</em>. Basic Books. — Bab 3 untuk model mental; Bab 5 untuk slip dan mistake.</li>
+      <li>Dix, A., Finlay, J., Abowd, G., &amp; Beale, R. (2004). <em>Human–Computer Interaction</em> (3rd ed.). Prentice Hall. — Bab 1, seluruhnya relevan dengan materi minggu ini.</li>
+      <li>Preece, J., Sharp, H., &amp; Rogers, Y. (2019). <em>Interaction Design: Beyond Human–Computer Interaction</em> (5th ed.). Wiley. — Bab 4 untuk aspek kognitif.</li>
+      <li>Miller, G. A. (1956). The magical number seven, plus or minus two. <em>Psychological Review</em>, 63(2), 81–97. Bandingkan Cowan, N. (2001), <em>Behavioral and Brain Sciences</em>, 24(1), 87–114.</li>
+      <li>Fitts, P. M. (1954). The information capacity of the human motor system. <em>Journal of Experimental Psychology</em>, 47(6), 381–391.</li>
+      <li>W3C. <em>Web Content Accessibility Guidelines (WCAG) 2.1</em>. — Kriteria 1.4.1 (Use of Color) dan 1.4.3 (Contrast Minimum).</li>
+    </ul>
+    <div class="spectrum-bar">
+      <i style="background:#3CB4E6"></i><i style="background:#32B18E"></i><i style="background:#FFD730"></i><i style="background:#FF8040"></i><i style="background:#F05696"></i><i style="background:#9C208C"></i><i style="background:#B89C57"></i><i style="background:#959595"></i>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('.sidebar a'));
+  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if ('IntersectionObserver' in window && targets.length){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('on'); });
+          var m = links.filter(function(l){ return l.getAttribute('href') === '#'+e.target.id; })[0];
+          if(m) m.classList.add('on');
+        }
+      });
+    }, {rootMargin:'-20% 0px -70% 0px'});
+    targets.forEach(function(t){ obs.observe(t); });
+  }
+
+  var palette = [
+    {n:'Sky Blue',       h:'#3CB4E6', use:'Aksen, latar bidang, garis pemisah tebal'},
+    {n:'Emerald Green',  h:'#32B18E', use:'Penanda status positif bila disertai ikon'},
+    {n:'Hot Pink',       h:'#F05696', use:'Aksen penekanan dan pembeda seksi'},
+    {n:'Deep Orange',    h:'#FF8040', use:'Cincin fokus dan sorotan sementara'},
+    {n:'Sunny Yellow',   h:'#FFD730', use:'Hanya sebagai latar dengan teks gelap'},
+    {n:'Light Grey',     h:'#D0D0D0', use:'Garis kisi dan pembatas halus'},
+    {n:'Metallic Silver',h:'#959595', use:'Batas dan elemen dekoratif, bukan teks'},
+    {n:'Golden Bronze',  h:'#B89C57', use:'Aksen kutipan dan catatan'},
+    {n:'Deep Magenta',   h:'#9C208C', use:'Teks penekanan dan label penting'},
+    {n:'Midnight Blue',  h:'#001F4F', use:'Teks utama dan latar gelap'}
+  ];
+  function srgb(c){ c/=255; return c<=0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4); }
+  function lum(hex){
+    var r=parseInt(hex.substr(1,2),16), g=parseInt(hex.substr(3,2),16), b=parseInt(hex.substr(5,2),16);
+    return 0.2126*srgb(r)+0.7152*srgb(g)+0.0722*srgb(b);
+  }
+  function ratio(a,b){ var l1=lum(a), l2=lum(b); var hi=Math.max(l1,l2), lo=Math.min(l1,l2); return (hi+0.05)/(lo+0.05); }
+  var tb = document.querySelector('#contrastTable tbody');
+  if(tb){
+    palette.forEach(function(p){
+      var r = ratio(p.h, '#F0F0F0');
+      var tr = document.createElement('tr');
+      var normal = r>=4.5 ? '<span class="pass ok">lolos</span>' : (r>=3 ? '<span class="pass mid">batas</span>' : '<span class="pass no">gagal</span>');
+      var large  = r>=3   ? '<span class="pass ok">lolos</span>' : '<span class="pass no">gagal</span>';
+      tr.innerHTML =
+        '<td><span class="swatch-row"><span class="swatch" style="background:'+p.h+'"></span><span>'+p.n+'<br><span style="color:var(--muted);font-size:.85em">'+p.h+'</span></span></span></td>'+
+        '<td><strong>'+r.toFixed(2)+':1</strong></td><td>'+normal+'</td><td>'+large+'</td><td>'+p.use+'</td>';
+      tb.appendChild(tr);
+    });
+  }
+
+  var pDot=document.getElementById('peripheryDot'), pBtn=document.getElementById('peripheryStart'), pStage=document.getElementById('peripheryStage');
+  if(pBtn){
+    pBtn.addEventListener('click', function(){
+      var w = pStage.clientWidth - 40;
+      var x = 8 + Math.random()*w;
+      var y = 20 + Math.random()*(pStage.clientHeight-60);
+      pDot.style.transition='left .6s ease, top .6s ease';
+      pDot.style.left = x+'px';
+      pDot.style.top = y+'px';
+      pDot.style.transform='translateY(0)';
+    });
+  }
+
+  var arena=document.getElementById('fittsArena'),
+      tgt=document.getElementById('fittsTarget'),
+      msg=document.getElementById('fittsMsg'),
+      startBtn=document.getElementById('fittsStart'),
+      resetBtn=document.getElementById('fittsReset');
+  var fState={running:false, i:0, total:10, t0:0, big:[], small:[], maxID:0, lastX:0, lastY:0};
+
+  function fRender(){
+    document.getElementById('fTrial').textContent = fState.i+'/'+fState.total;
+    var avg=function(a){ return a.length? Math.round(a.reduce(function(x,y){return x+y;},0)/a.length)+' ms' : '—'; };
+    document.getElementById('fBig').textContent = avg(fState.big);
+    document.getElementById('fSmall').textContent = avg(fState.small);
+    document.getElementById('fID').textContent = fState.maxID ? fState.maxID.toFixed(2) : '—';
+  }
+  function fNext(){
+    if(fState.i>=fState.total){ fEnd(); return; }
+    var w = Math.random()<0.5 ? 64 : 22;
+    var pad = 6;
+    var x = pad + Math.random()*(arena.clientWidth - w - pad*2);
+    var y = pad + Math.random()*(arena.clientHeight - w - pad*2);
+    var D = Math.sqrt(Math.pow(x-fState.lastX,2)+Math.pow(y-fState.lastY,2)) || 1;
+    var ID = Math.log(2*D/w)/Math.LN2;
+    if(ID>fState.maxID) fState.maxID=ID;
+    tgt.style.display='block';
+    tgt.style.width=w+'px'; tgt.style.height=w+'px';
+    tgt.style.left=x+'px'; tgt.style.top=y+'px';
+    tgt.style.background = (w>40 ? '#3CB4E6' : '#F05696');
+    tgt.dataset.w=w;
+    fState.lastX=x; fState.lastY=y;
+    fState.t0=performance.now();
+    tgt.focus();
+  }
+  function fEnd(){
+    fState.running=false;
+    tgt.style.display='none';
+    msg.style.display='flex';
+    msg.textContent='Selesai. Periksa angka di bawah.';
+    var c=document.getElementById('fittsConclusion');
+    if(fState.big.length && fState.small.length){
+      var b=fState.big.reduce(function(x,y){return x+y;},0)/fState.big.length;
+      var s=fState.small.reduce(function(x,y){return x+y;},0)/fState.small.length;
+      var d=Math.round(s-b);
+      c.innerHTML = d>0
+        ? 'Target kecil menyita <strong>'+d+' ms</strong> lebih lama daripada target besar. Pada antarmuka yang dipakai puluhan kali sehari, selisih sekecil ini berlipat menjadi kelelahan dan kesalahan nyata.'
+        : 'Hasil Anda tidak menunjukkan selisih yang diharapkan. Jumlah percobaan terlalu sedikit untuk mengatasi variasi acak — pelajaran metodologis: satu sesi kecil tidak cukup untuk menyimpulkan.';
+    }
+    fRender();
+  }
+  if(startBtn){
+    startBtn.addEventListener('click', function(){
+      fState={running:true,i:0,total:10,t0:0,big:[],small:[],maxID:0,lastX:arena.clientWidth/2,lastY:arena.clientHeight/2};
+      document.getElementById('fittsConclusion').textContent='';
+      msg.style.display='none';
+      fRender(); fNext();
+    });
+    resetBtn.addEventListener('click', function(){
+      fState={running:false,i:0,total:10,t0:0,big:[],small:[],maxID:0,lastX:0,lastY:0};
+      tgt.style.display='none'; msg.style.display='flex';
+      msg.textContent='Tekan "Mulai" untuk memulai percobaan';
+      document.getElementById('fittsConclusion').textContent='';
+      fRender();
+    });
+    tgt.addEventListener('click', function(){
+      if(!fState.running) return;
+      var dt=performance.now()-fState.t0;
+      if(parseInt(tgt.dataset.w,10)>40) fState.big.push(dt); else fState.small.push(dt);
+      fState.i++;
+      fRender();
+      fNext();
+    });
+  }
+
+  var words=['BIRU','HIJAU','MERAH','ORANYE'];
+  var hexOf={BIRU:'#3CB4E6', HIJAU:'#32B18E', MERAH:'#F05696', ORANYE:'#FF8040'};
+  var sw=document.getElementById('stroopWord'),
+      sBtns=document.getElementById('stroopBtns'),
+      sStart=document.getElementById('stroopStart'),
+      sReset=document.getElementById('stroopReset');
+  var sState={running:false,i:0,total:12,t0:0,cong:[],inc:[],err:0,curColor:null,isCong:false};
+
+  function sRender(){
+    document.getElementById('sTrial').textContent=sState.i+'/'+sState.total;
+    var avg=function(a){ return a.length? Math.round(a.reduce(function(x,y){return x+y;},0)/a.length)+' ms' : '—'; };
+    document.getElementById('sCong').textContent=avg(sState.cong);
+    document.getElementById('sInc').textContent=avg(sState.inc);
+    document.getElementById('sErr').textContent=sState.err;
+  }
+  function sNext(){
+    if(sState.i>=sState.total){ sEnd(); return; }
+    var word=words[Math.floor(Math.random()*4)];
+    var cong=Math.random()<0.5;
+    var color=word;
+    if(!cong){ do{ color=words[Math.floor(Math.random()*4)]; }while(color===word); }
+    sState.curColor=color; sState.isCong=cong;
+    sw.textContent=word;
+    sw.style.color=hexOf[color];
+    sState.t0=performance.now();
+  }
+  function sEnd(){
+    sState.running=false;
+    sw.textContent='Selesai';
+    sw.style.color='var(--ink)';
+    Array.prototype.forEach.call(sBtns.children, function(b){ b.disabled=true; });
+    var c=document.getElementById('stroopConclusion');
+    if(sState.cong.length && sState.inc.length){
+      var a=sState.cong.reduce(function(x,y){return x+y;},0)/sState.cong.length;
+      var b=sState.inc.reduce(function(x,y){return x+y;},0)/sState.inc.length;
+      var d=Math.round(b-a);
+      c.innerHTML = d>0
+        ? 'Kondisi bertentangan memakan <strong>'+d+' ms</strong> lebih lama. Anda tidak bisa mematikan pembacaan kata meskipun ingin — ketika warna, ikon, dan teks pada antarmuka membawa pesan berbeda, pengguna membayar selisih waktu dan kesalahan yang sama.'
+        : 'Selisihnya tidak muncul pada sesi ini. Dengan 12 percobaan, variasi acak masih mendominasi.';
+    }
+    sRender();
+  }
+  if(sStart){
+    sStart.addEventListener('click', function(){
+      sState={running:true,i:0,total:12,t0:0,cong:[],inc:[],err:0,curColor:null,isCong:false};
+      document.getElementById('stroopConclusion').textContent='';
+      Array.prototype.forEach.call(sBtns.children, function(b){ b.disabled=false; });
+      sRender(); sNext();
+    });
+    sReset.addEventListener('click', function(){
+      sState={running:false,i:0,total:12,t0:0,cong:[],inc:[],err:0,curColor:null,isCong:false};
+      sw.textContent='Siap?'; sw.style.color='var(--ink)';
+      Array.prototype.forEach.call(sBtns.children, function(b){ b.disabled=true; });
+      document.getElementById('stroopConclusion').textContent='';
+      sRender();
+    });
+    sBtns.addEventListener('click', function(e){
+      var btn=e.target.closest('button');
+      if(!btn||!sState.running) return;
+      var dt=performance.now()-sState.t0;
+      if(btn.dataset.c===sState.curColor){
+        if(sState.isCong) sState.cong.push(dt); else sState.inc.push(dt);
+      } else {
+        sState.err++;
+      }
+      sState.i++;
+      sRender();
+      sNext();
+    });
+  }
+
+  var dotsG=document.getElementById('gDots'),
+      regG=document.getElementById('gRegions'),
+      lineG=document.getElementById('gLine'),
+      gc=document.getElementById('gestaltControls'),
+      gnote=document.getElementById('gestaltNote');
+  var cols=10, rows=4, dots=[];
+  function buildDots(){
+    if(!dotsG) return;
+    dotsG.innerHTML='';
+    dots=[];
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        var el=document.createElementNS('http://www.w3.org/2000/svg','circle');
+        el.setAttribute('class','gdot');
+        el.setAttribute('r','9');
+        el.setAttribute('fill','#001F4F');
+        dotsG.appendChild(el);
+        dots.push({el:el,r:r,c:c});
+      }
+    }
+    applyG('none');
+  }
+  var notes={
+    none:'Pada mode netral, mata membaca kisi ini sebagai satu blok tanpa struktur.',
+    proximity:'Hanya jarak horizontal yang diubah. Anda kini melihat lima pasang kolom, bukan sepuluh kolom. Kedekatan adalah hukum pengelompokan terkuat.',
+    similarity:'Posisi tidak berubah, hanya warna. Mata membentuk baris berdasarkan kesamaan — inilah sebabnya memberi warna aksen pada elemen non-interaktif membuat pengguna mengkliknya.',
+    region:'Posisi dan warna netral kembali; ditambahkan bidang latar. Wilayah bersama mengalahkan kedekatan — dua titik berjauhan dalam satu kotak tetap dibaca sebagai satu kelompok.',
+    continuity:'Titik-titik yang sama kini dibaca sebagai satu jalur karena mata mengikuti garis. Penjajaran bukan urusan kerapian, melainkan jalur pemindaian yang Anda berikan kepada mata pengguna.'
+  };
+  function applyG(mode){
+    if(!dotsG) return;
+    regG.innerHTML='';
+    lineG.setAttribute('opacity','0');
+    var baseX=40, baseY=40, stepX=53, stepY=45;
+    dots.forEach(function(d){
+      var x=baseX+d.c*stepX, y=baseY+d.r*stepY, fill='#001F4F', rad=9;
+      if(mode==='proximity'){ x = baseX + d.c*stepX + (d.c%2===0 ? 8 : -8); }
+      if(mode==='similarity'){
+        var pal=['#3CB4E6','#F05696','#32B18E','#FF8040'];
+        fill=pal[d.r];
+      }
+      if(mode==='continuity'){
+        var onPath = (d.r===Math.round(1.5+1.5*Math.sin(d.c*0.7)));
+        fill = onPath ? '#F05696' : '#D0D0D0';
+        rad = onPath ? 9 : 6;
+      }
+      d.el.setAttribute('cx',x); d.el.setAttribute('cy',y);
+      d.el.setAttribute('fill',fill); d.el.setAttribute('r',rad);
+    });
+    if(mode==='region'){
+      [[0,4,'#3CB4E6'],[5,9,'#FFD730']].forEach(function(seg){
+        var rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        rect.setAttribute('x', baseX + seg[0]*stepX - 24);
+        rect.setAttribute('y', baseY - 26);
+        rect.setAttribute('width', (seg[1]-seg[0])*stepX + 48);
+        rect.setAttribute('height', (rows-1)*stepY + 52);
+        rect.setAttribute('fill', seg[2]);
+        rect.setAttribute('opacity','0.22');
+        regG.appendChild(rect);
+      });
+    }
+    if(mode==='continuity'){
+      var d2='';
+      for(var c=0;c<cols;c++){
+        var rr=Math.round(1.5+1.5*Math.sin(c*0.7));
+        d2 += (c===0?'M':'L') + (baseX+c*stepX) + ' ' + (baseY+rr*stepY) + ' ';
+      }
+      lineG.setAttribute('d', d2);
+      lineG.setAttribute('stroke', '#F05696');
+      lineG.setAttribute('opacity','0.45');
+    }
+    gnote.textContent = notes[mode];
+  }
+  if(gc){
+    gc.addEventListener('click', function(e){
+      var b=e.target.closest('button');
+      if(!b) return;
+      Array.prototype.forEach.call(gc.children, function(x){ x.setAttribute('aria-pressed', String(x===b)); });
+      applyG(b.dataset.g);
+    });
+  }
+  buildDots();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IMK Minggu 1 — Pengantar Interaksi Manusia dan Komputer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#3CB4E6; --emerald:#32B18E; --pink:#F05696; --orange:#FF8040; --yellow:#FFD730;
+  --snow:#F0F0F0; --lightgrey:#D0D0D0; --silver:#959595; --bronze:#B89C57; --magenta:#9C208C; --ink:#001F4F;
+  --paper:#F0F0F0; --card:#FFFFFF; --muted:#46587A; --rule:#D0D0D0;
+  --serif:"Source Serif 4", Georgia, serif;
+  --grot:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --measure:68ch;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:5.5rem;}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:1.0625rem; line-height:1.72; -webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:var(--grot); line-height:1.1; margin:0; font-weight:800; letter-spacing:-0.015em;}
+p{margin:0 0 1.1em;}
+a{color:var(--ink);}
+strong{font-weight:600;}
+code{font-family:var(--grot); background:var(--card); padding:.1em .35em; font-size:.92em;}
+
+.topbar{position:sticky; top:0; z-index:60; background:var(--ink); color:var(--snow); border-bottom:3px solid var(--sky);}
+.topbar-inner{max-width:1220px; margin:0 auto; padding:.6rem 1.25rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;}
+.brandmark{display:flex; align-items:center; gap:.6rem; font-family:var(--grot); font-weight:800; font-size:.95rem;}
+.brandmark .chips{display:flex;}
+.brandmark .chips i{width:9px; height:18px; display:block;}
+.topnav{display:flex; gap:1.1rem; font-family:var(--grot); font-size:.85rem; font-weight:600; flex-wrap:wrap;}
+.topnav a{color:#C9D8EC; text-decoration:none; padding:.2rem 0; border-bottom:2px solid transparent;}
+.topnav a:hover,.topnav a:focus-visible{color:#fff; border-bottom-color:var(--yellow);}
+
+.hero{background:var(--ink); color:var(--snow); padding:3.5rem 1.25rem 4rem; position:relative; overflow:hidden;}
+.hero-inner{max-width:1220px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:3rem; align-items:center;}
+.eyebrow-course{font-family:var(--grot); font-weight:600; font-size:.9rem; color:var(--sky); margin-bottom:1rem;}
+.hero h1{font-size:clamp(2.4rem,5.4vw,4.1rem); letter-spacing:-0.035em;}
+.hero h1 em{font-style:normal; display:block;}
+.hero-lede{font-size:1.15rem; color:#C9D8EC; max-width:46ch; margin-top:1.4rem;}
+.hero-meta{display:flex; gap:.5rem; flex-wrap:wrap; margin-top:2rem;}
+.hero-meta span{font-family:var(--grot); font-size:.78rem; font-weight:600; padding:.35rem .7rem; border:1px solid rgba(240,240,240,.28); border-radius:100px; color:#C9D8EC;}
+
+.prism-wrap{position:relative;}
+.prism{width:100%; height:auto; display:block;}
+.beam-in{stroke-dasharray:240; stroke-dashoffset:240; animation:beamdraw .9s ease-out .2s forwards;}
+.band{opacity:0; transform-origin:214px 175px; animation:fan .7s cubic-bezier(.22,.9,.3,1) forwards;}
+.band:nth-of-type(1){animation-delay:1.0s} .band:nth-of-type(2){animation-delay:1.12s} .band:nth-of-type(3){animation-delay:1.24s} .band:nth-of-type(4){animation-delay:1.36s} .band:nth-of-type(5){animation-delay:1.48s}
+.bandlabel{opacity:0; animation:fadein .6s ease-out forwards;}
+.bandlabel:nth-of-type(1){animation-delay:1.45s} .bandlabel:nth-of-type(2){animation-delay:1.57s} .bandlabel:nth-of-type(3){animation-delay:1.69s} .bandlabel:nth-of-type(4){animation-delay:1.81s} .bandlabel:nth-of-type(5){animation-delay:1.93s}
+@keyframes beamdraw{to{stroke-dashoffset:0}}
+@keyframes fan{from{opacity:0; transform:rotate(-7deg) scaleX(.6)} to{opacity:1; transform:none}}
+@keyframes fadein{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){ .beam-in{stroke-dashoffset:0; animation:none} .band,.bandlabel{opacity:1; animation:none; transform:none} }
+
+.shell{max-width:1220px; margin:0 auto; padding:0 1.25rem; display:grid; grid-template-columns:238px minmax(0,1fr); gap:3.5rem; align-items:start;}
+.sidebar{position:sticky; top:5rem; padding:3rem 0; font-family:var(--grot); font-size:.85rem;}
+.sidebar h4{font-size:.8rem; font-weight:800; color:var(--muted); margin-bottom:.8rem;}
+.sidebar ol{list-style:none; margin:0 0 1.8rem; padding:0;}
+.sidebar li{margin-bottom:.45rem;}
+.sidebar a{text-decoration:none; color:var(--muted); display:block; padding-left:.7rem; border-left:2px solid var(--lightgrey);}
+.sidebar a:hover,.sidebar a:focus-visible{color:var(--ink); border-left-color:var(--pink);}
+.sidebar a.on{color:var(--ink); font-weight:600; border-left-color:var(--pink);}
+
+main{padding:3rem 0 5rem; min-width:0;}
+section{margin-bottom:4.5rem; scroll-margin-top:5.5rem;}
+main > section > p, main > section > ul, main > section > ol{max-width:var(--measure);}
+
+.week-open{margin:0 0 3rem; padding:2rem 2rem 2.2rem; color:var(--snow); background:linear-gradient(115deg,#001F4F 0%, #0A3F7A 55%, #3CB4E6 140%);}
+.week-open .num{font-family:var(--grot); font-weight:800; font-size:.9rem; color:var(--yellow);}
+.week-open h2{font-size:clamp(1.8rem,3.6vw,2.6rem); margin:.5rem 0 .8rem; letter-spacing:-0.03em;}
+.week-open p{color:#D6E3F2; max-width:58ch; margin:0;}
+.week-open .goals{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.9rem; margin-top:1.6rem;}
+.week-open .goals div{font-family:var(--grot); font-size:.85rem; line-height:1.4; color:#EAF2FB; border-top:2px solid rgba(255,255,255,.35); padding-top:.6rem;}
+
+h2.sec{font-size:1.6rem; letter-spacing:-0.025em; margin-bottom:.35rem;}
+.sec-no{font-family:var(--grot); font-weight:600; font-size:.85rem; color:var(--muted); display:block; margin-bottom:.4rem;}
+h3.sub{font-size:1.12rem; margin:2rem 0 .6rem; font-weight:600;}
+.lead-rule{width:64px; height:4px; margin:.9rem 0 1.5rem;}
+
+ul.plain, ol.plain{padding-left:1.15rem; margin:0 0 1.2em;}
+ul.plain li, ol.plain li{margin-bottom:.5em;}
+
+.note{border-left:5px solid var(--bronze); background:#FBF7EC; padding:1.1rem 1.3rem; margin:1.8rem 0; max-width:var(--measure);}
+.note h4{font-family:var(--grot); font-size:.95rem; color:#6E5A20; margin-bottom:.45rem;}
+.note p:last-child{margin-bottom:0;}
+
+.verdict{display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1.8rem 0;}
+.verdict > div{padding:1.1rem 1.2rem; background:var(--card);}
+.verdict .good{border-top:5px solid var(--emerald);}
+.verdict .bad{border-top:5px solid var(--pink);}
+.verdict h4{font-family:var(--grot); font-size:.92rem; margin-bottom:.5rem;}
+.verdict p{font-size:.95rem; margin:0;}
+
+table{border-collapse:collapse; width:100%; margin:1.6rem 0; font-size:.94rem; background:var(--card);}
+th,td{text-align:left; padding:.7rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top;}
+th{font-family:var(--grot); font-size:.82rem; font-weight:700; background:var(--ink); color:var(--snow); border-bottom:none;}
+tbody tr:last-child td{border-bottom:none;}
+
+.concept-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--rule); margin:1.8rem 0; border:1px solid var(--rule);}
+.concept-grid > div{background:var(--card); padding:1.15rem 1.2rem;}
+.concept-grid h4{font-family:var(--grot); font-size:.95rem; margin-bottom:.4rem;}
+.concept-grid p{font-size:.92rem; margin:0; color:#2B3E5E;}
+.concept-grid .tag{display:inline-block; width:26px; height:5px; margin-bottom:.7rem;}
+
+.timeline{margin:2rem 0; border-left:2px solid var(--lightgrey); padding-left:1.6rem; max-width:var(--measure);}
+.timeline .ev{position:relative; margin-bottom:1.5rem;}
+.timeline .ev::before{content:""; position:absolute; left:-1.95rem; top:.45rem; width:11px; height:11px; border-radius:50%; background:var(--sky); border:2px solid var(--paper);}
+.timeline .ev:nth-child(2)::before{background:var(--emerald)} .timeline .ev:nth-child(3)::before{background:var(--yellow)} .timeline .ev:nth-child(4)::before{background:var(--orange)} .timeline .ev:nth-child(5)::before{background:var(--pink)} .timeline .ev:nth-child(6)::before{background:var(--magenta)}
+.timeline .yr{font-family:var(--grot); font-weight:800; font-size:.95rem;}
+.timeline p{margin:.15rem 0 0; font-size:.95rem;}
+
+.task{background:var(--card); border-left:5px solid var(--sky); padding:1.2rem 1.3rem; margin:1.2rem 0; max-width:var(--measure);}
+.task h4{font-family:var(--grot); font-size:1rem; margin-bottom:.5rem;}
+.task.b{border-left-color:var(--emerald);}
+.task.c{border-left-color:var(--orange);}
+.task p{font-size:.96rem;}
+.task p:last-child{margin-bottom:0;}
+
+details{border-bottom:1px solid var(--rule); max-width:var(--measure);}
+details summary{cursor:pointer; padding:.85rem 0; font-family:var(--grot); font-weight:600; font-size:.98rem; list-style:none; display:flex; gap:.7rem;}
+details summary::-webkit-details-marker{display:none;}
+details summary::before{content:"+"; color:var(--pink); font-weight:800;}
+details[open] summary::before{content:"–";}
+details .body{padding:0 0 1.1rem 1.4rem; font-size:.96rem; color:#2B3E5E;}
+details .body p:last-child{margin-bottom:0;}
+
+.crosslink{background:var(--card); border:2px dashed var(--sky); padding:1.1rem 1.3rem; margin:2rem 0; max-width:var(--measure); font-family:var(--grot); font-size:.92rem;}
+.crosslink strong{color:var(--ink);}
+
+footer{background:var(--ink); color:#C9D8EC; padding:3rem 1.25rem 3.5rem; font-size:.94rem;}
+.footer-inner{max-width:1220px; margin:0 auto;}
+footer h4{font-family:var(--grot); color:var(--snow); font-size:1.05rem; margin-bottom:.9rem;}
+footer ul{list-style:none; padding:0; margin:0;}
+footer li{margin-bottom:.6rem; max-width:62ch;}
+.spectrum-bar{display:flex; height:8px; margin-top:2.5rem;}
+.spectrum-bar i{flex:1;}
+
+@media (max-width:980px){
+  .hero-inner{grid-template-columns:1fr; gap:2.2rem;}
+  .shell{grid-template-columns:1fr; gap:0;}
+  .sidebar{position:static; padding:2rem 0 0;}
+  .sidebar ol{columns:2; column-gap:1.5rem;}
+}
+@media (max-width:620px){
+  body{font-size:1rem;}
+  .verdict{grid-template-columns:1fr;}
+  .sidebar ol{columns:1;}
+  .week-open{padding:1.5rem 1.3rem 1.8rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brandmark">
+      <span class="chips">
+        <i style="background:#3CB4E6"></i><i style="background:#32B18E"></i><i style="background:#FFD730"></i><i style="background:#FF8040"></i><i style="background:#F05696"></i>
+      </span>
+      IMK · Teknik Informatika
+    </div>
+    <nav class="topnav" aria-label="Navigasi utama">
+      <a href="#definisi">Definisi</a>
+      <a href="#sejarah">Sejarah</a>
+      <a href="#komponen">Siklus Aksi</a>
+      <a href="#ucd">UCD</a>
+      <a href="#latihan">Latihan</a>
+      <a href="#referensi">Referensi</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow-course">Modul 1 · Pertemuan 1</div>
+      <h1>Pengantar Interaksi<em>Manusia dan Komputer</em></h1>
+      <p class="hero-lede">Pertanyaan bergeser dari "bagaimana membuat sistem ini berjalan?" menjadi "bagaimana membuat sistem ini bisa dijalankan manusia tanpa penderitaan?" — dan pergeseran itu mengubah setiap keputusan teknis yang mengikutinya.</p>
+      <div class="hero-meta">
+        <span>Definisi &amp; ruang lingkup</span>
+        <span>Sejarah paradigma interaksi</span>
+        <span>Siklus Aksi Norman</span>
+        <span>User-Centered Design</span>
+        <span>Studi kasus aplikasi nyata</span>
+      </div>
+    </div>
+    <div class="prism-wrap">
+      <svg class="prism" viewBox="0 0 640 360" role="img" aria-label="Diagram prisma: satu berkas rangsangan masuk lalu terurai menjadi persepsi, atensi, memori, kognisi, dan aksi motorik">
+        <line class="beam-in" x1="10" y1="175" x2="196" y2="175" stroke="#F0F0F0" stroke-width="5"/>
+        <text x="14" y="160" font-family="Bricolage Grotesque, sans-serif" font-size="14" font-weight="600" fill="#C9D8EC">rangsangan</text>
+        <path d="M214 95 L268 215 L160 215 Z" fill="none" stroke="#959595" stroke-width="2.5"/>
+        <g class="band"><path d="M214 175 L620 78 L620 96 L214 175 Z" fill="#3CB4E6"/></g>
+        <g class="band"><path d="M214 175 L620 126 L620 144 L214 175 Z" fill="#32B18E"/></g>
+        <g class="band"><path d="M214 175 L620 174 L620 192 L214 175 Z" fill="#FFD730"/></g>
+        <g class="band"><path d="M214 175 L620 222 L620 240 L214 175 Z" fill="#FF8040"/></g>
+        <g class="band"><path d="M214 175 L620 270 L620 288 L214 175 Z" fill="#F05696"/></g>
+        <g font-family="Bricolage Grotesque, sans-serif" font-size="14" font-weight="600" fill="#EAF2FB">
+          <text class="bandlabel" x="470" y="80">persepsi</text>
+          <text class="bandlabel" x="470" y="128">atensi</text>
+          <text class="bandlabel" x="470" y="176">memori</text>
+          <text class="bandlabel" x="470" y="224">kognisi</text>
+          <text class="bandlabel" x="470" y="272">aksi motorik</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <h4>Isi modul</h4>
+    <ol>
+      <li><a href="#definisi">1.1 Apa itu IMK</a></li>
+      <li><a href="#mengapa">1.2 Mengapa IMK penting</a></li>
+      <li><a href="#disiplin">1.3 Disiplin penyusun</a></li>
+      <li><a href="#sejarah">1.4 Sejarah &amp; paradigma</a></li>
+      <li><a href="#komponen">1.5 Manusia–komputer–interaksi</a></li>
+      <li><a href="#ucd">1.6 User-centered design</a></li>
+      <li><a href="#kasus">1.7 Studi kasus</a></li>
+      <li><a href="#latihan">Latihan</a></li>
+      <li><a href="#kritis">Pertanyaan kritis</a></li>
+      <li><a href="#referensi">Referensi</a></li>
+    </ol>
+  </aside>
+
+  <main>
+
+  <div class="week-open">
+    <div class="num">Minggu 1</div>
+    <h2>Pengantar, ruang lingkup, dan cara berpikir IMK</h2>
+    <p>Minggu ini kita menggeser pertanyaan dari "bagaimana membuat sistem ini berjalan?" menjadi "bagaimana membuat sistem ini bisa dijalankan manusia tanpa penderitaan?". Dua pertanyaan itu menghasilkan keputusan teknis yang berbeda.</p>
+    <div class="goals">
+      <div>Menjelaskan definisi IMK dan posisinya di antara disiplin lain</div>
+      <div>Menguraikan tiga komponen: manusia, komputer, dan interaksi</div>
+      <div>Membedakan perancangan berpusat sistem dan berpusat pengguna</div>
+      <div>Menilai satu aplikasi nyata memakai kerangka IMK dasar</div>
+    </div>
+  </div>
+
+  <section id="definisi">
+    <span class="sec-no">1.1</span>
+    <h2 class="sec">Apa yang sebenarnya dipelajari IMK</h2>
+    <div class="lead-rule" style="background:var(--sky)"></div>
+    <p>Definisi klasik dari ACM SIGCHI: IMK adalah disiplin yang berkaitan dengan <strong>perancangan, evaluasi, dan implementasi sistem komputasi interaktif untuk digunakan manusia, serta studi tentang fenomena besar yang mengelilinginya</strong>. Perhatikan tiga kata kerja itu — merancang, mengevaluasi, mengimplementasi. IMK bukan mata kuliah menggambar layar; ia adalah siklus rekayasa yang objek ujinya adalah manusia.</p>
+    <p>Yang membuat IMK berbeda dari mata kuliah rekayasa perangkat lunak biasa adalah letak "kebenaran"-nya. Dalam algoritma, benar-salah ditentukan oleh spesifikasi formal. Dalam IMK, benar-salah ditentukan oleh <strong>bukti empiris dari perilaku pengguna</strong>. Sebuah tombol tidak "benar" karena logikanya rapi, tetapi karena sembilan dari sepuluh orang menemukannya dalam dua detik tanpa diberi tahu.</p>
+
+    <div class="note">
+      <h4>Catatan dosen</h4>
+      <p>Kalau Anda hanya mengingat satu kalimat dari mata kuliah ini, ingat yang ini: <strong>Anda bukan pengguna Anda.</strong> Intuisi Anda sebagai mahasiswa Informatika tentang "ini sudah jelas kok" adalah salah satu sumber kesalahan desain paling konsisten, karena Anda sudah memiliki model mental sistemnya di kepala. Pengguna tidak.</p>
+    </div>
+
+    <h3 class="sub">Tiga istilah yang sering tertukar</h3>
+    <table>
+      <thead><tr><th style="width:24%">Istilah</th><th>Fokus</th><th style="width:34%">Pertanyaan khasnya</th></tr></thead>
+      <tbody>
+        <tr><td><strong>IMK / HCI</strong></td><td>Disiplin ilmu: teori, metode, dan bukti empiris tentang manusia yang berinteraksi dengan komputasi</td><td>"Mengapa manusia gagal pada langkah ini?"</td></tr>
+        <tr><td><strong>UX</strong></td><td>Praktik industri: seluruh pengalaman pengguna sebelum, saat, dan sesudah memakai produk</td><td>"Apakah orang merasa produk ini layak dipakai lagi?"</td></tr>
+        <tr><td><strong>UI</strong></td><td>Artefak: lapisan konkret berupa tata letak, kontrol, tipografi, warna, gerak</td><td>"Apakah tombol ini terlihat dan terjangkau?"</td></tr>
+      </tbody>
+    </table>
+    <p>Hubungan ketiganya bertingkat: IMK menyediakan <em>alasan</em>, UX menyediakan <em>proses</em>, UI menyediakan <em>wujud</em>. UI yang cantik di atas model interaksi yang keliru tetap menghasilkan produk yang gagal — ini persis yang terjadi pada banyak aplikasi pemerintah yang tampilannya sudah modern tetapi alur verifikasinya memaksa pengguna bolak-balik antar aplikasi.</p>
+  </section>
+
+  <section id="mengapa">
+    <span class="sec-no">1.2</span>
+    <h2 class="sec">Mengapa ini bukan sekadar soal estetika</h2>
+    <div class="lead-rule" style="background:var(--emerald)"></div>
+    <p>Argumen terkuat untuk IMK bukan "supaya bagus", melainkan <strong>biaya</strong>. Setiap kebingungan pengguna diterjemahkan menjadi angka: tiket support, transaksi batal, pelatihan ulang, denda regulasi, dan pada domain kritis — korban jiwa.</p>
+
+    <div class="concept-grid">
+      <div><span class="tag" style="background:var(--sky)"></span><h4>Biaya ekonomi</h4><p>Formulir checkout yang meminta data berlebihan menaikkan tingkat pengabaian keranjang. Satu field yang tidak perlu bisa bernilai ratusan juta rupiah per bulan pada skala e-commerce.</p></div>
+      <div><span class="tag" style="background:var(--emerald)"></span><h4>Biaya operasional</h4><p>Antarmuka yang buruk memindahkan beban ke manusia lain: petugas call center, admin, dan tim IT internal yang harus memperbaiki data yang salah input.</p></div>
+      <div><span class="tag" style="background:var(--orange)"></span><h4>Biaya keselamatan</h4><p>Pada sistem medis, penerbangan, dan pembangkit listrik, kesalahan interaksi berujung fatal. Kecelakaan Three Mile Island (1979) sebagian besar dianalisis sebagai kegagalan antarmuka ruang kendali, bukan kegagalan reaktor.</p></div>
+      <div><span class="tag" style="background:var(--magenta)"></span><h4>Biaya sosial</h4><p>Sistem yang hanya bisa dipakai kelompok tertentu — muda, melek teknologi, penglihatan normal, sinyal kuat — mengecualikan warga dari layanan publik yang wajib mereka akses.</p></div>
+    </div>
+
+    <div class="note">
+      <h4>Prinsip yang perlu Anda internalisasi</h4>
+      <p>Ketika pengguna melakukan kesalahan berulang di titik yang sama, itu <strong>bukan kesalahan pengguna</strong>. Itu adalah data yang menunjukkan letak cacat desain. Donald Norman menyebutnya secara tajam: kalau ribuan orang membuat kesalahan yang sama, yang salah bukan ribuan orang itu.</p>
+    </div>
+  </section>
+
+  <section id="disiplin">
+    <span class="sec-no">1.3</span>
+    <h2 class="sec">IMK sebagai simpul banyak disiplin</h2>
+    <div class="lead-rule" style="background:var(--yellow)"></div>
+    <p>IMK lahir dari pertemuan bidang-bidang yang biasanya tidak saling bicara. Anda tidak perlu menguasai semuanya, tetapi Anda perlu tahu <em>dari mana sebuah argumen desain berasal</em>, karena itu menentukan bagaimana argumen tersebut bisa dibantah.</p>
+    <table>
+      <thead><tr><th style="width:30%">Disiplin</th><th>Kontribusi terhadap keputusan desain</th></tr></thead>
+      <tbody>
+        <tr><td>Psikologi kognitif</td><td>Batas memori kerja, atensi selektif, pembentukan model mental, jenis-jenis kesalahan manusia — dibahas mendalam di Minggu 2</td></tr>
+        <tr><td>Ergonomi &amp; faktor manusia</td><td>Batas fisik: jangkauan jari, ukuran target sentuh, kelelahan postur, keterbacaan pada jarak tertentu</td></tr>
+        <tr><td>Ilmu komputer &amp; rekayasa perangkat lunak</td><td>Apa yang teknis mungkin, latensi, arsitektur event, pola implementasi komponen</td></tr>
+        <tr><td>Desain grafis &amp; tipografi</td><td>Hierarki visual, kontras, ritme spasial, keterbacaan</td></tr>
+        <tr><td>Sosiologi &amp; antropologi</td><td>Konteks pemakaian nyata: siapa yang menonton layar Anda, norma sosial, kerja kolaboratif</td></tr>
+        <tr><td>Linguistik</td><td>Penamaan menu, pesan kesalahan, konsistensi kosakata antarmuka</td></tr>
+      </tbody>
+    </table>
+    <p>Implikasi praktisnya: saat rapat desain dan ada perdebatan, tanyakan "klaim ini datang dari disiplin mana?". Klaim ergonomis (misalnya "target 24 px terlalu kecil untuk jempol") dapat diuji dengan pengukuran. Klaim selera ("warna ini kurang enak dilihat") tidak dapat diuji dan karenanya tidak boleh mengalahkan klaim yang dapat diuji.</p>
+  </section>
+
+  <section id="sejarah">
+    <span class="sec-no">1.4</span>
+    <h2 class="sec">Pergeseran paradigma interaksi</h2>
+    <div class="lead-rule" style="background:var(--orange)"></div>
+    <p>Sejarah IMK bukan daftar tahun untuk dihafal, melainkan rangkaian perubahan <strong>siapa yang harus menyesuaikan diri</strong>. Semakin ke kanan garis waktu, semakin banyak beban adaptasi yang dipindahkan dari manusia ke mesin.</p>
+    <div class="timeline">
+      <div class="ev"><div class="yr">1945 — Memex</div><p>Vannevar Bush membayangkan mesin yang menyimpan dan menautkan informasi mengikuti asosiasi pikiran manusia. Gagasan ini menjadi cikal bakal hypertext.</p></div>
+      <div class="ev"><div class="yr">1963–1968 — Sketchpad &amp; "Mother of All Demos"</div><p>Ivan Sutherland memperkenalkan manipulasi grafis langsung; Douglas Engelbart mendemonstrasikan mouse, windowing, dan kolaborasi jarak jauh. Interaksi tidak lagi harus berupa teks perintah.</p></div>
+      <div class="ev"><div class="yr">1970-an — Xerox PARC &amp; WIMP</div><p>Paradigma Windows, Icons, Menus, Pointer lahir. Konsekuensinya besar: pengguna tidak perlu lagi mengingat perintah, cukup mengenali pilihan yang tampak — pergeseran dari <em>recall</em> ke <em>recognition</em>.</p></div>
+      <div class="ev"><div class="yr">1980-an — IMK menjadi disiplin</div><p>Card, Moran, dan Newell menerbitkan <em>The Psychology of HCI</em> (1983); Norman menerbitkan <em>The Design of Everyday Things</em> (1988). Desain mulai punya dasar teori dan model prediktif.</p></div>
+      <div class="ev"><div class="yr">1990–2000-an — Web dan mobile</div><p>Pengguna berubah dari "operator terlatih" menjadi "siapa saja". Heuristik Nielsen dan usability testing menjadi praktik industri karena tidak ada lagi kesempatan melatih pengguna.</p></div>
+      <div class="ev"><div class="yr">2010-an–sekarang — Interaksi menyebar</div><p>Layar sentuh, suara, gestur, wearable, kendaraan, dan antarmuka berbasis AI. Tantangan barunya: interaksi yang tidak punya wujud fisik sering kehilangan <em>visibility</em> dan <em>affordance</em> — pengguna tidak tahu apa yang bisa dikatakan atau diminta.</p></div>
+    </div>
+    <div class="verdict">
+      <div class="good"><h4>Yang membaik</h4><p>Beban mengingat sintaks perintah nyaris hilang; sebagian besar sistem modern dapat dioperasikan dengan mengenali pilihan yang terlihat di layar.</p></div>
+      <div class="bad"><h4>Yang memburuk</h4><p>Gestur tersembunyi (swipe, long-press) dan antarmuka suara mengembalikan masalah lama: pengguna harus mengingat perintah yang tidak ditampilkan di mana pun.</p></div>
+    </div>
+  </section>
+
+  <section id="komponen">
+    <span class="sec-no">1.5</span>
+    <h2 class="sec">Tiga komponen dan jurang di antaranya</h2>
+    <div class="lead-rule" style="background:var(--pink)"></div>
+    <p>Kerangka paling berguna untuk menganalisis interaksi apa pun adalah <strong>Siklus Aksi Norman</strong>. Manusia punya tujuan di kepalanya; sistem punya keadaan di memorinya. Keduanya berbicara bahasa yang berbeda, dan interaksi adalah usaha menyeberangi dua jurang.</p>
+
+    <h3 class="sub">Gulf of Execution — jurang pelaksanaan</h3>
+    <p>Jarak antara apa yang <em>ingin dilakukan</em> pengguna dan apa yang <em>bisa dilakukan</em> lewat antarmuka. Jurang ini lebar ketika pengguna tahu persis tujuannya tetapi tidak menemukan cara melakukannya.</p>
+    <p>Contoh nyata: seorang pengguna ingin membatalkan langganan. Tujuannya jelas. Namun tombolnya disembunyikan tiga level di dalam menu "Akun → Pengaturan lanjutan → Kelola tagihan". Jurang pelaksanaan lebar — dan dalam kasus ini disengaja, yang termasuk pola gelap (<em>dark pattern</em>).</p>
+
+    <h3 class="sub">Gulf of Evaluation — jurang penilaian</h3>
+    <p>Jarak antara <em>keadaan sistem sebenarnya</em> dan <em>pemahaman pengguna</em> tentang keadaan itu. Jurang ini lebar ketika sistem sudah melakukan sesuatu tetapi pengguna tidak yakin apakah berhasil.</p>
+    <p>Contoh nyata: pengguna menekan "Bayar", layar diam tiga detik tanpa perubahan. Pengguna menekan lagi. Terjadi dua transaksi. Penyebab kegagalan bukan pada sistem pembayaran, melainkan pada tidak adanya <strong>feedback</strong> — antarmuka gagal melaporkan keadaannya sendiri.</p>
+
+    <div class="concept-grid">
+      <div><span class="tag" style="background:var(--sky)"></span><h4>Visibility</h4><p>Keadaan sistem dan aksi yang tersedia harus terlihat. Kalau pengguna harus menebak, desainnya sudah gagal sebelum diuji.</p></div>
+      <div><span class="tag" style="background:var(--emerald)"></span><h4>Affordance</h4><p>Properti objek yang menyiratkan cara memakainya. Tombol tampak bisa ditekan; gagang tampak bisa ditarik. Pada layar, yang bekerja sebenarnya adalah <em>perceived affordance</em> — kesan yang ditangkap mata.</p></div>
+      <div><span class="tag" style="background:var(--yellow)"></span><h4>Signifier</h4><p>Penanda eksplisit yang memberi tahu di mana aksi terjadi: garis bawah pada tautan, ikon panah, teks "geser untuk membayar". Desain datar (<em>flat design</em>) sering menghapus signifier dan membuat pengguna tidak tahu mana yang bisa diklik.</p></div>
+      <div><span class="tag" style="background:var(--orange)"></span><h4>Mapping</h4><p>Kesesuaian antara kontrol dan efeknya. Slider volume yang naik ke atas untuk mengeraskan suara punya <em>natural mapping</em>; tombol kompor yang tata letaknya tidak sejajar dengan tungkunya tidak.</p></div>
+      <div><span class="tag" style="background:var(--pink)"></span><h4>Feedback</h4><p>Laporan segera tentang apa yang baru terjadi. Aturan praktisnya: di bawah 0,1 detik terasa instan; sampai 1 detik alur pikir masih utuh; di atas 10 detik perhatian pengguna berpindah dan sistem wajib menampilkan progres.</p></div>
+      <div><span class="tag" style="background:var(--magenta)"></span><h4>Constraint</h4><p>Pembatasan yang mencegah aksi salah sejak awal. Menonaktifkan tanggal yang sudah lewat pada kalender lebih baik daripada menampilkan pesan kesalahan setelah pengguna memilihnya.</p></div>
+    </div>
+
+    <div class="note">
+      <h4>Cara memakai kerangka ini saat mengevaluasi</h4>
+      <p>Untuk setiap masalah yang Anda temukan, paksa diri Anda menulis: <em>"Ini jurang pelaksanaan atau jurang penilaian? Prinsip mana yang dilanggar?"</em> Tanpa langkah ini, laporan evaluasi Anda akan berhenti pada "kurang menarik" — dan itu bukan temuan IMK, itu opini.</p>
+    </div>
+
+    <div class="crosslink">
+      <strong>Terhubung ke Minggu 2 →</strong> Enam prinsip di atas menjelaskan <em>apa</em> yang harus dirancang. Minggu depan kita membedah <em>mengapa</em> otak manusia bereaksi seperti itu — lewat persepsi, atensi, memori kerja, dan dua hukum terukur (Fitts &amp; Hick) yang menjelaskan kecepatan gerak dan keputusan manusia secara matematis.
+    </div>
+  </section>
+
+  <section id="ucd">
+    <span class="sec-no">1.6</span>
+    <h2 class="sec">Perancangan yang berpusat pada pengguna</h2>
+    <div class="lead-rule" style="background:var(--magenta)"></div>
+    <p><em>User-Centered Design</em> (UCD) adalah proses, bukan gaya visual. Standar ISO 9241-210 merumuskannya sebagai siklus yang berulang dan tidak boleh dipotong.</p>
+    <ol class="plain">
+      <li><strong>Pahami konteks pemakaian.</strong> Siapa penggunanya, apa tugasnya, di lingkungan seperti apa. Ojek daring dipakai sambil berdiri di pinggir jalan, satu tangan, layar terkena matahari — fakta ini mengubah keputusan ukuran tombol dan kontras.</li>
+      <li><strong>Rumuskan kebutuhan pengguna.</strong> Ubah temuan menjadi pernyataan kebutuhan yang dapat diuji, bukan daftar fitur.</li>
+      <li><strong>Buat solusi rancangan.</strong> Mulai dari sketsa dan prototipe kesetiaan rendah agar murah untuk dibuang.</li>
+      <li><strong>Evaluasi terhadap kebutuhan.</strong> Uji dengan pengguna nyata, lalu kembali ke langkah sebelumnya. Iterasi bukan tanda kegagalan; ketiadaan iterasi yang merupakan tanda bahaya.</li>
+    </ol>
+
+    <div class="verdict">
+      <div class="bad"><h4>Berpusat pada sistem</h4><p>Menu disusun mengikuti struktur basis data dan pembagian divisi perusahaan. Istilahnya memakai kosakata internal ("modul transaksi B2B"). Pengguna dipaksa mempelajari arsitektur sistem sebelum bisa memakainya.</p></div>
+      <div class="good"><h4>Berpusat pada pengguna</h4><p>Menu disusun mengikuti tugas yang ingin diselesaikan pengguna ("Kirim uang", "Bayar tagihan"). Istilahnya memakai kosakata pengguna. Struktur internal disembunyikan karena bukan urusan pengguna.</p></div>
+    </div>
+
+    <p>Tiga alat yang akan Anda pakai sepanjang semester: <strong>persona</strong> (representasi pengguna berbasis data, bukan karangan), <strong>skenario</strong> (narasi pemakaian dalam konteks nyata), dan <strong>analisis tugas</strong> (penguraian tujuan menjadi urutan langkah). Ketiganya berfungsi sebagai rem terhadap asumsi pribadi perancang.</p>
+  </section>
+
+  <section id="kasus">
+    <span class="sec-no">1.7</span>
+    <h2 class="sec">Studi kasus: membedah dua keputusan desain</h2>
+    <div class="lead-rule" style="background:var(--bronze)"></div>
+
+    <h3 class="sub">Kasus A — Peta langsung pada layar pertama aplikasi transportasi</h3>
+    <p>Aplikasi seperti Gojek dan Grab menampilkan peta dengan posisi pengguna sudah terdeteksi sebelum pengguna melakukan apa pun. Mengapa ini keputusan yang kuat secara teori IMK?</p>
+    <ul class="plain">
+      <li><strong>Mempersempit jurang pelaksanaan.</strong> Tugas utama ("pergi dari sini ke sana") langsung tersedia tanpa navigasi menu.</li>
+      <li><strong>Mengubah recall menjadi recognition.</strong> Pengguna tidak perlu mengetik alamat asal dari memori; ia cukup memverifikasi titik yang sudah ditampilkan.</li>
+      <li><strong>Memanfaatkan model mental yang sudah ada.</strong> Peta adalah representasi yang sudah dikuasai pengguna sejak sebelum mengenal aplikasi, sehingga tidak ada biaya belajar tambahan.</li>
+    </ul>
+    <p>Kritik yang tetap perlu diajukan: pada kondisi sinyal GPS lemah — gang sempit, dalam gedung — titik yang terdeteksi bisa meleset ratusan meter. Kalau antarmuka menampilkan lokasi keliru dengan keyakinan penuh dan tanpa penanda ketidakpastian, ia menciptakan jurang penilaian baru: pengguna percaya sistem sudah benar padahal tidak.</p>
+
+    <h3 class="sub">Kasus B — Pesan kesalahan pada formulir pendaftaran</h3>
+    <div class="verdict">
+      <div class="bad"><h4>"Terjadi kesalahan. Silakan coba lagi."</h4><p>Melanggar prinsip <em>help users recognize and recover from errors</em>. Tidak menyebut apa yang salah, di field mana, dan apa yang harus diperbaiki. Pengguna hanya bisa menebak, dan menebak adalah beban kognitif yang diciptakan sistem.</p></div>
+      <div class="good"><h4>"Kata sandi perlu minimal 8 karakter. Saat ini 5."</h4><p>Menyebut lokasi masalah, aturan yang berlaku, dan keadaan saat ini. Pengguna dapat langsung bertindak tanpa berpikir. Lebih baik lagi bila aturan ditampilkan <em>sebelum</em> pengguna mengetik, sehingga kesalahan dicegah, bukan dilaporkan.</p></div>
+    </div>
+    <p>Pelajaran umumnya: urutan mutu penanganan kesalahan adalah <strong>mencegah &gt; membimbing &gt; melaporkan</strong>. Sebagian besar sistem berhenti di tahap melaporkan karena itu yang paling murah diimplementasikan, bukan karena itu yang terbaik bagi pengguna.</p>
+  </section>
+
+  <section id="latihan">
+    <span class="sec-no">Tugas</span>
+    <h2 class="sec">Latihan dan studi kasus</h2>
+    <div class="lead-rule" style="background:var(--emerald)"></div>
+    <p>Kerjakan minimal dua dari tiga tugas berikut. Setiap jawaban wajib menyebut <strong>teori atau prinsip yang mendasarinya</strong>.</p>
+
+    <div class="task">
+      <h4>Tugas A — Audit jurang interaksi</h4>
+      <p>Pilih satu aplikasi yang Anda pakai harian. Rekam layar saat menyelesaikan satu tugas dari awal hingga akhir (misalnya membayar tagihan listrik). Identifikasi minimal tiga titik gesekan, lalu untuk tiap titik tulis: <em>(a)</em> apa yang pengguna coba lakukan, <em>(b)</em> ini jurang pelaksanaan atau penilaian, <em>(c)</em> prinsip Norman mana yang dilanggar, <em>(d)</em> usulan perbaikan konkret.</p>
+    </div>
+
+    <div class="task b">
+      <h4>Tugas B — Bandingkan sistem vs pengguna</h4>
+      <p>Cari satu aplikasi (bisa akademik, kampus, atau pemerintah) yang menurut Anda disusun berdasarkan struktur internal organisasi, bukan tugas pengguna. Petakan menunya, lalu rancang ulang strukturnya berdasarkan tugas yang ingin diselesaikan pengguna. Jelaskan bedanya dengan mengacu UCD.</p>
+    </div>
+
+    <div class="task c">
+      <h4>Tugas C — Klasifikasi pesan kesalahan</h4>
+      <p>Kumpulkan lima pesan kesalahan dari aplikasi berbeda. Nilai masing-masing dengan urutan mencegah &gt; membimbing &gt; melaporkan. Tulis versi perbaikan untuk pesan yang paling buruk.</p>
+    </div>
+  </section>
+
+  <section id="kritis">
+    <span class="sec-no">Diskusi</span>
+    <h2 class="sec">Pertanyaan kritis</h2>
+    <div class="lead-rule" style="background:var(--magenta)"></div>
+
+    <details>
+      <summary>Apakah perancang bertanggung jawab atas pengguna yang memakai sistem dengan cara yang tidak diniatkan?</summary>
+      <div class="body"><p>Dalam tradisi IMK, ya, sebagian besar. Pemakaian tak terduga adalah data tentang kebutuhan nyata yang tidak terakomodasi, bukan kesalahan pengguna. Pertanyaan lanjutannya lebih tajam: bila sebuah pola desain terbukti membuat orang melakukan hal yang merugikan dirinya sendiri — berlangganan tanpa sadar, menyerahkan data berlebihan — maka desain tersebut bukan netral secara etika.</p></div>
+    </details>
+
+    <details>
+      <summary>Apakah konsistensi dengan aplikasi lain selalu kebaikan?</summary>
+      <div class="body"><p>Tidak selalu. Konsistensi memudahkan transfer model mental, tetapi ada kasus di mana konsistensi dengan pola lama justru mempertahankan desain yang memang buruk. Melanggar konvensi hanya bisa dibenarkan bila ada bukti terukur bahwa alternatifnya lebih baik.</p></div>
+    </details>
+
+    <details>
+      <summary>Apakah antarmuka berbasis AI percakapan menghapus kebutuhan akan IMK?</summary>
+      <div class="body"><p>Justru sebaliknya. Antarmuka percakapan menghilangkan visibility dan affordance — tidak ada menu yang menunjukkan apa yang bisa diminta, sehingga pengguna kembali ke beban <em>recall</em>. Jurang penilaian juga melebar karena pengguna sulit menilai apakah jawaban sistem benar. Prinsip lama tetap berlaku; yang berubah hanya bentuk pelanggarannya.</p></div>
+    </details>
+  </section>
+
+  </main>
+</div>
+
+<footer id="referensi">
+  <div class="footer-inner">
+    <h4>Referensi utama</h4>
+    <ul>
+      <li>Norman, D. A. (2013). <em>The Design of Everyday Things: Revised and Expanded Edition</em>. Basic Books. — Bab 1–2 untuk affordance, signifier, mapping, dan siklus aksi.</li>
+      <li>Dix, A., Finlay, J., Abowd, G., &amp; Beale, R. (2004). <em>Human–Computer Interaction</em> (3rd ed.). Prentice Hall. — Bab 3 untuk paradigma interaksi.</li>
+      <li>Preece, J., Sharp, H., &amp; Rogers, Y. (2019). <em>Interaction Design: Beyond Human–Computer Interaction</em> (5th ed.). Wiley. — Bab 1–3 untuk proses desain.</li>
+      <li>ISO 9241-210:2019. <em>Ergonomics of human–system interaction — Part 210: Human-centred design for interactive systems</em>.</li>
+      <li>ACM SIGCHI Curricula for Human–Computer Interaction — definisi ruang lingkup IMK yang menjadi acuan bab ini.</li>
+    </ul>
+    <div class="spectrum-bar">
+      <i style="background:#3CB4E6"></i><i style="background:#32B18E"></i><i style="background:#FFD730"></i><i style="background:#FF8040"></i><i style="background:#F05696"></i><i style="background:#9C208C"></i><i style="background:#B89C57"></i><i style="background:#959595"></i>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var links = Array.prototype.slice.call(document.querySelectorAll('.sidebar a'));
+  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if ('IntersectionObserver' in window && targets.length){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('on'); });
+          var m = links.filter(function(l){ return l.getAttribute('href') === '#'+e.target.id; })[0];
+          if(m) m.classList.add('on');
+        }
+      });
+    }, {rootMargin:'-20% 0px -70% 0px'});
+    targets.forEach(function(t){ obs.observe(t); });
+  }
+})();
+</script>
+</body>
+</html>

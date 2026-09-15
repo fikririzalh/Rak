@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#3CB4E6">
+<title>Rak Kuliah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#3CB4E6; --emerald:#32B18E; --pink:#F05696; --orange:#FF8040;
+    --yellow:#FFD730; --white:#F0F0F0; --grey:#D0D0D0; --silver:#959595;
+    --bronze:#B89C57; --magenta:#9C208C; --midnight:#001F4F;
+
+    --bg: var(--white);
+    --surface: #ffffff;
+    --text-primary: #26221c;
+    --text-secondary: #6b6459;
+    --border: var(--grey);
+    --wood-1: #c9a668;
+    --wood-2: #9c7b45;
+    --wood-shadow: rgba(60, 42, 15, 0.35);
+    --accent: var(--sky);
+    --toggle-icon: var(--midnight);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: var(--midnight);
+      --surface: #062a5e;
+      --text-primary: #f3f6fb;
+      --text-secondary: #a9bcda;
+      --border: #123a72;
+      --wood-1: #5b4123;
+      --wood-2: #362512;
+      --wood-shadow: rgba(0, 0, 0, 0.55);
+      --toggle-icon: var(--yellow);
+    }
+  }
+
+  :root[data-theme="dark"]{
+    --bg: var(--midnight);
+    --surface: #062a5e;
+    --text-primary: #f3f6fb;
+    --text-secondary: #a9bcda;
+    --border: #123a72;
+    --wood-1: #5b4123;
+    --wood-2: #362512;
+    --wood-shadow: rgba(0, 0, 0, 0.55);
+    --toggle-icon: var(--yellow);
+  }
+
+  :root[data-theme="light"]{
+    --bg: var(--white);
+    --surface: #ffffff;
+    --text-primary: #26221c;
+    --text-secondary: #6b6459;
+    --border: var(--grey);
+    --wood-1: #c9a668;
+    --wood-2: #9c7b45;
+    --wood-shadow: rgba(60, 42, 15, 0.35);
+    --toggle-icon: var(--midnight);
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+    transition: background .25s ease, color .25s ease;
+    padding: 24px 16px 60px;
+  }
+
+  h1, h2, .book span{ font-family: "Baloo 2", "Segoe UI", sans-serif; }
+
+  .page{ max-width: 980px; margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    background: var(--surface);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+
+  .brand{ display:flex; align-items:center; gap:14px; min-width:max-content; }
+
+  .brand h1{ font-size:26px; margin:0; font-weight:700; color: var(--text-primary); }
+  .brand p{ margin:2px 0 0; font-size:13px; color: var(--text-secondary); font-weight:600; }
+
+  .cat-tail{ transform-origin: 150px 108px; }
+  @media (prefers-reduced-motion: no-preference){
+    .cat-tail{ animation: tailSwish 2.6s ease-in-out infinite; }
+  }
+  @keyframes tailSwish{
+    0%,100%{ transform: rotate(0deg); }
+    50%{ transform: rotate(9deg); }
+  }
+
+  .controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+
+  .search-box{
+    display:flex; align-items:center; gap:8px;
+    background: var(--bg);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding: 10px 14px;
+    min-width: 220px;
+  }
+  .search-box input{
+    border:0; outline:0; background:transparent; color: var(--text-primary);
+    font-family:"Nunito", sans-serif; font-size:14px; width:100%;
+  }
+  .search-box svg{ flex:none; opacity:.6; }
+
+  #themeToggle{
+    width:44px; height:44px; border-radius:14px;
+    border:1px solid var(--border);
+    background: var(--bg);
+    display:grid; place-items:center;
+    cursor:pointer;
+  }
+  #themeToggle svg{ width:20px; height:20px; }
+
+  /* ---------- Shelves ---------- */
+  .shelf{ margin-bottom: 38px; }
+
+  .shelf-header{
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding: 0 6px 10px;
+  }
+  .shelf-header h2{ margin:0; font-size:19px; font-weight:600; }
+  .shelf-count{ font-size:12px; color: var(--text-secondary); font-weight:700; }
+
+  .shelf-frame{
+    background: var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding: 20px 18px 0;
+    overflow:hidden;
+  }
+
+  .books-row{
+    display:flex;
+    align-items:flex-end;
+    gap:7px;
+    overflow-x:auto;
+    padding: 4px 4px 18px;
+  }
+
+  .book{
+    --book-color: var(--sky);
+    flex: 0 0 auto;
+    width: 46px;
+    background: var(--book-color);
+    border-radius: 5px 5px 2px 2px;
+    box-shadow: inset -5px 0 0 rgba(0,0,0,.15), inset 2px 0 0 rgba(255,255,255,.25);
+    color: #fff;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding: 12px 0;
+    text-decoration:none;
+    cursor:pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .book:hover, .book:focus-visible{
+    transform: translateY(-14px) rotate(-2deg);
+    box-shadow: 0 12px 18px rgba(0,0,0,.3), inset -5px 0 0 rgba(0,0,0,.15);
+  }
+  .book span{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .2px;
+    text-shadow: 0 1px 2px rgba(0,0,0,.3);
+    max-height: 100%;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .shelf-plank{
+    height: 20px;
+    margin: 0 -4px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--wood-1), var(--wood-2));
+    box-shadow: 0 8px 14px var(--wood-shadow);
+    position: relative;
+  }
+  .shelf-plank::before, .shelf-plank::after{
+    content:"";
+    position:absolute; top:100%; width:10px; height:16px;
+    background: var(--wood-2);
+    border-radius: 0 0 4px 4px;
+  }
+  .shelf-plank::before{ left:14px; }
+  .shelf-plank::after{ right:14px; }
+
+  /* ---------- Empty state ---------- */
+  .empty-state{
+    background: var(--surface);
+    border:1px dashed var(--border);
+    border-radius:18px;
+    padding: 32px 20px;
+    text-align:center;
+    color: var(--text-secondary);
+    font-weight:600;
+  }
+  .empty-state code{
+    background: var(--bg);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:2px 8px;
+    font-family: monospace;
+    color: var(--text-primary);
+  }
+
+  footer{
+    text-align:center;
+    margin-top: 34px;
+    color: var(--text-secondary);
+    font-size:12.5px;
+    font-weight:600;
+  }
+
+  @media (max-width: 560px){
+    .topbar{ padding:16px; }
+    .brand h1{ font-size:22px; }
+    .search-box{ min-width: 0; flex:1; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+      <svg width="58" height="46" viewBox="0 0 220 170" aria-hidden="true">
+        <rect x="30" y="140" width="160" height="16" rx="3" fill="#3CB4E6"/>
+        <rect x="40" y="124" width="140" height="16" rx="3" fill="#F05696"/>
+        <rect x="50" y="108" width="120" height="16" rx="3" fill="#FFD730"/>
+        <path class="cat-tail" d="M150,110 C185,100 190,60 165,45" fill="none" stroke="#959595" stroke-width="10" stroke-linecap="round"/>
+        <ellipse cx="100" cy="95" rx="46" ry="34" fill="#F0F0F0" stroke="#959595" stroke-width="3"/>
+        <circle cx="90" cy="55" r="30" fill="#F0F0F0" stroke="#959595" stroke-width="3"/>
+        <polygon points="66,38 74,10 86,34" fill="#F0F0F0" stroke="#959595" stroke-width="3" stroke-linejoin="round"/>
+        <polygon points="114,34 126,10 134,38" fill="#F0F0F0" stroke="#959595" stroke-width="3" stroke-linejoin="round"/>
+        <polygon points="70,32 75,18 82,30" fill="#F05696"/>
+        <polygon points="118,30 125,18 130,32" fill="#F05696"/>
+        <ellipse cx="79" cy="55" rx="4.5" ry="6" fill="#32B18E"/>
+        <ellipse cx="101" cy="55" rx="4.5" ry="6" fill="#32B18E"/>
+        <polygon points="90,64 86,70 94,70" fill="#F05696"/>
+        <path d="M90,70 Q90,76 82,76" fill="none" stroke="#959595" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M90,70 Q90,76 98,76" fill="none" stroke="#959595" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="50" y1="58" x2="70" y2="56" stroke="#959595" stroke-width="2"/>
+        <line x1="50" y1="66" x2="70" y2="64" stroke="#959595" stroke-width="2"/>
+        <line x1="130" y1="56" x2="150" y2="58" stroke="#959595" stroke-width="2"/>
+        <line x1="130" y1="64" x2="150" y2="66" stroke="#959595" stroke-width="2"/>
+      </svg>
+      <div>
+        <h1>Rak Kuliah</h1>
+        <p>Semua materi mingguan, satu rak per mata kuliah</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="searchInput" type="text" placeholder="Cari mata kuliah atau minggu...">
+      </div>
+      <button id="themeToggle" type="button" aria-label="Ganti tema">
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="var(--toggle-icon)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="var(--toggle-icon)" style="display:none"><path d="M20.5 14.5a8.5 8.5 0 1 1-9-13 7 7 0 0 0 9 13z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="shelvesContainer"></main>
+
+  <footer>Dibuat otomatis oleh generate-sitemap.js &mdash; data contoh di bawah ini akan diganti saat script dijalankan di folder aslimu 🐾</footer>
+</div>
+
+<script>
+  /* =========================================================
+     DATA RAK (diisi ulang otomatis oleh generate-sitemap.js)
+  ========================================================= */
+  const SHELVES = [
+      {
+          title: "Interaksi Manusia dan Komputer",
+          books: [
+              { title: "First Week", url: "Interkasi Manusia dan Komputer/imk-minggu-1.html", color: "#3CB4E6" },
+              { title: "Second Week", url: "Interkasi Manusia dan Komputer/imk-minggu-2.html", color: "#32B18E" },
+              { title: "Third Week", url: "Interkasi Manusia dan Komputer/third week.html", color: "#F05696" },
+              { title: "Fourth Week", url: "Interkasi Manusia dan Komputer/fourth week.html", color: "#FF8040" },
+              { title: "Fifth Week", url: "Interkasi Manusia dan Komputer/fifth week.html", color: "#FFD730" }
+          ]
+      },
+      {
+          title: "Struktur Data",
+          books: [
+              { title: "Pengantar Array", url: "Struktur Data/pengantar array.html", color: "#9C208C" },
+              { title: "Linked List", url: "Struktur Data/linked list.html", color: "#3CB4E6" },
+              { title: "Stack & Queue", url: "Struktur Data/stack queue.html", color: "#32B18E" },
+              { title: "Pohon Biner", url: "Struktur Data/pohon biner.html", color: "#F05696" }
+          ]
+      },
+      {
+          title: "Fisika Dasar",
+          books: [
+              { title: "Kinematika", url: "Fisika Dasar/kinematika.html", color: "#FF8040" },
+              { title: "Dinamika", url: "Fisika Dasar/dinamika.html", color: "#FFD730" },
+              { title: "Usaha & Energi", url: "Fisika Dasar/usaha energi.html", color: "#B89C57" }
+          ]
+      }
+  ];
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
+  function escapeHtml(str){
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+  }
+
+  function render(){
+      const container = document.getElementById("shelvesContainer");
+      container.innerHTML = "";
+
+      if(SHELVES.length === 0){
+          container.innerHTML = '<p class="empty-state">Belum ada rak. Jalankan <code>node generate-sitemap.js</code> di folder ini untuk mengisi otomatis.</p>';
+          return;
+      }
+
+      SHELVES.forEach(shelf => {
+          const section = document.createElement("section");
+          section.className = "shelf";
+          section.dataset.title = shelf.title;
+
+          const header = document.createElement("div");
+          header.className = "shelf-header";
+          header.innerHTML = `<h2>${escapeHtml(shelf.title)}</h2><span class="shelf-count">${shelf.books.length} minggu</span>`;
+          section.appendChild(header);
+
+          const frame = document.createElement("div");
+          frame.className = "shelf-frame";
+
+          const row = document.createElement("div");
+          row.className = "books-row";
+
+          shelf.books.forEach((book, i) => {
+              const a = document.createElement("a");
+              a.className = "book";
+              a.href = book.url;
+              a.dataset.title = book.title;
+              a.style.setProperty("--book-color", book.color);
+              a.style.height = (170 + (i % 4) * 16) + "px";
+              a.innerHTML = `<span>${escapeHtml(book.title)}</span>`;
+              row.appendChild(a);
+          });
+
+          frame.appendChild(row);
+
+          const plank = document.createElement("div");
+          plank.className = "shelf-plank";
+          frame.appendChild(plank);
+
+          section.appendChild(frame);
+          container.appendChild(section);
+      });
+  }
+
+  render();
+
+  /* =========================================================
+     SEARCH
+  ========================================================= */
+  document.getElementById("searchInput").addEventListener("input", (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      document.querySelectorAll(".shelf").forEach(shelfEl => {
+          const shelfTitle = (shelfEl.dataset.title || "").toLowerCase();
+          let anyVisible = false;
+          shelfEl.querySelectorAll(".book").forEach(bookEl => {
+              const bookTitle = (bookEl.dataset.title || "").toLowerCase();
+              const match = !q || shelfTitle.includes(q) || bookTitle.includes(q);
+              bookEl.style.display = match ? "" : "none";
+              if(match) anyVisible = true;
+          });
+          shelfEl.style.display = anyVisible ? "" : "none";
+      });
+  });
+
+  /* =========================================================
+     THEME TOGGLE
+  ========================================================= */
+  const root = document.documentElement;
+  const themeToggle = document.getElementById("themeToggle");
+  const iconSun = document.getElementById("iconSun");
+  const iconMoon = document.getElementById("iconMoon");
+  const THEME_KEY = "rak-kuliah-theme";
+
+  function applyTheme(theme){
+      root.setAttribute("data-theme", theme);
+      iconSun.style.display = theme === "dark" ? "none" : "block";
+      iconMoon.style.display = theme === "dark" ? "block" : "none";
+      themeToggle.setAttribute("aria-label", theme === "dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap");
+  }
+
+  (function initTheme(){
+      try{
+          const saved = localStorage.getItem(THEME_KEY);
+          if(saved){ applyTheme(saved); return; }
+      }catch(e){}
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(prefersDark ? "dark" : "light");
+  })();
+
+  themeToggle.addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+  });
+</script>
+</body>
+</html>
