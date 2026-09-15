@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Base catatan kuliah mingguan dengan tema HAPPY PRISM.">
+  <meta name="theme-color" content="#001F4F">
+  <title>Manajemen Proyek Perangkat Lunak (MPPL) | HAPPY PRISM</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23001F4F'/%3E%3Cpath d='M32 10 54 50H10Z' fill='%233CB4E6'/%3E%3Cpath d='m32 10 9 40H23Z' fill='%23F05696'/%3E%3Cpath d='M23 50h18L32 10Z' fill='%23FFD730' fill-opacity='.85'/%3E%3C/svg%3E">
+
+  <!--
+    KONTRAK PENGISIAN UNTUK CLAUDE
+
+    Tugas: ubah base ini menjadi catatan kuliah mingguan berdasarkan materi pengguna.
+
+    ATURAN WAJIB:
+    1. Kembalikan SATU file index.html lengkap. Jangan memberi potongan kode atau penjelasan di luar file.
+    2. Pertahankan seluruh CSS, JavaScript, class, id, struktur navigasi, dan palet HAPPY PRISM.
+    3. Ubah hanya placeholder metadata dan area di antara AI-CONTENT-START serta AI-CONTENT-END.
+    4. Salin struktur <template id="weekTemplate"> untuk setiap pertemuan. Tempel hasilnya di #weeklyNotes.
+    5. Beri setiap artikel id unik: minggu-01, minggu-02, dan seterusnya. Samakan data-week dengan nomornya.
+    6. Setelah catatan terisi, ubah <body data-filled="false"> menjadi <body data-filled="true">.
+    7. Susun jumlah minggu sesuai materi. Jangan menambah topik yang tidak diberikan hanya untuk memenuhi jumlah tertentu.
+    8. Gunakan bahasa Indonesia akademik yang jelas, aktif, ringkas, dan mudah dipelajari.
+    9. Setiap minggu harus memuat: tujuan belajar, konsep inti, pembahasan, contoh atau penerapan, istilah penting, rangkuman, refleksi atau latihan, serta referensi bila tersedia.
+    10. Jangan mengarang data, kutipan, DOI, nama jurnal, atau daftar pustaka. Jika sumber belum tersedia, tulis "Referensi belum dicantumkan dalam materi sumber."
+    11. Gunakan tabel hanya untuk perbandingan yang membutuhkan pemetaan tepat. Gunakan bullet untuk daftar singkat.
+    12. Jangan menambahkan CDN, framework, font eksternal, gambar eksternal, atau file lain. Hasil harus tetap berjalan offline.
+    13. Jaga hierarki heading: h1 untuk judul halaman, h2 untuk topik minggu, h3 untuk bagian catatan.
+    14. Jangan menghapus template, aturan ini, fitur navigasi, tombol cetak, atau dukungan tampilan mobile.
+
+    DATA YANG HARUS DIISI DARI PERMINTAAN PENGGUNA:
+    - [NAMA MATA KULIAH]
+    - [KODE MATA KULIAH]
+    - [NAMA DOSEN]
+    - [PROGRAM STUDI]
+    - [SEMESTER / TAHUN AKADEMIK]
+    - seluruh catatan per minggu di #weeklyNotes
+  -->
+
+  <style>
+    :root {
+      --sky: #3CB4E6;
+      --emerald: #32B18E;
+      --pink: #F05696;
+      --orange: #FF8040;
+      --yellow: #FFD730;
+      --snow: #F0F0F0;
+      --grey: #D0D0D0;
+      --silver: #959595;
+      --bronze: #B89C57;
+      --magenta: #9C208C;
+      --midnight: #001F4F;
+      --white: #FFFFFF;
+      --ink: #10213B;
+      --muted: #60708A;
+      --line: rgba(0, 31, 79, .12);
+      --shadow: 0 18px 50px rgba(0, 31, 79, .10);
+      --prism: linear-gradient(90deg, var(--sky), var(--emerald), var(--yellow), var(--orange), var(--pink), var(--magenta));
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --sidebar: 18.75rem;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--snow);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    button, a { font: inherit; }
+
+    a { color: inherit; }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 100;
+      width: 0;
+      height: 5px;
+      background: var(--prism);
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 1.5rem;
+      overflow-y: auto;
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .sidebar::before {
+      content: "";
+      display: block;
+      height: 7px;
+      margin: -1.5rem -1.5rem 1.5rem;
+      background: var(--prism);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 2rem;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.8rem;
+      aspect-ratio: 1;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      transform: rotate(-4deg);
+      box-shadow: 6px 6px 0 var(--pink);
+    }
+
+    .brand strong,
+    .brand span { display: block; }
+
+    .brand strong {
+      font-size: .95rem;
+      letter-spacing: .09em;
+    }
+
+    .brand span {
+      color: rgba(255, 255, 255, .68);
+      font-size: .78rem;
+    }
+
+    .course-card {
+      padding: 1.1rem;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: var(--radius-md);
+    }
+
+    .micro-label {
+      margin: 0 0 .45rem;
+      color: var(--sky);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .course-card h2 {
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+      line-height: 1.35;
+    }
+
+    .course-meta {
+      display: grid;
+      gap: .7rem;
+      margin: 0;
+    }
+
+    .course-meta div {
+      display: grid;
+      grid-template-columns: 4.4rem 1fr;
+      gap: .5rem;
+      padding-top: .7rem;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .course-meta dt {
+      color: rgba(255, 255, 255, .58);
+      font-size: .78rem;
+    }
+
+    .course-meta dd {
+      margin: 0;
+      font-size: .78rem;
+      font-weight: 650;
+    }
+
+    .nav-heading {
+      margin: 1.8rem 0 .65rem;
+      color: rgba(255, 255, 255, .52);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-nav {
+      display: grid;
+      gap: .35rem;
+    }
+
+    .week-nav a,
+    .nav-empty {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      min-height: 2.65rem;
+      padding: .55rem .7rem;
+      color: rgba(255, 255, 255, .72);
+      border-radius: 10px;
+      font-size: .86rem;
+      text-decoration: none;
+    }
+
+    .week-nav a::before {
+      content: attr(data-number);
+      display: grid;
+      place-items: center;
+      width: 1.7rem;
+      height: 1.7rem;
+      flex: 0 0 auto;
+      color: var(--midnight);
+      background: var(--sky);
+      border-radius: 8px;
+      font-size: .7rem;
+      font-weight: 900;
+    }
+
+    .week-nav a:hover,
+    .week-nav a.active {
+      color: var(--white);
+      background: rgba(255, 255, 255, .11);
+    }
+
+    .week-nav a.active::before { background: var(--yellow); }
+
+    .nav-empty {
+      color: rgba(255, 255, 255, .45);
+      border: 1px dashed rgba(255, 255, 255, .18);
+    }
+
+    .sidebar-actions {
+      display: grid;
+      gap: .65rem;
+      margin-top: 1.5rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      min-height: 2.8rem;
+      padding: .7rem 1rem;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .button-primary {
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .button-primary:hover { background: #FFE36A; }
+
+    .content {
+      min-width: 0;
+      padding: clamp(1.15rem, 3vw, 3.25rem);
+    }
+
+    .mobile-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .menu-button {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      min-height: 20rem;
+      padding: clamp(1.5rem, 5vw, 4rem);
+      overflow: hidden;
+      color: var(--white);
+      background: var(--midnight);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      border-radius: 999px;
+      filter: blur(1px);
+    }
+
+    .hero::before {
+      width: 18rem;
+      height: 18rem;
+      top: -7rem;
+      right: -4rem;
+      background: var(--pink);
+      opacity: .88;
+    }
+
+    .hero::after {
+      width: 13rem;
+      height: 13rem;
+      right: 8rem;
+      bottom: -7rem;
+      background: var(--emerald);
+      opacity: .86;
+    }
+
+    .prism-lines {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .26;
+      background-image: linear-gradient(115deg, transparent 45%, var(--yellow) 45% 48%, transparent 48%), linear-gradient(65deg, transparent 58%, var(--sky) 58% 61%, transparent 61%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin: 0 0 1.4rem;
+      color: var(--yellow);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 2rem;
+      height: 4px;
+      background: var(--prism);
+      border-radius: 99px;
+    }
+
+    .hero h1 {
+      max-width: 11ch;
+      margin: 0;
+      font-size: clamp(2.45rem, 6vw, 5.6rem);
+      line-height: .96;
+      letter-spacing: -.055em;
+    }
+
+    .hero-copy {
+      max-width: 44rem;
+      margin: 1.5rem 0 0;
+      color: rgba(255, 255, 255, .76);
+      font-size: 1.05rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 2rem;
+    }
+
+    .hero-tag {
+      padding: .5rem .8rem;
+      color: var(--white);
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .guide-panel {
+      margin-top: 1.5rem;
+      padding: clamp(1.4rem, 3vw, 2.4rem);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    body[data-filled="true"] .guide-panel { display: none; }
+
+    .section-kicker {
+      margin: 0 0 .35rem;
+      color: var(--magenta);
+      font-size: .75rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 0;
+      color: var(--midnight);
+      font-size: clamp(1.65rem, 3vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -.03em;
+    }
+
+    .section-intro {
+      max-width: 50rem;
+      margin: .75rem 0 0;
+      color: var(--muted);
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+      margin: 1.6rem 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: rules;
+    }
+
+    .rules-grid li {
+      position: relative;
+      min-height: 8.2rem;
+      padding: 1.2rem 1.15rem 1.15rem 4rem;
+      background: #F8FAFC;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      counter-increment: rules;
+    }
+
+    .rules-grid li::before {
+      content: counter(rules, decimal-leading-zero);
+      position: absolute;
+      top: 1.15rem;
+      left: 1.15rem;
+      display: grid;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 10px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .rules-grid strong {
+      display: block;
+      margin-bottom: .25rem;
+      color: var(--midnight);
+    }
+
+    .rules-grid span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .ai-command {
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      color: var(--midnight);
+      background: rgba(60, 180, 230, .12);
+      border-left: 5px solid var(--sky);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: .92rem;
+    }
+
+    .notes-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: clamp(2.3rem, 6vw, 4.5rem) 0 1.2rem;
+    }
+
+    .notes-status {
+      flex: 0 0 auto;
+      padding: .45rem .75rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      min-height: 23rem;
+      padding: 2rem;
+      text-align: center;
+      background: var(--white);
+      border: 2px dashed var(--grey);
+      border-radius: var(--radius-lg);
+    }
+
+    .empty-state[hidden] { display: none; }
+
+    .empty-symbol {
+      position: relative;
+      width: 5.5rem;
+      height: 5.5rem;
+      margin: 0 auto 1.25rem;
+      background: var(--sky);
+      border-radius: 22px;
+      transform: rotate(5deg);
+      box-shadow: 12px 12px 0 var(--pink), -8px -8px 0 var(--yellow);
+    }
+
+    .empty-symbol::before,
+    .empty-symbol::after {
+      content: "";
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 2.2rem;
+      height: 5px;
+      background: var(--midnight);
+      border-radius: 99px;
+      transform: translate(-50%, -50%);
+    }
+
+    .empty-symbol::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+    .empty-state h2 {
+      margin: 0;
+      color: var(--midnight);
+      font-size: 1.55rem;
+    }
+
+    .empty-state p {
+      max-width: 34rem;
+      margin: .55rem auto 0;
+      color: var(--muted);
+    }
+
+    #weeklyNotes {
+      display: grid;
+      gap: 1.35rem;
+    }
+
+    .week-card {
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .week-head {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      min-height: 10rem;
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .week-number {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .week-number span {
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-number strong {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .week-heading {
+      display: grid;
+      align-content: center;
+      padding: 1.5rem 2rem;
+    }
+
+    .week-heading p {
+      margin: 0 0 .35rem;
+      color: var(--sky);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .week-heading h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.35rem);
+      line-height: 1.15;
+    }
+
+    .week-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      padding: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .note-block {
+      padding: 1.2rem;
+      background: #FAFBFD;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .note-block.full { grid-column: 1 / -1; }
+
+    .note-block.accent-sky { border-top: 5px solid var(--sky); }
+    .note-block.accent-emerald { border-top: 5px solid var(--emerald); }
+    .note-block.accent-pink { border-top: 5px solid var(--pink); }
+    .note-block.accent-orange { border-top: 5px solid var(--orange); }
+    .note-block.accent-magenta { border-top: 5px solid var(--magenta); }
+    .note-block.accent-bronze { border-top: 5px solid var(--bronze); }
+
+    .note-block h3 {
+      margin: 0 0 .65rem;
+      color: var(--midnight);
+      font-size: 1.05rem;
+    }
+
+    .note-block p,
+    .note-block ul,
+    .note-block ol { margin: .6rem 0 0; }
+
+    .note-block ul,
+    .note-block ol { padding-left: 1.25rem; }
+
+    .note-block li + li { margin-top: .35rem; }
+
+    .note-table-wrap { overflow-x: auto; }
+
+    .note-table {
+      width: 100%;
+      margin-top: .75rem;
+      border-collapse: collapse;
+      font-size: .92rem;
+    }
+
+    .note-table th,
+    .note-table td {
+      padding: .75rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--grey);
+    }
+
+    .note-table th {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .key-term {
+      display: grid;
+      grid-template-columns: minmax(7rem, .35fr) 1fr;
+      gap: .7rem;
+      padding: .65rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .key-term:last-child { border-bottom: 0; }
+    .key-term strong { color: var(--magenta); }
+
+    .reference-list {
+      padding-left: 1.2rem;
+      overflow-wrap: anywhere;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2.2rem;
+      padding: 1.2rem 0;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: .8rem;
+    }
+
+    @media (max-width: 960px) {
+      .app-shell { display: block; }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 90;
+        width: min(86vw, var(--sidebar));
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+        box-shadow: 20px 0 60px rgba(0, 0, 0, .25);
+      }
+
+      body.menu-open { overflow: hidden; }
+      body.menu-open .sidebar { transform: translateX(0); }
+
+      .mobile-bar { display: flex; }
+
+      .content { padding-top: 1rem; }
+    }
+
+    @media (max-width: 680px) {
+      .hero { min-height: 22rem; }
+      .hero::after { right: 1rem; }
+      .rules-grid,
+      .week-body { grid-template-columns: 1fr; }
+      .note-block.full { grid-column: auto; }
+      .notes-header { align-items: start; flex-direction: column; }
+      .week-head { grid-template-columns: 4.8rem minmax(0, 1fr); }
+      .week-heading { padding: 1.2rem; }
+      .week-number strong { font-size: 2.25rem; }
+      .page-footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+
+    @media print {
+      @page { margin: 1.5cm; }
+      body { background: var(--white); }
+      .scroll-progress,
+      .sidebar,
+      .mobile-bar,
+      .guide-panel,
+      .empty-state,
+      .notes-status { display: none !important; }
+      .app-shell { display: block; }
+      .content { padding: 0; }
+      .hero {
+        min-height: 0;
+        margin-bottom: 1.2rem;
+        padding: 2rem;
+        box-shadow: none;
+      }
+      .week-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+      .note-block { break-inside: avoid; }
+    }
+  </style>
+</head>
+
+<body data-filled="true">
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi catatan kuliah">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">HP</div>
+        <div>
+          <strong>HAPPY PRISM</strong>
+          <span>Weekly Notes System</span>
+        </div>
+      </div>
+
+      <section class="course-card" aria-labelledby="courseName">
+        <p class="micro-label">Mata Kuliah</p>
+        <h2 id="courseName" data-field="course">Manajemen Proyek Perangkat Lunak</h2>
+        <dl class="course-meta">
+          <div>
+            <dt>Kode</dt>
+            <dd data-field="course-code">MPPL</dd>
+          </div>
+          <div>
+            <dt>Dosen</dt>
+            <dd data-field="lecturer">Dosen Pengampu MPPL</dd>
+          </div>
+          <div>
+            <dt>Prodi</dt>
+            <dd data-field="program">Sistem Informasi / Teknik Informatika</dd>
+          </div>
+          <div>
+            <dt>Periode</dt>
+            <dd data-field="period">Ganjil 2026/2027</dd>
+          </div>
+        </dl>
+      </section>
+
+      <p class="nav-heading">Daftar Pertemuan</p>
+      <nav class="week-nav" id="weekNav" aria-label="Daftar catatan mingguan">
+        <span class="nav-empty">Belum ada minggu yang diisi</span>
+      </nav>
+
+      <div class="sidebar-actions">
+        <button class="button button-primary" id="printButton" type="button" aria-label="Cetak catatan atau simpan sebagai PDF">
+          Cetak / Simpan PDF
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="mobile-bar">
+        <strong>HAPPY PRISM</strong>
+        <button class="button menu-button" id="menuButton" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+      </div>
+
+      <header class="hero" id="top">
+        <div class="prism-lines" aria-hidden="true"></div>
+        <p class="eyebrow">Ruang Belajar Mingguan</p>
+        <h1>Catatan Kuliah Mingguan</h1>
+        <p class="hero-copy">Satu ruang terstruktur untuk menyimpan konsep, pembahasan, contoh, refleksi, dan referensi dari setiap pertemuan.</p>
+        <div class="hero-tags" aria-label="Informasi catatan">
+          <span class="hero-tag" data-field="course">Manajemen Proyek Perangkat Lunak</span>
+          <span class="hero-tag" data-field="period">Ganjil 2026/2027</span>
+          <span class="hero-tag" id="meetingCount">0 pertemuan</span>
+        </div>
+      </header>
+
+      <section class="guide-panel" id="claudeGuide" aria-labelledby="guideTitle">
+        <p class="section-kicker">Instruksi Pengisian</p>
+        <h2 class="section-title" id="guideTitle">Aturan kerja untuk Claude</h2>
+        <p class="section-intro">Base ini sengaja belum memuat materi. Saat materi diberikan, Claude harus mengisi area catatan tanpa mengubah desain, navigasi, atau fungsi halaman.</p>
+
+        <ol class="rules-grid">
+          <li>
+            <strong>Gunakan materi pengguna</strong>
+            <span>Jaga urutan topik. Jangan menambah fakta, sumber, atau pertemuan tanpa dasar.</span>
+          </li>
+          <li>
+            <strong>Isi metadata utama</strong>
+            <span>Ganti nama mata kuliah, kode, dosen, program studi, serta periode pada semua slot.</span>
+          </li>
+          <li>
+            <strong>Salin template minggu</strong>
+            <span>Buat satu artikel untuk setiap pertemuan dengan nomor, id, dan judul yang unik.</span>
+          </li>
+          <li>
+            <strong>Susun catatan utuh</strong>
+            <span>Bahas tujuan, konsep, uraian, contoh, istilah, rangkuman, latihan, dan referensi.</span>
+          </li>
+          <li>
+            <strong>Jaga akurasi akademik</strong>
+            <span>Jangan mengarang sitasi. Tandai secara jujur ketika materi belum menyediakan referensi.</span>
+          </li>
+          <li>
+            <strong>Kembalikan file lengkap</strong>
+            <span>Hasil akhir harus berupa index.html utuh yang dapat dibuka langsung tanpa internet.</span>
+          </li>
+        </ol>
+
+        <div class="ai-command">
+          <strong>Perintah singkat:</strong> Isi base ini menggunakan materi yang saya lampirkan. Patuhi KONTRAK PENGISIAN UNTUK CLAUDE di bagian head. Pertahankan desain dan kembalikan satu index.html lengkap.
+        </div>
+      </section>
+
+      <section aria-labelledby="notesTitle">
+        <div class="notes-header">
+          <div>
+            <p class="section-kicker">Arsip Pertemuan</p>
+            <h2 class="section-title" id="notesTitle">Catatan per minggu</h2>
+          </div>
+          <span class="notes-status" id="notesStatus">Siap diisi</span>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          <div>
+            <div class="empty-symbol" aria-hidden="true"></div>
+            <h2>Area catatan masih kosong</h2>
+            <p>Kirim file ini bersama materi kuliah kepada Claude. Struktur minggu akan muncul otomatis setelah area konten diisi.</p>
+          </div>
+        </div>
+
+        <!-- AI-CONTENT-START: CLAUDE MENEMPEL SEMUA ARTICLE .week-card DI DALAM ELEMEN INI -->
+        <div id="weeklyNotes" data-ai-edit-zone="weekly-notes">
+          <article class="week-card" id="minggu-01" data-week="01">
+            <header class="week-head">
+              <div class="week-number">
+                <span>Minggu</span>
+                <strong>01</strong>
+              </div>
+              <div class="week-heading">
+                <p>Pengantar Perkuliahan</p>
+                <h2>Konsep Dasar Manajemen Proyek Perangkat Lunak</h2>
+              </div>
+            </header>
+
+            <div class="week-body">
+              <section class="note-block accent-sky">
+                <h3>Tujuan Pembelajaran</h3>
+                <ul>
+                  <li>Menjelaskan pengertian proyek perangkat lunak dan perbedaannya dengan pekerjaan operasional rutin.</li>
+                  <li>Menjelaskan mengapa manajemen proyek dibutuhkan dalam pengembangan software, tidak cukup hanya keterampilan teknis (coding).</li>
+                  <li>Mengidentifikasi elemen segitiga kendala proyek (scope, time, cost) beserta dimensi kualitas sebagai faktor keempat.</li>
+                  <li>Mengenal kelompok proses dalam siklus hidup proyek: inisiasi, perencanaan, eksekusi, pemantauan &amp; pengendalian, serta penutupan.</li>
+                  <li>Memahami peran, tanggung jawab, dan posisi seorang Project Manager (PM) dalam tim pengembangan software di industri.</li>
+                </ul>
+              </section>
+
+              <section class="note-block accent-emerald">
+                <h3>Konsep Inti</h3>
+                <p>Proyek perangkat lunak adalah upaya sementara (<em>temporary endeavor</em>) yang dijalankan untuk menghasilkan produk, layanan, atau sistem software yang unik, dengan batas waktu, anggaran, dan lingkup kerja tertentu. Manajemen Proyek Perangkat Lunak (MPPL) adalah penerapan pengetahuan, keahlian, alat, dan teknik pada aktivitas proyek software agar tujuan bisnis dan kebutuhan pengguna tercapai secara terkendali &mdash; bukan sekadar menulis kode yang berjalan, tetapi memastikan kode itu selesai tepat lingkup, tepat waktu, sesuai anggaran, dan memenuhi standar kualitas yang disepakati.</p>
+              </section>
+
+              <section class="note-block full accent-pink">
+                <h3>Pembahasan Utama</h3>
+
+                <h4>1. Proyek vs. Operasional</h4>
+                <p>Pekerjaan organisasi terbagi menjadi dua sifat: <strong>operasional</strong> (berulang, rutin, tanpa titik akhir yang pasti &mdash; misalnya tim maintenance yang menangani tiket bug harian) dan <strong>proyek</strong> (sementara, punya tanggal mulai dan selesai, menghasilkan <em>deliverable</em> yang unik &mdash; misalnya membangun aplikasi mobile baru dari nol). Software project management berfokus pada sifat kedua: bagaimana sesuatu yang belum pernah dibuat persis seperti itu sebelumnya dapat direncanakan dan dieksekusi dengan risiko yang terkendali.</p>
+
+                <h4>2. Mengapa Proyek Software Rawan Gagal</h4>
+                <p>Dibandingkan proyek konstruksi atau manufaktur, proyek software punya karakteristik yang membuatnya lebih sulit dikelola: kebutuhan (<em>requirement</em>) sering berubah di tengah jalan, hasil kerja bersifat tidak kasatmata (<em>intangible</em>) sehingga sulit diukur progresnya hanya dengan melihat, serta ketergantungan tinggi pada kompetensi individu dan komunikasi tim. Tanpa manajemen yang baik, gejala umum yang muncul adalah <strong>scope creep</strong> (lingkup membengkak tanpa kendali), jadwal molor, biaya membengkak, dan kualitas yang dikorbankan demi mengejar tenggat.</p>
+
+                <h4>3. Segitiga Kendala Proyek (Triple Constraint) dan Kualitas</h4>
+                <p>Tiga variabel utama dalam proyek &mdash; <strong>ruang lingkup (scope)</strong>, <strong>waktu (time)</strong>, dan <strong>biaya (cost)</strong> &mdash; saling terkait erat. Mengubah satu variabel akan menekan variabel lainnya, dan hasil akhirnya selalu bermuara pada satu titik pusat: <strong>kualitas</strong>. Seorang PM tidak bisa memperbesar lingkup tanpa menambah waktu atau biaya, dan tidak bisa mempercepat waktu tanpa menambah sumber daya atau memangkas lingkup, tanpa mengorbankan kualitas di suatu titik.</p>
+                <div class="note-table-wrap">
+                  <table class="note-table">
+                    <thead>
+                      <tr>
+                        <th>Dimensi</th>
+                        <th>Pertanyaan Kunci</th>
+                        <th>Contoh Dampak Jika Ditekan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Scope</td>
+                        <td>Fitur apa saja yang harus ada dalam produk?</td>
+                        <td>Fitur dipotong dapat mengurangi nilai bisnis produk.</td>
+                      </tr>
+                      <tr>
+                        <td>Time</td>
+                        <td>Kapan produk harus rilis?</td>
+                        <td>Jadwal dipepetkan memaksa lembur atau uji coba dipersingkat.</td>
+                      </tr>
+                      <tr>
+                        <td>Cost</td>
+                        <td>Berapa anggaran dan sumber daya yang tersedia?</td>
+                        <td>Anggaran dipangkas bisa mengurangi jumlah developer atau tools.</td>
+                      </tr>
+                      <tr>
+                        <td>Quality</td>
+                        <td>Standar mutu apa yang harus dipenuhi?</td>
+                        <td>Selalu menjadi korban pertama saat tiga dimensi lain dipaksakan.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <h4>4. Siklus Hidup dan Kelompok Proses Proyek</h4>
+                <p>Terlepas dari metodologi yang dipakai (akan dibahas mendalam pada pertemuan berikutnya), setiap proyek software pada dasarnya melewati lima kelompok proses berikut, yang dapat dijalankan secara linear maupun berulang (iteratif):</p>
+                <div class="note-table-wrap">
+                  <table class="note-table">
+                    <thead>
+                      <tr>
+                        <th>Kelompok Proses</th>
+                        <th>Fokus Utama</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Inisiasi</td>
+                        <td>Menentukan kelayakan proyek, tujuan, dan pemangku kepentingan (stakeholder) utama.</td>
+                      </tr>
+                      <tr>
+                        <td>Perencanaan</td>
+                        <td>Menyusun ruang lingkup, jadwal, anggaran, kebutuhan sumber daya, dan strategi risiko.</td>
+                      </tr>
+                      <tr>
+                        <td>Eksekusi</td>
+                        <td>Tim mengerjakan deliverable sesuai rencana: desain, coding, testing, integrasi.</td>
+                      </tr>
+                      <tr>
+                        <td>Pemantauan &amp; Pengendalian</td>
+                        <td>Membandingkan progres aktual dengan rencana, mengelola perubahan (change request).</td>
+                      </tr>
+                      <tr>
+                        <td>Penutupan</td>
+                        <td>Serah terima produk, evaluasi akhir (retrospective/lesson learned), penutupan kontrak.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <h4>5. Peran Project Manager di Industri Software</h4>
+                <p>Di industri, PM software berperan sebagai penghubung antara kebutuhan bisnis (product owner, klien, manajemen) dan tim teknis (developer, QA, DevOps). Tanggung jawabnya mencakup menjaga kejelasan lingkup, memfasilitasi komunikasi, mengelola risiko, memantau progres terhadap timeline dan anggaran, serta menjadi pengambil keputusan saat terjadi trade-off antara scope, time, cost, dan quality. Pada tim Agile, peran ini kadang terbagi menjadi Scrum Master dan Product Owner, namun esensi tanggung jawab manajerialnya tetap sama.</p>
+
+                <h4>6. Hubungan Software Engineering dan Software Project Management</h4>
+                <p>Software engineering menjawab pertanyaan <em>&ldquo;bagaimana membangun software yang benar?&rdquo;</em> (arsitektur, algoritma, kualitas kode), sedangkan software project management menjawab <em>&ldquo;bagaimana memastikan software yang benar itu selesai tepat lingkup, waktu, dan biaya?&rdquo;</em>. Keduanya saling melengkapi: rekayasa yang baik tanpa manajemen yang baik berisiko menghasilkan produk bagus yang terlambat rilis atau melebihi anggaran; manajemen yang baik tanpa rekayasa yang baik berisiko menghasilkan produk tepat waktu tetapi rapuh dan sulit dipelihara.</p>
+              </section>
+
+              <section class="note-block accent-orange">
+                <h3>Contoh atau Penerapan</h3>
+                <p><strong>Kasus 1 &mdash; Aplikasi Mobile Fintech:</strong> Sebuah startup ingin merilis aplikasi pembayaran digital dalam 4 bulan dengan anggaran terbatas. Di tengah jalan, tim bisnis meminta tambahan fitur transfer antarbank yang tidak ada di rencana awal. Tanpa proses pengendalian perubahan (change control), permintaan ini akan menyebabkan scope creep: tanggal rilis mundur atau fitur lain harus dikorbankan. PM yang baik akan menilai dampak permintaan tersebut terhadap timeline dan biaya, lalu membawanya ke stakeholder untuk keputusan trade-off, bukan langsung menyetujui atau menolak sendiri.</p>
+                <p><strong>Kasus 2 &mdash; Sistem Informasi Akademik Kampus:</strong> Proyek pembangunan sistem akademik baru melibatkan banyak stakeholder (mahasiswa, dosen, bagian akademik, IT). Kegagalan proyek semacam ini sering terjadi bukan karena tim tidak bisa membuat kode, melainkan karena kebutuhan dari tiap unit tidak digali dan disepakati di awal, sehingga sistem yang jadi tidak sesuai kebutuhan sebagian pengguna &mdash; ini menegaskan pentingnya tahap inisiasi dan perencanaan sebelum eksekusi teknis dimulai.</p>
+              </section>
+
+              <section class="note-block accent-magenta">
+                <h3>Istilah Penting</h3>
+                <div class="key-term">
+                  <strong>Proyek</strong>
+                  <span>Upaya sementara dengan awal dan akhir jelas untuk menghasilkan produk atau hasil yang unik.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Stakeholder</strong>
+                  <span>Individu atau kelompok yang memiliki kepentingan atau dipengaruhi oleh hasil proyek.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Triple Constraint</strong>
+                  <span>Tiga kendala utama proyek yang saling memengaruhi: ruang lingkup, waktu, dan biaya.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Scope Creep</strong>
+                  <span>Perluasan lingkup proyek secara tidak terkendali tanpa penyesuaian waktu, biaya, atau sumber daya.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Deliverable</strong>
+                  <span>Hasil kerja konkret yang harus diserahkan pada tahap atau akhir proyek.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Project Life Cycle</strong>
+                  <span>Rangkaian tahap yang dilalui proyek dari awal hingga selesai.</span>
+                </div>
+              </section>
+
+              <section class="note-block full accent-bronze">
+                <h3>Rangkuman</h3>
+                <p>Manajemen Proyek Perangkat Lunak lahir dari kebutuhan untuk mengendalikan sifat proyek software yang cenderung berubah, sulit diukur, dan bergantung pada banyak pihak. Inti pengelolaannya berputar pada penyeimbangan ruang lingkup, waktu, dan biaya tanpa mengorbankan kualitas, yang dijalankan melalui lima kelompok proses: inisiasi, perencanaan, eksekusi, pemantauan &amp; pengendalian, dan penutupan. Project Manager berperan sebagai penjembatan antara kebutuhan bisnis dan eksekusi teknis, mengambil keputusan trade-off saat konflik antarkendala muncul. Pemahaman konsep dasar ini menjadi fondasi sebelum mempelajari metodologi pengembangan (Waterfall, Agile, Scrum, Kanban, Hybrid) pada pertemuan berikutnya.</p>
+              </section>
+
+              <section class="note-block accent-sky">
+                <h3>Refleksi atau Latihan</h3>
+                <ol>
+                  <li>Pilih satu aplikasi yang sering Anda gunakan (mobile atau web). Menurut Anda, tantangan scope, time, atau cost apa yang mungkin dihadapi tim pengembangnya saat pertama kali dibangun?</li>
+                  <li>Ceritakan pengalaman (atau bayangkan skenario) di mana penambahan fitur di tengah proyek menyebabkan masalah. Termasuk kategori kendala mana yang paling terdampak, dan bagaimana seharusnya perubahan itu dikelola?</li>
+                  <li>Identifikasi tiga stakeholder yang mungkin terlibat dalam proyek pembangunan sistem informasi perpustakaan kampus, beserta kepentingan masing-masing.</li>
+                </ol>
+              </section>
+
+              <section class="note-block accent-emerald">
+                <h3>Referensi</h3>
+                <ol class="reference-list">
+                  <li>Referensi belum dicantumkan dalam materi sumber.</li>
+                </ol>
+              </section>
+            </div>
+          </article>
+        </div>
+        <!-- AI-CONTENT-END -->
+      </section>
+
+      <footer class="page-footer">
+        <span>HAPPY PRISM Weekly Notes</span>
+        <span>Dirancang untuk catatan kuliah yang terstruktur dan mudah dicetak.</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- CLAUDE: salin isi template ini ke #weeklyNotes untuk setiap pertemuan, lalu isi seluruh slot. -->
+  <template id="weekTemplate">
+    <article class="week-card" id="minggu-01" data-week="01">
+      <header class="week-head">
+        <div class="week-number">
+          <span>Minggu</span>
+          <strong>01</strong>
+        </div>
+        <div class="week-heading">
+          <p>[TANGGAL / SUBTOPIK OPSIONAL]</p>
+          <h2>[JUDUL TOPIK PERTEMUAN]</h2>
+        </div>
+      </header>
+
+      <div class="week-body">
+        <section class="note-block accent-sky">
+          <h3>Tujuan Pembelajaran</h3>
+          <ul>
+            <li>[Tujuan pembelajaran pertama]</li>
+            <li>[Tujuan pembelajaran berikutnya]</li>
+          </ul>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Konsep Inti</h3>
+          <p>[Jelaskan ide utama pertemuan secara ringkas dan akurat.]</p>
+        </section>
+
+        <section class="note-block full accent-pink">
+          <h3>Pembahasan Utama</h3>
+          <p>[Uraikan materi secara sistematis. Tambahkan subjudul h4 bila pembahasan panjang.]</p>
+        </section>
+
+        <section class="note-block accent-orange">
+          <h3>Contoh atau Penerapan</h3>
+          <p>[Berikan contoh yang relevan dengan materi pengguna.]</p>
+        </section>
+
+        <section class="note-block accent-magenta">
+          <h3>Istilah Penting</h3>
+          <div class="key-term">
+            <strong>[Istilah]</strong>
+            <span>[Definisi singkat]</span>
+          </div>
+        </section>
+
+        <section class="note-block full accent-bronze">
+          <h3>Rangkuman</h3>
+          <p>[Tulis simpulan pertemuan dalam satu atau dua paragraf ringkas.]</p>
+        </section>
+
+        <section class="note-block accent-sky">
+          <h3>Refleksi atau Latihan</h3>
+          <ol>
+            <li>[Pertanyaan pemahaman atau refleksi]</li>
+            <li>[Latihan penerapan]</li>
+          </ol>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Referensi</h3>
+          <ol class="reference-list">
+            <li>[Cantumkan hanya sumber yang tersedia atau terverifikasi]</li>
+          </ol>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    (() => {
+      const body = document.body;
+      const sidebar = document.getElementById('sidebar');
+      const menuButton = document.getElementById('menuButton');
+      const printButton = document.getElementById('printButton');
+      const weekNav = document.getElementById('weekNav');
+      const weeklyNotes = document.getElementById('weeklyNotes');
+      const emptyState = document.getElementById('emptyState');
+      const meetingCount = document.getElementById('meetingCount');
+      const notesStatus = document.getElementById('notesStatus');
+      const progress = document.getElementById('scrollProgress');
+
+      const weeks = [...weeklyNotes.querySelectorAll('.week-card')];
+      const twoDigits = value => String(value).padStart(2, '0');
+
+      weekNav.innerHTML = '';
+      emptyState.hidden = weeks.length > 0;
+      meetingCount.textContent = `${weeks.length} pertemuan`;
+      notesStatus.textContent = weeks.length ? `${weeks.length} minggu tersusun` : 'Siap diisi';
+
+      if (!weeks.length) {
+        weekNav.innerHTML = '<span class="nav-empty">Belum ada minggu yang diisi</span>';
+      } else {
+        weeks.forEach((week, index) => {
+          const number = week.dataset.week || twoDigits(index + 1);
+          const title = week.querySelector('h2')?.textContent?.trim() || `Pertemuan ${number}`;
+          const link = document.createElement('a');
+          link.href = `#${week.id}`;
+          link.dataset.number = number;
+          link.textContent = title;
+          link.addEventListener('click', () => {
+            body.classList.remove('menu-open');
+            menuButton.setAttribute('aria-expanded', 'false');
+          });
+          weekNav.appendChild(link);
+        });
+
+        const links = [...weekNav.querySelectorAll('a')];
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            links.forEach(link => link.classList.toggle('active', link.hash === `#${entry.target.id}`));
+          });
+        }, { rootMargin: '-18% 0px -68% 0px' });
+        weeks.forEach(week => observer.observe(week));
+      }
+
+      menuButton.addEventListener('click', () => {
+        const isOpen = body.classList.toggle('menu-open');
+        menuButton.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      sidebar.addEventListener('click', event => event.stopPropagation());
+      document.addEventListener('click', event => {
+        if (window.innerWidth <= 960 && body.classList.contains('menu-open') && !sidebar.contains(event.target) && event.target !== menuButton) {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      printButton.addEventListener('click', () => window.print());
+
+      const updateProgress = () => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = total > 0 ? (window.scrollY / total) * 100 : 0;
+        progress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      };
+
+      updateProgress();
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+    })();
+  </script>
+</body>
+</html>

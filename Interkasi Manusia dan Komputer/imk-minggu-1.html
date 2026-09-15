@@ -1,483 +1,1901 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IMK Minggu 1 — Pengantar Interaksi Manusia dan Komputer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-<style>
-:root{
-  --sky:#3CB4E6; --emerald:#32B18E; --pink:#F05696; --orange:#FF8040; --yellow:#FFD730;
-  --snow:#F0F0F0; --lightgrey:#D0D0D0; --silver:#959595; --bronze:#B89C57; --magenta:#9C208C; --ink:#001F4F;
-  --paper:#F0F0F0; --card:#FFFFFF; --muted:#46587A; --rule:#D0D0D0;
-  --serif:"Source Serif 4", Georgia, serif;
-  --grot:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-  --measure:68ch;
-}
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth; scroll-padding-top:5.5rem;}
-@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
-body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:1.0625rem; line-height:1.72; -webkit-font-smoothing:antialiased;}
-h1,h2,h3,h4{font-family:var(--grot); line-height:1.1; margin:0; font-weight:800; letter-spacing:-0.015em;}
-p{margin:0 0 1.1em;}
-a{color:var(--ink);}
-strong{font-weight:600;}
-code{font-family:var(--grot); background:var(--card); padding:.1em .35em; font-size:.92em;}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Catatan kuliah Interaksi Manusia dan Komputer (IMK) Minggu 2: Review User-Centered Design (UCD) dan Persona User, lengkap dengan kuis 30 soal pilihan ganda.">
+  <meta name="theme-color" content="#001F4F">
+  <title>IMK - Minggu 2 | Know User: UCD & Persona | HAPPY PRISM</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23001F4F'/%3E%3Cpath d='M32 10 54 50H10Z' fill='%233CB4E6'/%3E%3Cpath d='m32 10 9 40H23Z' fill='%23F05696'/%3E%3Cpath d='M23 50h18L32 10Z' fill='%23FFD730' fill-opacity='.85'/%3E%3C/svg%3E">
 
-.topbar{position:sticky; top:0; z-index:60; background:var(--ink); color:var(--snow); border-bottom:3px solid var(--sky);}
-.topbar-inner{max-width:1220px; margin:0 auto; padding:.6rem 1.25rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;}
-.brandmark{display:flex; align-items:center; gap:.6rem; font-family:var(--grot); font-weight:800; font-size:.95rem;}
-.brandmark .chips{display:flex;}
-.brandmark .chips i{width:9px; height:18px; display:block;}
-.topnav{display:flex; gap:1.1rem; font-family:var(--grot); font-size:.85rem; font-weight:600; flex-wrap:wrap;}
-.topnav a{color:#C9D8EC; text-decoration:none; padding:.2rem 0; border-bottom:2px solid transparent;}
-.topnav a:hover,.topnav a:focus-visible{color:#fff; border-bottom-color:var(--yellow);}
+  <!--
+    KONTRAK PENGISIAN UNTUK CLAUDE
 
-.hero{background:var(--ink); color:var(--snow); padding:3.5rem 1.25rem 4rem; position:relative; overflow:hidden;}
-.hero-inner{max-width:1220px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:3rem; align-items:center;}
-.eyebrow-course{font-family:var(--grot); font-weight:600; font-size:.9rem; color:var(--sky); margin-bottom:1rem;}
-.hero h1{font-size:clamp(2.4rem,5.4vw,4.1rem); letter-spacing:-0.035em;}
-.hero h1 em{font-style:normal; display:block;}
-.hero-lede{font-size:1.15rem; color:#C9D8EC; max-width:46ch; margin-top:1.4rem;}
-.hero-meta{display:flex; gap:.5rem; flex-wrap:wrap; margin-top:2rem;}
-.hero-meta span{font-family:var(--grot); font-size:.78rem; font-weight:600; padding:.35rem .7rem; border:1px solid rgba(240,240,240,.28); border-radius:100px; color:#C9D8EC;}
+    Tugas: ubah base ini menjadi catatan kuliah mingguan berdasarkan materi pengguna.
 
-.prism-wrap{position:relative;}
-.prism{width:100%; height:auto; display:block;}
-.beam-in{stroke-dasharray:240; stroke-dashoffset:240; animation:beamdraw .9s ease-out .2s forwards;}
-.band{opacity:0; transform-origin:214px 175px; animation:fan .7s cubic-bezier(.22,.9,.3,1) forwards;}
-.band:nth-of-type(1){animation-delay:1.0s} .band:nth-of-type(2){animation-delay:1.12s} .band:nth-of-type(3){animation-delay:1.24s} .band:nth-of-type(4){animation-delay:1.36s} .band:nth-of-type(5){animation-delay:1.48s}
-.bandlabel{opacity:0; animation:fadein .6s ease-out forwards;}
-.bandlabel:nth-of-type(1){animation-delay:1.45s} .bandlabel:nth-of-type(2){animation-delay:1.57s} .bandlabel:nth-of-type(3){animation-delay:1.69s} .bandlabel:nth-of-type(4){animation-delay:1.81s} .bandlabel:nth-of-type(5){animation-delay:1.93s}
-@keyframes beamdraw{to{stroke-dashoffset:0}}
-@keyframes fan{from{opacity:0; transform:rotate(-7deg) scaleX(.6)} to{opacity:1; transform:none}}
-@keyframes fadein{to{opacity:1}}
-@media (prefers-reduced-motion:reduce){ .beam-in{stroke-dashoffset:0; animation:none} .band,.bandlabel{opacity:1; animation:none; transform:none} }
+    ATURAN WAJIB:
+    1. Kembalikan SATU file index.html lengkap. Jangan memberi potongan kode atau penjelasan di luar file.
+    2. Pertahankan seluruh CSS, JavaScript, class, id, struktur navigasi, dan palet HAPPY PRISM.
+    3. Ubah hanya placeholder metadata dan area di antara AI-CONTENT-START serta AI-CONTENT-END.
+    4. Salin struktur <template id="weekTemplate"> untuk setiap pertemuan. Tempel hasilnya di #weeklyNotes.
+    5. Beri setiap artikel id unik: minggu-01, minggu-02, dan seterusnya. Samakan data-week dengan nomornya.
+    6. Setelah catatan terisi, ubah <body data-filled="false"> menjadi <body data-filled="true">.
+    7. Susun jumlah minggu sesuai materi. Jangan menambah topik yang tidak diberikan hanya untuk memenuhi jumlah tertentu.
+    8. Gunakan bahasa Indonesia akademik yang jelas, aktif, ringkas, dan mudah dipelajari.
+    9. Setiap minggu harus memuat: tujuan belajar, konsep inti, pembahasan, contoh atau penerapan, istilah penting, rangkuman, refleksi atau latihan, serta referensi bila tersedia.
+    10. Jangan mengarang data, kutipan, DOI, nama jurnal, atau daftar pustaka. Jika sumber belum tersedia, tulis "Referensi belum dicantumkan dalam materi sumber."
+    11. Gunakan tabel hanya untuk perbandingan yang membutuhkan pemetaan tepat. Gunakan bullet untuk daftar singkat.
+    12. Jangan menambahkan CDN, framework, font eksternal, gambar eksternal, atau file lain. Hasil harus tetap berjalan offline.
+    13. Jaga hierarki heading: h1 untuk judul halaman, h2 untuk topik minggu, h3 untuk bagian catatan.
+    14. Jangan menghapus template, aturan ini, fitur navigasi, tombol cetak, atau dukungan tampilan mobile.
 
-.shell{max-width:1220px; margin:0 auto; padding:0 1.25rem; display:grid; grid-template-columns:238px minmax(0,1fr); gap:3.5rem; align-items:start;}
-.sidebar{position:sticky; top:5rem; padding:3rem 0; font-family:var(--grot); font-size:.85rem;}
-.sidebar h4{font-size:.8rem; font-weight:800; color:var(--muted); margin-bottom:.8rem;}
-.sidebar ol{list-style:none; margin:0 0 1.8rem; padding:0;}
-.sidebar li{margin-bottom:.45rem;}
-.sidebar a{text-decoration:none; color:var(--muted); display:block; padding-left:.7rem; border-left:2px solid var(--lightgrey);}
-.sidebar a:hover,.sidebar a:focus-visible{color:var(--ink); border-left-color:var(--pink);}
-.sidebar a.on{color:var(--ink); font-weight:600; border-left-color:var(--pink);}
+    DATA YANG HARUS DIISI DARI PERMINTAAN PENGGUNA:
+    - [NAMA MATA KULIAH]
+    - [KODE MATA KULIAH]
+    - [NAMA DOSEN]
+    - [PROGRAM STUDI]
+    - [SEMESTER / TAHUN AKADEMIK]
+    - seluruh catatan per minggu di #weeklyNotes
 
-main{padding:3rem 0 5rem; min-width:0;}
-section{margin-bottom:4.5rem; scroll-margin-top:5.5rem;}
-main > section > p, main > section > ul, main > section > ol{max-width:var(--measure);}
+    CATATAN TAMBAHAN (perluasan oleh Claude, tidak mengubah kontrak di atas):
+    Ditambahkan satu bagian baru "Evaluasi Mandiri" berisi kuis interaktif 30 soal pilihan ganda
+    di luar #weeklyNotes, sesuai permintaan eksplisit pengguna. Penambahan ini hanya menyisipkan
+    CSS, markup, dan skrip baru; tidak menghapus atau mengubah kontrak, navigasi, tombol cetak,
+    maupun dukungan tampilan mobile yang sudah ada.
+  -->
 
-.week-open{margin:0 0 3rem; padding:2rem 2rem 2.2rem; color:var(--snow); background:linear-gradient(115deg,#001F4F 0%, #0A3F7A 55%, #3CB4E6 140%);}
-.week-open .num{font-family:var(--grot); font-weight:800; font-size:.9rem; color:var(--yellow);}
-.week-open h2{font-size:clamp(1.8rem,3.6vw,2.6rem); margin:.5rem 0 .8rem; letter-spacing:-0.03em;}
-.week-open p{color:#D6E3F2; max-width:58ch; margin:0;}
-.week-open .goals{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.9rem; margin-top:1.6rem;}
-.week-open .goals div{font-family:var(--grot); font-size:.85rem; line-height:1.4; color:#EAF2FB; border-top:2px solid rgba(255,255,255,.35); padding-top:.6rem;}
+  <style>
+    :root {
+      --sky: #3CB4E6;
+      --emerald: #32B18E;
+      --pink: #F05696;
+      --orange: #FF8040;
+      --yellow: #FFD730;
+      --snow: #F0F0F0;
+      --grey: #D0D0D0;
+      --silver: #959595;
+      --bronze: #B89C57;
+      --magenta: #9C208C;
+      --midnight: #001F4F;
+      --white: #FFFFFF;
+      --ink: #10213B;
+      --muted: #60708A;
+      --line: rgba(0, 31, 79, .12);
+      --shadow: 0 18px 50px rgba(0, 31, 79, .10);
+      --prism: linear-gradient(90deg, var(--sky), var(--emerald), var(--yellow), var(--orange), var(--pink), var(--magenta));
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --sidebar: 18.75rem;
+    }
 
-h2.sec{font-size:1.6rem; letter-spacing:-0.025em; margin-bottom:.35rem;}
-.sec-no{font-family:var(--grot); font-weight:600; font-size:.85rem; color:var(--muted); display:block; margin-bottom:.4rem;}
-h3.sub{font-size:1.12rem; margin:2rem 0 .6rem; font-weight:600;}
-.lead-rule{width:64px; height:4px; margin:.9rem 0 1.5rem;}
+    * { box-sizing: border-box; }
 
-ul.plain, ol.plain{padding-left:1.15rem; margin:0 0 1.2em;}
-ul.plain li, ol.plain li{margin-bottom:.5em;}
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
 
-.note{border-left:5px solid var(--bronze); background:#FBF7EC; padding:1.1rem 1.3rem; margin:1.8rem 0; max-width:var(--measure);}
-.note h4{font-family:var(--grot); font-size:.95rem; color:#6E5A20; margin-bottom:.45rem;}
-.note p:last-child{margin-bottom:0;}
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--snow);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
 
-.verdict{display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1.8rem 0;}
-.verdict > div{padding:1.1rem 1.2rem; background:var(--card);}
-.verdict .good{border-top:5px solid var(--emerald);}
-.verdict .bad{border-top:5px solid var(--pink);}
-.verdict h4{font-family:var(--grot); font-size:.92rem; margin-bottom:.5rem;}
-.verdict p{font-size:.95rem; margin:0;}
+    button, a { font: inherit; }
 
-table{border-collapse:collapse; width:100%; margin:1.6rem 0; font-size:.94rem; background:var(--card);}
-th,td{text-align:left; padding:.7rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top;}
-th{font-family:var(--grot); font-size:.82rem; font-weight:700; background:var(--ink); color:var(--snow); border-bottom:none;}
-tbody tr:last-child td{border-bottom:none;}
+    a { color: inherit; }
 
-.concept-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--rule); margin:1.8rem 0; border:1px solid var(--rule);}
-.concept-grid > div{background:var(--card); padding:1.15rem 1.2rem;}
-.concept-grid h4{font-family:var(--grot); font-size:.95rem; margin-bottom:.4rem;}
-.concept-grid p{font-size:.92rem; margin:0; color:#2B3E5E;}
-.concept-grid .tag{display:inline-block; width:26px; height:5px; margin-bottom:.7rem;}
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
+    }
 
-.timeline{margin:2rem 0; border-left:2px solid var(--lightgrey); padding-left:1.6rem; max-width:var(--measure);}
-.timeline .ev{position:relative; margin-bottom:1.5rem;}
-.timeline .ev::before{content:""; position:absolute; left:-1.95rem; top:.45rem; width:11px; height:11px; border-radius:50%; background:var(--sky); border:2px solid var(--paper);}
-.timeline .ev:nth-child(2)::before{background:var(--emerald)} .timeline .ev:nth-child(3)::before{background:var(--yellow)} .timeline .ev:nth-child(4)::before{background:var(--orange)} .timeline .ev:nth-child(5)::before{background:var(--pink)} .timeline .ev:nth-child(6)::before{background:var(--magenta)}
-.timeline .yr{font-family:var(--grot); font-weight:800; font-size:.95rem;}
-.timeline p{margin:.15rem 0 0; font-size:.95rem;}
+    .scroll-progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 100;
+      width: 0;
+      height: 5px;
+      background: var(--prism);
+    }
 
-.task{background:var(--card); border-left:5px solid var(--sky); padding:1.2rem 1.3rem; margin:1.2rem 0; max-width:var(--measure);}
-.task h4{font-family:var(--grot); font-size:1rem; margin-bottom:.5rem;}
-.task.b{border-left-color:var(--emerald);}
-.task.c{border-left-color:var(--orange);}
-.task p{font-size:.96rem;}
-.task p:last-child{margin-bottom:0;}
+    .app-shell {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      min-height: 100vh;
+    }
 
-details{border-bottom:1px solid var(--rule); max-width:var(--measure);}
-details summary{cursor:pointer; padding:.85rem 0; font-family:var(--grot); font-weight:600; font-size:.98rem; list-style:none; display:flex; gap:.7rem;}
-details summary::-webkit-details-marker{display:none;}
-details summary::before{content:"+"; color:var(--pink); font-weight:800;}
-details[open] summary::before{content:"–";}
-details .body{padding:0 0 1.1rem 1.4rem; font-size:.96rem; color:#2B3E5E;}
-details .body p:last-child{margin-bottom:0;}
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 1.5rem;
+      overflow-y: auto;
+      color: var(--white);
+      background: var(--midnight);
+    }
 
-.crosslink{background:var(--card); border:2px dashed var(--sky); padding:1.1rem 1.3rem; margin:2rem 0; max-width:var(--measure); font-family:var(--grot); font-size:.92rem;}
-.crosslink strong{color:var(--ink);}
+    .sidebar::before {
+      content: "";
+      display: block;
+      height: 7px;
+      margin: -1.5rem -1.5rem 1.5rem;
+      background: var(--prism);
+    }
 
-footer{background:var(--ink); color:#C9D8EC; padding:3rem 1.25rem 3.5rem; font-size:.94rem;}
-.footer-inner{max-width:1220px; margin:0 auto;}
-footer h4{font-family:var(--grot); color:var(--snow); font-size:1.05rem; margin-bottom:.9rem;}
-footer ul{list-style:none; padding:0; margin:0;}
-footer li{margin-bottom:.6rem; max-width:62ch;}
-.spectrum-bar{display:flex; height:8px; margin-top:2.5rem;}
-.spectrum-bar i{flex:1;}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 2rem;
+    }
 
-@media (max-width:980px){
-  .hero-inner{grid-template-columns:1fr; gap:2.2rem;}
-  .shell{grid-template-columns:1fr; gap:0;}
-  .sidebar{position:static; padding:2rem 0 0;}
-  .sidebar ol{columns:2; column-gap:1.5rem;}
-}
-@media (max-width:620px){
-  body{font-size:1rem;}
-  .verdict{grid-template-columns:1fr;}
-  .sidebar ol{columns:1;}
-  .week-open{padding:1.5rem 1.3rem 1.8rem;}
-}
-</style>
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.8rem;
+      aspect-ratio: 1;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      transform: rotate(-4deg);
+      box-shadow: 6px 6px 0 var(--pink);
+    }
+
+    .brand strong,
+    .brand span { display: block; }
+
+    .brand strong {
+      font-size: .95rem;
+      letter-spacing: .09em;
+    }
+
+    .brand span {
+      color: rgba(255, 255, 255, .68);
+      font-size: .78rem;
+    }
+
+    .course-card {
+      padding: 1.1rem;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: var(--radius-md);
+    }
+
+    .micro-label {
+      margin: 0 0 .45rem;
+      color: var(--sky);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .course-card h2 {
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+      line-height: 1.35;
+    }
+
+    .course-meta {
+      display: grid;
+      gap: .7rem;
+      margin: 0;
+    }
+
+    .course-meta div {
+      display: grid;
+      grid-template-columns: 4.4rem 1fr;
+      gap: .5rem;
+      padding-top: .7rem;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .course-meta dt {
+      color: rgba(255, 255, 255, .58);
+      font-size: .78rem;
+    }
+
+    .course-meta dd {
+      margin: 0;
+      font-size: .78rem;
+      font-weight: 650;
+    }
+
+    .nav-heading {
+      margin: 1.8rem 0 .65rem;
+      color: rgba(255, 255, 255, .52);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-nav {
+      display: grid;
+      gap: .35rem;
+    }
+
+    .week-nav a,
+    .nav-empty {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      min-height: 2.65rem;
+      padding: .55rem .7rem;
+      color: rgba(255, 255, 255, .72);
+      border-radius: 10px;
+      font-size: .86rem;
+      text-decoration: none;
+    }
+
+    .week-nav a::before {
+      content: attr(data-number);
+      display: grid;
+      place-items: center;
+      width: 1.7rem;
+      height: 1.7rem;
+      flex: 0 0 auto;
+      color: var(--midnight);
+      background: var(--sky);
+      border-radius: 8px;
+      font-size: .7rem;
+      font-weight: 900;
+    }
+
+    .week-nav a:hover,
+    .week-nav a.active {
+      color: var(--white);
+      background: rgba(255, 255, 255, .11);
+    }
+
+    .week-nav a.active::before { background: var(--yellow); }
+
+    .nav-empty {
+      color: rgba(255, 255, 255, .45);
+      border: 1px dashed rgba(255, 255, 255, .18);
+    }
+
+    .sidebar-actions {
+      display: grid;
+      gap: .65rem;
+      margin-top: 1.5rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      min-height: 2.8rem;
+      padding: .7rem 1rem;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .button-primary {
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .button-primary:hover { background: #FFE36A; }
+
+    .button-secondary {
+      color: var(--white);
+      background: var(--sky);
+    }
+
+    .button-secondary:hover { background: #59C3EE; }
+
+    .content {
+      min-width: 0;
+      padding: clamp(1.15rem, 3vw, 3.25rem);
+    }
+
+    .mobile-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .menu-button {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      min-height: 20rem;
+      padding: clamp(1.5rem, 5vw, 4rem);
+      overflow: hidden;
+      color: var(--white);
+      background: var(--midnight);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      border-radius: 999px;
+      filter: blur(1px);
+    }
+
+    .hero::before {
+      width: 18rem;
+      height: 18rem;
+      top: -7rem;
+      right: -4rem;
+      background: var(--pink);
+      opacity: .88;
+    }
+
+    .hero::after {
+      width: 13rem;
+      height: 13rem;
+      right: 8rem;
+      bottom: -7rem;
+      background: var(--emerald);
+      opacity: .86;
+    }
+
+    .prism-lines {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .26;
+      background-image: linear-gradient(115deg, transparent 45%, var(--yellow) 45% 48%, transparent 48%), linear-gradient(65deg, transparent 58%, var(--sky) 58% 61%, transparent 61%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin: 0 0 1.4rem;
+      color: var(--yellow);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 2rem;
+      height: 4px;
+      background: var(--prism);
+      border-radius: 99px;
+    }
+
+    .hero h1 {
+      max-width: 11ch;
+      margin: 0;
+      font-size: clamp(2.45rem, 6vw, 5.6rem);
+      line-height: .96;
+      letter-spacing: -.055em;
+    }
+
+    .hero-copy {
+      max-width: 44rem;
+      margin: 1.5rem 0 0;
+      color: rgba(255, 255, 255, .76);
+      font-size: 1.05rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 2rem;
+    }
+
+    .hero-tag {
+      padding: .5rem .8rem;
+      color: var(--white);
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .guide-panel {
+      margin-top: 1.5rem;
+      padding: clamp(1.4rem, 3vw, 2.4rem);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    body[data-filled="true"] .guide-panel { display: none; }
+
+    .section-kicker {
+      margin: 0 0 .35rem;
+      color: var(--magenta);
+      font-size: .75rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 0;
+      color: var(--midnight);
+      font-size: clamp(1.65rem, 3vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -.03em;
+    }
+
+    .section-intro {
+      max-width: 50rem;
+      margin: .75rem 0 0;
+      color: var(--muted);
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+      margin: 1.6rem 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: rules;
+    }
+
+    .rules-grid li {
+      position: relative;
+      min-height: 8.2rem;
+      padding: 1.2rem 1.15rem 1.15rem 4rem;
+      background: #F8FAFC;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      counter-increment: rules;
+    }
+
+    .rules-grid li::before {
+      content: counter(rules, decimal-leading-zero);
+      position: absolute;
+      top: 1.15rem;
+      left: 1.15rem;
+      display: grid;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 10px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .rules-grid strong {
+      display: block;
+      margin-bottom: .25rem;
+      color: var(--midnight);
+    }
+
+    .rules-grid span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .ai-command {
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      color: var(--midnight);
+      background: rgba(60, 180, 230, .12);
+      border-left: 5px solid var(--sky);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: .92rem;
+    }
+
+    .notes-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: clamp(2.3rem, 6vw, 4.5rem) 0 1.2rem;
+    }
+
+    .notes-status {
+      flex: 0 0 auto;
+      padding: .45rem .75rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      min-height: 23rem;
+      padding: 2rem;
+      text-align: center;
+      background: var(--white);
+      border: 2px dashed var(--grey);
+      border-radius: var(--radius-lg);
+    }
+
+    .empty-state[hidden] { display: none; }
+
+    .empty-symbol {
+      position: relative;
+      width: 5.5rem;
+      height: 5.5rem;
+      margin: 0 auto 1.25rem;
+      background: var(--sky);
+      border-radius: 22px;
+      transform: rotate(5deg);
+      box-shadow: 12px 12px 0 var(--pink), -8px -8px 0 var(--yellow);
+    }
+
+    .empty-symbol::before,
+    .empty-symbol::after {
+      content: "";
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 2.2rem;
+      height: 5px;
+      background: var(--midnight);
+      border-radius: 99px;
+      transform: translate(-50%, -50%);
+    }
+
+    .empty-symbol::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+    .empty-state h2 {
+      margin: 0;
+      color: var(--midnight);
+      font-size: 1.55rem;
+    }
+
+    .empty-state p {
+      max-width: 34rem;
+      margin: .55rem auto 0;
+      color: var(--muted);
+    }
+
+    #weeklyNotes {
+      display: grid;
+      gap: 1.35rem;
+    }
+
+    .week-card {
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .week-head {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      min-height: 10rem;
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .week-number {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .week-number span {
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-number strong {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .week-heading {
+      display: grid;
+      align-content: center;
+      padding: 1.5rem 2rem;
+    }
+
+    .week-heading p {
+      margin: 0 0 .35rem;
+      color: var(--sky);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .week-heading h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.35rem);
+      line-height: 1.15;
+    }
+
+    .week-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      padding: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .note-block {
+      padding: 1.2rem;
+      background: #FAFBFD;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .note-block.full { grid-column: 1 / -1; }
+
+    .note-block.accent-sky { border-top: 5px solid var(--sky); }
+    .note-block.accent-emerald { border-top: 5px solid var(--emerald); }
+    .note-block.accent-pink { border-top: 5px solid var(--pink); }
+    .note-block.accent-orange { border-top: 5px solid var(--orange); }
+    .note-block.accent-magenta { border-top: 5px solid var(--magenta); }
+    .note-block.accent-bronze { border-top: 5px solid var(--bronze); }
+
+    .note-block h3 {
+      margin: 0 0 .65rem;
+      color: var(--midnight);
+      font-size: 1.05rem;
+    }
+
+    .note-block h4 {
+      margin: 1.1rem 0 .5rem;
+      color: var(--midnight);
+      font-size: .98rem;
+    }
+
+    .note-block h4:first-of-type { margin-top: 0; }
+
+    .note-block p,
+    .note-block ul,
+    .note-block ol { margin: .6rem 0 0; }
+
+    .note-block ul,
+    .note-block ol { padding-left: 1.25rem; }
+
+    .note-block li + li { margin-top: .35rem; }
+
+    .note-table-wrap { overflow-x: auto; }
+
+    .note-table {
+      width: 100%;
+      margin-top: .75rem;
+      border-collapse: collapse;
+      font-size: .92rem;
+    }
+
+    .note-table th,
+    .note-table td {
+      padding: .75rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--grey);
+    }
+
+    .note-table th {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .key-term {
+      display: grid;
+      grid-template-columns: minmax(7rem, .35fr) 1fr;
+      gap: .7rem;
+      padding: .65rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .key-term:last-child { border-bottom: 0; }
+    .key-term strong { color: var(--magenta); }
+
+    .reference-list {
+      padding-left: 1.2rem;
+      overflow-wrap: anywhere;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2.2rem;
+      padding: 1.2rem 0;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: .8rem;
+    }
+
+    /* ===== Perluasan: Modul Kuis Evaluasi Mandiri (30 soal pilihan ganda) ===== */
+
+    .quiz-section {
+      margin-top: clamp(2.3rem, 6vw, 4.5rem);
+    }
+
+    .quiz-progress-track {
+      height: 8px;
+      margin: 1.1rem 0 1.4rem;
+      background: var(--grey);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--prism);
+      transition: width .25s ease;
+    }
+
+    .quiz-card {
+      padding: clamp(1.3rem, 3vw, 2.2rem);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-question-eyebrow {
+      margin: 0 0 .5rem;
+      color: var(--magenta);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .quiz-question-text {
+      margin: 0 0 1.3rem;
+      color: var(--midnight);
+      font-size: 1.2rem;
+      line-height: 1.42;
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: .7rem;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: .8rem;
+      padding: .9rem 1rem;
+      color: var(--ink);
+      text-align: left;
+      background: #FAFBFD;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--sky);
+      background: rgba(60, 180, 230, .08);
+    }
+
+    .quiz-option:disabled { cursor: default; }
+
+    .quiz-option-letter {
+      display: grid;
+      place-items: center;
+      width: 1.9rem;
+      height: 1.9rem;
+      flex: 0 0 auto;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 8px;
+      font-size: .8rem;
+      font-weight: 900;
+    }
+
+    .quiz-option.is-correct {
+      border-color: var(--emerald);
+      background: rgba(50, 177, 142, .12);
+    }
+
+    .quiz-option.is-correct .quiz-option-letter { background: var(--emerald); color: var(--white); }
+
+    .quiz-option.is-wrong {
+      border-color: var(--pink);
+      background: rgba(240, 86, 150, .10);
+    }
+
+    .quiz-option.is-wrong .quiz-option-letter { background: var(--pink); color: var(--white); }
+
+    .quiz-feedback {
+      margin-top: 1.1rem;
+      padding: 1rem 1.1rem;
+      border-left: 5px solid var(--sky);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      background: rgba(60, 180, 230, .08);
+      font-size: .93rem;
+    }
+
+    .quiz-feedback.is-correct { border-color: var(--emerald); background: rgba(50, 177, 142, .1); }
+    .quiz-feedback.is-wrong { border-color: var(--pink); background: rgba(240, 86, 150, .08); }
+
+    .quiz-feedback strong { display: block; margin-bottom: .3rem; color: var(--midnight); }
+
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: .8rem;
+      margin-top: 1.6rem;
+    }
+
+    .button-ghost {
+      color: var(--midnight);
+      background: var(--snow);
+      border: 1px solid var(--line);
+    }
+
+    .button-ghost:hover { background: var(--grey); }
+
+    .button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .quiz-result { text-align: center; }
+
+    .quiz-score {
+      font-size: clamp(2.6rem, 6vw, 3.6rem);
+      font-weight: 900;
+      color: var(--midnight);
+    }
+
+    .quiz-score span { font-size: 1.3rem; color: var(--muted); font-weight: 700; }
+
+    .quiz-remark {
+      max-width: 34rem;
+      margin: .6rem auto 1.6rem;
+      color: var(--muted);
+    }
+
+    .quiz-review {
+      display: grid;
+      gap: .8rem;
+      margin-top: 1.6rem;
+      text-align: left;
+    }
+
+    .quiz-review-item {
+      padding: 1rem 1.1rem;
+      background: #FAFBFD;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--pink);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: .92rem;
+    }
+
+    .quiz-review-item strong { display: block; margin-bottom: .3rem; color: var(--midnight); }
+
+    @media (max-width: 960px) {
+      .app-shell { display: block; }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 90;
+        width: min(86vw, var(--sidebar));
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+        box-shadow: 20px 0 60px rgba(0, 0, 0, .25);
+      }
+
+      body.menu-open { overflow: hidden; }
+      body.menu-open .sidebar { transform: translateX(0); }
+
+      .mobile-bar { display: flex; }
+
+      .content { padding-top: 1rem; }
+    }
+
+    @media (max-width: 680px) {
+      .hero { min-height: 22rem; }
+      .hero::after { right: 1rem; }
+      .rules-grid,
+      .week-body { grid-template-columns: 1fr; }
+      .note-block.full { grid-column: auto; }
+      .notes-header { align-items: start; flex-direction: column; }
+      .week-head { grid-template-columns: 4.8rem minmax(0, 1fr); }
+      .week-heading { padding: 1.2rem; }
+      .week-number strong { font-size: 2.25rem; }
+      .page-footer { flex-direction: column; }
+      .quiz-nav { flex-direction: column; }
+      .quiz-question-text { font-size: 1.05rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+
+    @media print {
+      @page { margin: 1.5cm; }
+      body { background: var(--white); }
+      .scroll-progress,
+      .sidebar,
+      .mobile-bar,
+      .guide-panel,
+      .empty-state,
+      .notes-status,
+      .quiz-section { display: none !important; }
+      .app-shell { display: block; }
+      .content { padding: 0; }
+      .hero {
+        min-height: 0;
+        margin-bottom: 1.2rem;
+        padding: 2rem;
+        box-shadow: none;
+      }
+      .week-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+      .note-block { break-inside: avoid; }
+    }
+  </style>
 </head>
-<body>
 
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="brandmark">
-      <span class="chips">
-        <i style="background:#3CB4E6"></i><i style="background:#32B18E"></i><i style="background:#FFD730"></i><i style="background:#FF8040"></i><i style="background:#F05696"></i>
-      </span>
-      IMK · Teknik Informatika
-    </div>
-    <nav class="topnav" aria-label="Navigasi utama">
-      <a href="#definisi">Definisi</a>
-      <a href="#sejarah">Sejarah</a>
-      <a href="#komponen">Siklus Aksi</a>
-      <a href="#ucd">UCD</a>
-      <a href="#latihan">Latihan</a>
-      <a href="#referensi">Referensi</a>
-    </nav>
-  </div>
-</div>
+<body data-filled="true">
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<header class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="eyebrow-course">Modul 1 · Pertemuan 1</div>
-      <h1>Pengantar Interaksi<em>Manusia dan Komputer</em></h1>
-      <p class="hero-lede">Pertanyaan bergeser dari "bagaimana membuat sistem ini berjalan?" menjadi "bagaimana membuat sistem ini bisa dijalankan manusia tanpa penderitaan?" — dan pergeseran itu mengubah setiap keputusan teknis yang mengikutinya.</p>
-      <div class="hero-meta">
-        <span>Definisi &amp; ruang lingkup</span>
-        <span>Sejarah paradigma interaksi</span>
-        <span>Siklus Aksi Norman</span>
-        <span>User-Centered Design</span>
-        <span>Studi kasus aplikasi nyata</span>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi catatan kuliah">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">HP</div>
+        <div>
+          <strong>HAPPY PRISM</strong>
+          <span>Weekly Notes System</span>
+        </div>
       </div>
-    </div>
-    <div class="prism-wrap">
-      <svg class="prism" viewBox="0 0 640 360" role="img" aria-label="Diagram prisma: satu berkas rangsangan masuk lalu terurai menjadi persepsi, atensi, memori, kognisi, dan aksi motorik">
-        <line class="beam-in" x1="10" y1="175" x2="196" y2="175" stroke="#F0F0F0" stroke-width="5"/>
-        <text x="14" y="160" font-family="Bricolage Grotesque, sans-serif" font-size="14" font-weight="600" fill="#C9D8EC">rangsangan</text>
-        <path d="M214 95 L268 215 L160 215 Z" fill="none" stroke="#959595" stroke-width="2.5"/>
-        <g class="band"><path d="M214 175 L620 78 L620 96 L214 175 Z" fill="#3CB4E6"/></g>
-        <g class="band"><path d="M214 175 L620 126 L620 144 L214 175 Z" fill="#32B18E"/></g>
-        <g class="band"><path d="M214 175 L620 174 L620 192 L214 175 Z" fill="#FFD730"/></g>
-        <g class="band"><path d="M214 175 L620 222 L620 240 L214 175 Z" fill="#FF8040"/></g>
-        <g class="band"><path d="M214 175 L620 270 L620 288 L214 175 Z" fill="#F05696"/></g>
-        <g font-family="Bricolage Grotesque, sans-serif" font-size="14" font-weight="600" fill="#EAF2FB">
-          <text class="bandlabel" x="470" y="80">persepsi</text>
-          <text class="bandlabel" x="470" y="128">atensi</text>
-          <text class="bandlabel" x="470" y="176">memori</text>
-          <text class="bandlabel" x="470" y="224">kognisi</text>
-          <text class="bandlabel" x="470" y="272">aksi motorik</text>
-        </g>
-      </svg>
-    </div>
+
+      <section class="course-card" aria-labelledby="courseName">
+        <p class="micro-label">Mata Kuliah</p>
+        <h2 id="courseName" data-field="course">Interaksi Manusia dan Komputer (IMK)</h2>
+        <dl class="course-meta">
+          <div>
+            <dt>Kode</dt>
+            <dd data-field="course-code">CSG2C3 · 3 SKS</dd>
+          </div>
+          <div>
+            <dt>Dosen</dt>
+            <dd data-field="lecturer">Tim Dosen IMK</dd>
+          </div>
+          <div>
+            <dt>Prodi</dt>
+            <dd data-field="program">Teknik Informatika</dd>
+          </div>
+          <div>
+            <dt>Periode</dt>
+            <dd data-field="period">Tahun Akademik Berjalan</dd>
+          </div>
+        </dl>
+      </section>
+
+      <p class="nav-heading">Daftar Pertemuan</p>
+      <nav class="week-nav" id="weekNav" aria-label="Daftar catatan mingguan">
+        <span class="nav-empty">Belum ada minggu yang diisi</span>
+      </nav>
+
+      <div class="sidebar-actions">
+        <a class="button button-secondary" href="#kuis-evaluasi" onclick="document.body.classList.remove('menu-open')">Kuis 30 Soal</a>
+        <button class="button button-primary" id="printButton" type="button" aria-label="Cetak catatan atau simpan sebagai PDF">
+          Cetak / Simpan PDF
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="mobile-bar">
+        <strong>HAPPY PRISM</strong>
+        <button class="button menu-button" id="menuButton" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+      </div>
+
+      <header class="hero" id="top">
+        <div class="prism-lines" aria-hidden="true"></div>
+        <p class="eyebrow">Ruang Belajar Mingguan</p>
+        <h1>Catatan Kuliah Mingguan</h1>
+        <p class="hero-copy">Satu ruang terstruktur untuk menyimpan konsep, pembahasan, contoh, refleksi, dan referensi dari setiap pertemuan.</p>
+        <div class="hero-tags" aria-label="Informasi catatan">
+          <span class="hero-tag" data-field="course">Interaksi Manusia dan Komputer (IMK)</span>
+          <span class="hero-tag" data-field="period">Tahun Akademik Berjalan</span>
+          <span class="hero-tag" id="meetingCount">0 pertemuan</span>
+        </div>
+      </header>
+
+      <section class="guide-panel" id="claudeGuide" aria-labelledby="guideTitle">
+        <p class="section-kicker">Instruksi Pengisian</p>
+        <h2 class="section-title" id="guideTitle">Aturan kerja untuk Claude</h2>
+        <p class="section-intro">Base ini sengaja belum memuat materi. Saat materi diberikan, Claude harus mengisi area catatan tanpa mengubah desain, navigasi, atau fungsi halaman.</p>
+
+        <ol class="rules-grid">
+          <li>
+            <strong>Gunakan materi pengguna</strong>
+            <span>Jaga urutan topik. Jangan menambah fakta, sumber, atau pertemuan tanpa dasar.</span>
+          </li>
+          <li>
+            <strong>Isi metadata utama</strong>
+            <span>Ganti nama mata kuliah, kode, dosen, program studi, serta periode pada semua slot.</span>
+          </li>
+          <li>
+            <strong>Salin template minggu</strong>
+            <span>Buat satu artikel untuk setiap pertemuan dengan nomor, id, dan judul yang unik.</span>
+          </li>
+          <li>
+            <strong>Susun catatan utuh</strong>
+            <span>Bahas tujuan, konsep, uraian, contoh, istilah, rangkuman, latihan, dan referensi.</span>
+          </li>
+          <li>
+            <strong>Jaga akurasi akademik</strong>
+            <span>Jangan mengarang sitasi. Tandai secara jujur ketika materi belum menyediakan referensi.</span>
+          </li>
+          <li>
+            <strong>Kembalikan file lengkap</strong>
+            <span>Hasil akhir harus berupa index.html utuh yang dapat dibuka langsung tanpa internet.</span>
+          </li>
+        </ol>
+
+        <div class="ai-command">
+          <strong>Perintah singkat:</strong> Isi base ini menggunakan materi yang saya lampirkan. Patuhi KONTRAK PENGISIAN UNTUK CLAUDE di bagian head. Pertahankan desain dan kembalikan satu index.html lengkap.
+        </div>
+      </section>
+
+      <section aria-labelledby="notesTitle">
+        <div class="notes-header">
+          <div>
+            <p class="section-kicker">Arsip Pertemuan</p>
+            <h2 class="section-title" id="notesTitle">Catatan per minggu</h2>
+          </div>
+          <span class="notes-status" id="notesStatus">Siap diisi</span>
+        </div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <div>
+            <div class="empty-symbol" aria-hidden="true"></div>
+            <h2>Area catatan masih kosong</h2>
+            <p>Kirim file ini bersama materi kuliah kepada Claude. Struktur minggu akan muncul otomatis setelah area konten diisi.</p>
+          </div>
+        </div>
+
+        <!-- AI-CONTENT-START: CLAUDE MENEMPEL SEMUA ARTICLE .week-card DI DALAM ELEMEN INI -->
+        <div id="weeklyNotes" data-ai-edit-zone="weekly-notes">
+          <article class="week-card" id="minggu-02" data-week="02">
+            <header class="week-head">
+              <div class="week-number">
+                <span>Minggu</span>
+                <strong>02</strong>
+              </div>
+              <div class="week-heading">
+                <p>Modul 02 · Step 1: Know User</p>
+                <h2>Review User-Centered Design (UCD) dan Persona User</h2>
+              </div>
+            </header>
+
+            <div class="week-body">
+              <section class="note-block accent-sky">
+                <h3>Tujuan Pembelajaran</h3>
+                <ul>
+                  <li>Mengetahui proses yang dilakukan pada metode User-Centered Design (UCD).</li>
+                  <li>Memahami pentingnya mengenal pengguna dari aplikasi yang akan dibangun sebagai dasar untuk merancang antarmuka perangkat lunak.</li>
+                  <li>Mampu mendefinisikan Persona User untuk antarmuka perangkat lunak.</li>
+                </ul>
+              </section>
+
+              <section class="note-block accent-emerald">
+                <h3>Konsep Inti</h3>
+                <p>User-Centered Design (UCD) adalah pendekatan pengembangan antarmuka dan sistem yang menempatkan pemahaman terhadap pengguna, tujuan dan tugas mereka, serta lingkungan penggunaan (fisik, organisasional, sosial) sebagai pusat perhatian di sepanjang proses pengembangan, bukan hanya di tahap akhir. Prinsip ini dirumuskan secara formal dalam ISO 13407 tentang proses human-centered design untuk sistem interaktif. Salah satu keluaran penting dari tahap awal UCD adalah Persona User, yaitu representasi pengguna arketipal yang membantu tim desain merancang untuk kebutuhan nyata, bukan untuk "semua orang" secara abstrak.</p>
+              </section>
+
+              <section class="note-block full accent-pink">
+                <h3>Pembahasan Utama</h3>
+
+                <h4>1. User Experience (UX) dan User Interface (UI)</h4>
+                <p>UX dan UI adalah dua konsep yang saling terkait namun tidak identik. UX mencakup keseluruhan pengalaman pengguna saat berinteraksi dengan produk, yang dibentuk oleh perpotongan antara konten, tujuan bisnis (business goals), tujuan pengguna (user goals), dan interaksi itu sendiri (model CUBI). UI, di sisi lain, adalah lapisan antarmuka konkret tempat interaksi tersebut terjadi, misalnya tata letak layar, tombol, dan alur navigasi pada suatu aplikasi kerja seperti dashboard self-service karyawan. Dengan kata lain, UI adalah "wajah" sistem, sedangkan UX adalah keseluruhan perasaan dan hasil yang didapat pengguna dari wajah tersebut.</p>
+
+                <h4>2. Usability Goals dan User Experience Goals</h4>
+                <p>Preece, Rogers, dan Sharp (2002) membedakan dua lapis tujuan desain interaktif: usability goals yang bersifat fungsional dan objektif, serta user experience goals yang bersifat afektif dan subjektif. Kedua lapis tujuan ini saling melengkapi; sebuah sistem yang efisien namun tidak menyenangkan tetap dianggap kurang berhasil dari sisi pengalaman pengguna.</p>
+                <div class="note-table-wrap">
+                  <table class="note-table">
+                    <thead>
+                      <tr><th>Usability Goals</th><th>User Experience Goals</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Efficient to use (efisien digunakan)</td><td>Satisfying, enjoyable, fun (memuaskan, menyenangkan)</td></tr>
+                      <tr><td>Effective to use (efektif mencapai tujuan)</td><td>Motivating, rewarding (memotivasi, memberi rasa berhasil)</td></tr>
+                      <tr><td>Safe to use (aman digunakan)</td><td>Aesthetically pleasing (enak dipandang)</td></tr>
+                      <tr><td>Have good utility (memiliki kegunaan yang baik)</td><td>Supportive of creativity (mendukung kreativitas)</td></tr>
+                      <tr><td>Easy to learn (mudah dipelajari)</td><td>Emotionally fulfilling, helpful (memuaskan secara emosi)</td></tr>
+                      <tr><td>Easy to remember how to use (mudah diingat cara pakainya)</td><td>Entertaining (menghibur)</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <h4>3. Apa itu User-Centered Design (UCD)?</h4>
+                <p>ISO 13407 mendeskripsikan proses human-centered design untuk sistem interaktif dengan empat prinsip utama:</p>
+                <ul>
+                  <li>Keterlibatan aktif pengguna (active involvement of users) di sepanjang proses desain.</li>
+                  <li>Alokasi fungsi yang tepat antara pengguna dan sistem (appropriate allocation of function).</li>
+                  <li>Iterasi solusi desain (iteration of design solutions) berdasarkan umpan balik.</li>
+                  <li>Tim desain multidisiplin (multidisciplinary design teams).</li>
+                </ul>
+                <p>Pendekatan user-centered dibangun di atas tiga fondasi: (1) early focus on users and tasks, yaitu mempelajari karakteristik kognitif, perilaku, antropometrik, dan sikap pengguna sejak awal; (2) empirical measurement, yaitu mengamati dan menganalisis reaksi serta performa pengguna terhadap skenario, manual, simulasi, dan prototipe; (3) iterative design, yaitu memperbaiki masalah yang ditemukan pada pengujian pengguna lalu menguji ulang.</p>
+
+                <h4>4. Model Interaksi Desain Sederhana (Siklus UCD)</h4>
+                <p>Siklus UCD digambarkan sebagai proses berulang: (1) Identify needs / establish requirements — mengidentifikasi kebutuhan dan menetapkan persyaratan; (2) (Re)Design — merancang atau merancang ulang solusi; (3) Build an interactive version — membangun versi interaktif (prototipe); (4) Evaluate — mengevaluasi bersama pengguna. Hasil evaluasi dapat mengarah kembali ke tahap identifikasi kebutuhan atau ke tahap (re)design, sampai akhirnya solusi dianggap memadai dan menjadi final product. Siklus ini menegaskan bahwa desain yang baik jarang dihasilkan dalam satu kali proses linear.</p>
+
+                <h4>5. Tahap 1: Mengidentifikasi Kebutuhan dan Menetapkan Persyaratan</h4>
+                <p>Dua pertanyaan praktis mendasari tahap ini: siapa sebenarnya pengguna (target users) dari sistem yang akan dibangun, dan apa yang dimaksud dengan "kebutuhan" (needs) mereka. Kesalahan umum adalah menyempitkan target pengguna secara sembarangan atau mengasumsikan kebutuhan tanpa verifikasi langsung ke pengguna, sehingga desain akhirnya tidak relevan dengan konteks pemakaian sesungguhnya.</p>
+
+                <h4>6. Teknik Menggali Kebutuhan Pengguna</h4>
+                <ul>
+                  <li><strong>Wawancara (interview).</strong> Terbagi menjadi tidak terstruktur (kaya informasi, sulit direplikasi), terstruktur (mudah dianalisis, kurang mendalam), dan semi-terstruktur (menyeimbangkan kekayaan data dan replikasi). Pertanyaan dapat bersifat tertutup (closed, mudah dianalisis) atau terbuka (open). Penyusun wawancara perlu menghindari pertanyaan panjang, kalimat majemuk, jargon, pertanyaan mengarahkan (leading question), dan bias tak sadar seperti stereotip gender. Alat bantu (props) seperti prototipe atau skenario dapat memperkaya proses wawancara.</li>
+                  <li><strong>Contextual inquiry.</strong> Pendekatan etnografis berbentuk wawancara di tempat kerja pengguna, biasanya berlangsung 2–3 jam, dengan empat prinsip: context (mengamati langsung lingkungan kerja), partnership (pengguna dan pengembang berkolaborasi setara), interpretation (hasil observasi ditafsirkan bersama), dan focus (proyek memiliki fokus jelas tentang apa yang perlu dicari).</li>
+                  <li><strong>Kuesioner (questionnaire).</strong> Dapat berisi pertanyaan tertutup maupun terbuka dan disebarkan lewat kertas, email, atau web. Kuesioner daring memberi keuntungan berupa respons cepat, tanpa biaya cetak/kirim, data langsung tersimpan di basis data, dan waktu analisis lebih singkat; namun memiliki risiko berupa sampling yang sulit dikontrol ketika ukuran populasi tidak diketahui serta potensi seseorang mengisi lebih dari satu kali. Urutan pertanyaan, instruksi yang jelas, dan konsistensi nada pertanyaan (positif/negatif) perlu diperhatikan dalam desain kuesioner.</li>
+                  <li><strong>Observasi.</strong> Observasi langsung dapat dilakukan di lapangan (dengan berbagai derajat partisipasi, dari "outsider" hingga "insider") atau di lingkungan terkontrol (misalnya think-aloud technique, meminta pengguna menyuarakan pikirannya saat menjalankan tugas). Observasi tidak langsung dilakukan melalui diaries dan interaction logging. Kerangka Goetz and LeCompte (1984) membantu menstrukturkan observasi lapangan dengan pertanyaan: siapa yang hadir, apa perannya, apa yang terjadi, kapan, di mana, mengapa, dan bagaimana aktivitas itu terorganisasi.</li>
+                  <li><strong>Etnografi (ethnography).</strong> Filosofi riset dengan teknik seperti observasi partisipan dan wawancara, di mana peneliti membenamkan diri dalam budaya yang diteliti. Membutuhkan kerja sama subjek yang diobservasi, memanfaatkan informan, dilakukan dengan analisis data yang berkelanjutan, bersifat interpretivis, dan pertanyaannya terus disempurnakan seiring bertambahnya pemahaman.</li>
+                </ul>
+                <p>Pemilihan dan kombinasi teknik di atas bergantung pada fokus studi, karakteristik partisipan, sifat teknik itu sendiri, dan sumber daya (waktu, biaya, akses) yang tersedia.</p>
+
+                <h4>7. Analisis Kompetitif dan Evaluasi Heuristik</h4>
+                <p>Competitive/comparative analysis dilakukan dengan mencoba produk atau layanan sejenis untuk memahami tren pasar, ekspektasi pengguna, praktik yang sebaiknya dilakukan atau dihindari, konvensi antarmuka yang berlaku umum, serta fitur standar yang wajib ada ("must have"). Heuristic evaluation mengevaluasi antarmuka (yang sudah ada maupun konsep baru) berdasarkan seperangkat kriteria usability, biasanya dilakukan oleh evaluator ahli, untuk menemukan masalah usability yang kemudian ditindaklanjuti pada tahap desain berikutnya.</p>
+
+                <h4>8. Tahap 2: Mengembangkan Alternatif Desain — Persona, Goals, Tasks, dan Scenario</h4>
+                <p>Persona adalah model pengguna "arketipal" hasil riset pengguna; setiap persona menggambarkan satu jenis pengguna "khas" dari sistem, dan beberapa persona dapat digabung jika memiliki tujuan yang sama atau tumpang tindih. Persona menggeser fokus desain dari "semua orang" menjadi pengguna spesifik. Goals adalah apa yang ingin dicapai pengguna, tanpa menjelaskan bagaimana caranya. Tasks adalah langkah-langkah untuk mencapai goals tersebut; tugas dapat berubah tergantung teknologi yang tersedia dan dapat diurai (task analysis) maupun disusun ulang menjadi urutan langkah (scenario). Scenario adalah deskripsi tertulis tentang seorang persona mencapai suatu goal melalui serangkaian task dalam konteks tertentu; skenario sebaiknya dimulai secara netral terhadap teknologi lalu menjadi lebih spesifik seiring desain berkembang.</p>
+
+                <h4>9. Tahap 3: Membangun Versi Interaktif dan Tahap 4: Mengevaluasi Desain</h4>
+                <p>Pada tahap membangun versi interaktif, desain dimulai secara kasar, dieksplorasi, dan divalidasi lewat prototipe untuk pengujian usability, dengan tetap menjaga persona dan skenario sebagai acuan serta mengumpulkan umpan balik secara berkala. Pada tahap evaluasi, pengguna diminta menyelesaikan tugas-tugas tipikal (dari skenario) sambil berpikir keras (think aloud); pengujian dapat dilakukan dengan jumlah pengguna kecil (3–5 orang atau bahkan kurang) namun tetap informatif. Kriteria keberhasilan idealnya ditetapkan sejak awal proyek, dibandingkan terhadap baseline bila ada, dan digunakan untuk memeriksa apakah masalah usability dari evaluasi heuristik sebelumnya sudah teratasi. Tahapan evaluasi meliputi: menetapkan apa yang diuji, memilih pengguna berdasarkan persona, menjalankan pengujian, menganalisis data, mendokumentasikan temuan, membagikan temuan ke tim pengembang, dan menentukan perubahan desain yang akan dilakukan.</p>
+
+                <h4>10. Proses Desain Antarmuka Pengguna — Step 1: Know Your Users and Clients</h4>
+                <p>Langkah pertama dalam proses desain UI menuntut tim desain untuk: memahami cara manusia berinteraksi dengan komputer; memahami karakteristik manusia yang relevan dengan desain; mengidentifikasi tingkat pengetahuan dan pengalaman pengguna; mengidentifikasi karakteristik kebutuhan, tugas, dan pekerjaan pengguna; mengidentifikasi karakteristik psikologis pengguna; mengidentifikasi karakteristik fisik pengguna; serta menerapkan metode yang direkomendasikan untuk memahami pengguna (wawancara, kuesioner, observasi, dan sejenisnya). Keluaran (output) dari langkah ini adalah Persona User, yang berguna untuk membantu mengidentifikasi pengguna dan kebutuhan spesifik, mengidentifikasi pengguna primer dan sekunder, serta membantu tim memilih individu yang tepat sebagai acuan desain.</p>
+
+                <h4>11. Mengapa Manusia Bermasalah dengan Komputer?</h4>
+                <p>Siklus aksi manusia terdiri atas tiga tahap: tujuan dibentuk, rencana eksekusi disusun dan diimplementasikan, lalu hasil tindakan dievaluasi. Masalah interaksi manusia-komputer sering muncul karena: sistem terlalu fleksibel sehingga membingungkan, penggunaan jargon teknis, desain yang tidak jelas, perbedaan antarelemen yang terlalu halus untuk dibedakan, serta disparitas strategi pemecahan masalah antara perancang dan pengguna. Respons psikologis khas terhadap desain yang buruk meliputi kebingungan, annoyance (jengkel), frustrasi, panik/stres, dan kebosanan. Respons ini kerap diikuti reaksi fisik seperti pengabaian sistem, penggunaan sistem hanya sebagian, penggunaan langsung yang berlebihan, modifikasi tugas, aktivitas kompensasi, penyalahgunaan sistem, hingga pemrograman ulang secara langsung oleh pengguna.</p>
+
+                <h4>12. Karakteristik Manusia dalam Pemrosesan Informasi (Human Information Processing System)</h4>
+                <p>Pemahaman tentang bagaimana manusia berpikir, belajar, dan berkomunikasi menjadi faktor penentu utama dalam merancang sistem interaktif, dan sering dianalogikan dengan model pemrosesan pada komputer. Model tiga fase pemrosesan informasi manusia terdiri atas: Perceptual System (membaca dan memindai/scan input), Cognitive System (berpikir/think), dan Motor System (merespons/response).</p>
+                <ul>
+                  <li><strong>Sistem perseptual.</strong> Organ sensorik meneruskan sinyal eksternal ke sensory buffer yang menyimpan citra mentah dengan detail tinggi namun berdurasi sangat singkat sebelum meluruh atau diteruskan ke otak. Proses pengenalan pola (pattern recognition) pada manusia bukan sekadar pencocokan pola sederhana, melainkan proses aktif yang memanfaatkan konteks dan pengetahuan, sehingga mampu mentoleransi informasi yang ambigu atau tidak lengkap.</li>
+                  <li><strong>Sistem kognitif.</strong> Short-Term Memory (STM) berfungsi sebagai penyimpan sekaligus prosesor (meski lambat), dengan kapasitas dan durasi terbatas. Long-Term Memory (LTM) memiliki kapasitas tidak terbatas dan durasi yang relatif permanen, tetapi membutuhkan usaha dan konsentrasi untuk menyimpan informasi baru ke dalamnya.</li>
+                  <li><strong>Sistem motorik.</strong> Pikiran diterjemahkan menjadi tindakan melalui serangkaian mikro-gerakan (micromovement) yang diskret; gerakan motorik yang relevan bagi desain UI meliputi gerakan kepala, mata, lengan, tangan, dan jari.</li>
+                </ul>
+                <p>Karakteristik manusia lain yang penting dalam desain meliputi persepsi, memori, sensory storage, ketajaman visual (visual acuity), proses informasi, model mental (mental models), kontrol gerakan, pembelajaran (learning), keterampilan (skill), beban kinerja (performance load), dan perbedaan individual (individual differences).</p>
+
+                <h4>13. Pertimbangan Manusia dalam Perancangan Sistem Bisnis</h4>
+                <p>Empat kelompok karakteristik pengguna berikut perlu diidentifikasi sebelum merancang antarmuka, karena masing-masing berimplikasi langsung pada keputusan desain (misalnya tingkat kerumitan, ukuran elemen, atau kebutuhan bantuan kontekstual):</p>
+                <div class="note-table-wrap">
+                  <table class="note-table">
+                    <thead>
+                      <tr><th>Kategori</th><th>Contoh Atribut yang Diidentifikasi</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Pengetahuan / Pengalaman</td><td>Literasi komputer, pengalaman dengan sistem serupa, tingkat pendidikan, kemampuan membaca dan mengetik, bahasa atau budaya asal.</td></tr>
+                      <tr><td>Pekerjaan / Tugas / Kebutuhan</td><td>Sifat penggunaan (wajib/opsional), frekuensi penggunaan, tingkat kepentingan tugas, struktur tugas, kebutuhan interaksi sosial, kategori jabatan.</td></tr>
+                      <tr><td>Psikologis</td><td>Sikap terhadap sistem, motivasi, kesabaran, ekspektasi, tingkat stres, gaya kognitif (verbal/spasial, analitis/intuitif).</td></tr>
+                      <tr><td>Fisik</td><td>Usia, jenis kelamin, dominasi tangan, disabilitas (penglihatan, pendengaran, motorik).</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <h4>14. Apa itu Persona dan Bagaimana Menyusunnya?</h4>
+                <p>Dalam konteks desain, persona adalah contoh fiktif seorang pengguna dari basis pengguna nyata, umumnya memuat usia, jenis kelamin, pekerjaan, hobi, kesukaan/ketidaksukaan, serta detail lain yang relevan dengan produk, termasuk kepribadian, tujuan, dan frustrasi mereka. Persona idealnya disusun berdasarkan riset nyata atau pengetahuan mendalam terhadap basis pengguna yang sudah ada, bukan sekadar asumsi. Contoh persona seperti Marjorie Bannet (78 tahun, baru pindah kota, belum pernah memakai komputer, memiliki sedikit gangguan penglihatan dan artritis) menunjukkan bagaimana data biografis, kondisi kesehatan, dan pengalaman teknologi memengaruhi kebutuhan desain, misalnya ukuran teks, kontras, dan kesederhanaan antarmuka.</p>
+                <p>Tahapan menyusun persona secara umum meliputi: brainstorming jenis-jenis pengguna terkait produk; melakukan riset dan wawancara terhadap masing-masing jenis pengguna untuk memahami pain point dan cara mereka menggunakan produk; menulis deskripsi persona secara rinci; menyortir dan memprioritaskan persona bersama tim menjadi primary, secondary, dan tertiary; mendiskusikan kesesuaian persona dengan tim lintas fungsi; serta memfinalisasi, mencetak, dan mendistribusikan persona agar menjadi acuan bersama sepanjang proyek. Untuk mengumpulkan data yang mendasari persona, tim desain disarankan mengunjungi lokasi kerja pengguna, berbicara langsung dengan pengguna (tanpa perantara), mengamati cara mereka menjalankan tugas, merekam alur kerja, meminta pengguna berpikir keras (think aloud) saat bekerja, mencoba sendiri aktivitas pengguna, serta menggunakan survei atau kuesioner untuk memperluas sampel.</p>
+              </section>
+
+              <section class="note-block accent-orange">
+                <h3>Contoh atau Penerapan</h3>
+                <p>Perhatikan dashboard self-service karyawan (seperti pada contoh Sitrion) yang menampilkan daftar tugas persetujuan cuti, kalender tim, dan status pengajuan dalam satu layar. Desain ini mencerminkan penerapan UCD: tugas nyata pengguna (menyetujui/menolak cuti dengan cepat) dijadikan pusat tata letak, bukan sekadar menampilkan data mentah dari basis data HR.</p>
+                <p>Sebagai latihan analisis, bayangkan tim Anda merancang aplikasi pengingat obat untuk pengguna dengan persona seperti Marjorie Bannet. Beberapa keputusan desain yang relevan dengan teori pada pertemuan ini:</p>
+                <ul>
+                  <li><strong>Karakteristik fisik (early cataracts, artritis ringan)</strong> mendorong penggunaan ukuran teks besar, kontras tinggi, dan target sentuh (tap target) yang lebar agar tetap dapat digunakan meski ketajaman visual dan kontrol motorik menurun.</li>
+                  <li><strong>Karakteristik pengetahuan/pengalaman (belum pernah memakai komputer)</strong> menuntut onboarding sederhana, istilah yang menghindari jargon teknis, dan alur yang sangat linear untuk mengurangi beban kognitif pada Short-Term Memory.</li>
+                  <li><strong>Karakteristik psikologis (mudah cemas terhadap teknologi)</strong> mengarahkan desain pada umpan balik (feedback) yang jelas dan menenangkan setiap kali sebuah aksi berhasil, guna menghindari respons psikologis seperti kebingungan atau panik yang telah dibahas pada bagian pembahasan.</li>
+                  <li><strong>Evaluasi berbasis usability goals dan UX goals</strong>: aplikasi perlu diuji apakah "easy to learn" dan "safe to use" (usability goals) sekaligus terasa "helpful" dan tidak "annoying" (UX goals) bagi persona tersebut, misalnya lewat pengujian think-aloud bersama pengguna lanjut usia.</li>
+                </ul>
+                <p>Pola analisis yang sama dapat diterapkan pada aplikasi nyata lain, misalnya membandingkan aplikasi perbankan digital dengan kompetitornya (competitive analysis) untuk melihat konvensi antarmuka yang lazim dipakai (misalnya posisi tombol transfer, pola verifikasi biometrik) sebelum menyusun persona dan skenario pengguna baru.</p>
+              </section>
+
+              <section class="note-block accent-magenta">
+                <h3>Istilah Penting</h3>
+                <div class="key-term">
+                  <strong>UCD</strong>
+                  <span>User-Centered Design; pendekatan pengembangan yang menempatkan pengguna, tugas, dan lingkungan sebagai pusat proses desain.</span>
+                </div>
+                <div class="key-term">
+                  <strong>ISO 13407</strong>
+                  <span>Standar yang mendeskripsikan proses human-centered design untuk sistem interaktif.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Persona</strong>
+                  <span>Representasi fiktif namun berbasis riset dari pengguna arketipal suatu produk.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Usability Goals</strong>
+                  <span>Tujuan fungsional desain: efisien, efektif, aman, mudah dipelajari, dan mudah diingat.</span>
+                </div>
+                <div class="key-term">
+                  <strong>UX Goals</strong>
+                  <span>Tujuan afektif desain: memuaskan, menyenangkan, memotivasi, dan enak dipandang.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Contextual Inquiry</strong>
+                  <span>Wawancara di tempat kerja pengguna berlandaskan prinsip context, partnership, interpretation, dan focus.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Etnografi</strong>
+                  <span>Teknik riset dengan membenamkan diri dalam budaya atau lingkungan pengguna yang diteliti.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Think-Aloud</strong>
+                  <span>Teknik observasi terkontrol yang meminta pengguna menyuarakan pikirannya saat menjalankan tugas.</span>
+                </div>
+                <div class="key-term">
+                  <strong>STM &amp; LTM</strong>
+                  <span>Short-Term Memory (kapasitas dan durasi terbatas) dan Long-Term Memory (kapasitas dan durasi relatif tak terbatas).</span>
+                </div>
+                <div class="key-term">
+                  <strong>Scenario</strong>
+                  <span>Deskripsi tertulis persona mencapai goal melalui serangkaian task pada konteks tertentu.</span>
+                </div>
+                <div class="key-term">
+                  <strong>Heuristic Evaluation</strong>
+                  <span>Evaluasi antarmuka oleh evaluator ahli berdasarkan kriteria usability tertentu.</span>
+                </div>
+              </section>
+
+              <section class="note-block full accent-bronze">
+                <h3>Rangkuman</h3>
+                <p>User-Centered Design menempatkan pemahaman terhadap pengguna, tugas, dan lingkungan penggunaan sebagai landasan sepanjang siklus pengembangan sistem interaktif, sebagaimana dirumuskan dalam prinsip ISO 13407 dan pendekatan early focus, empirical measurement, serta iterative design. Proses ini berjalan melalui siklus identifikasi kebutuhan, (re)desain, pembuatan prototipe, dan evaluasi yang berulang. Untuk mengenali kebutuhan pengguna, tim desain dapat menggunakan berbagai teknik seperti wawancara, contextual inquiry, kuesioner, observasi, dan etnografi, yang dikombinasikan sesuai konteks proyek. Pemahaman terhadap karakteristik manusia—mulai dari pengetahuan dan pengalaman, kebutuhan dan tugas, kondisi psikologis, kondisi fisik, hingga model pemrosesan informasi manusia (perceptual, cognitive, motor)—menjelaskan mengapa desain yang buruk memicu kebingungan, frustrasi, dan berbagai reaksi negatif pengguna. Seluruh pemahaman ini kemudian dituangkan ke dalam Persona User sebagai output Step 1 (Know Your Users and Clients), yang menjadi acuan konkret bagi tim untuk merancang, membangun, dan mengevaluasi antarmuka yang benar-benar sesuai dengan penggunanya.</p>
+              </section>
+
+              <section class="note-block accent-sky">
+                <h3>Refleksi atau Latihan</h3>
+                <ol>
+                  <li>Pilih satu aplikasi mobile yang sering Anda gunakan. Identifikasi minimal tiga karakteristik pengguna (pengetahuan, psikologis, fisik) yang tampaknya dipertimbangkan dalam desainnya.</li>
+                  <li>Susun satu persona sederhana (nama, usia, pekerjaan, tujuan, frustrasi, tingkat literasi teknologi) untuk pengguna target dari aplikasi tersebut.</li>
+                  <li>Rancang tiga pertanyaan wawancara semi-terstruktur untuk memvalidasi persona yang Anda buat, dan hindari pertanyaan yang mengarahkan (leading question).</li>
+                  <li>Jelaskan satu contoh reaksi fisik pengguna akibat desain yang buruk (misalnya pengabaian sistem) dan kaitkan penyebabnya dengan teori pemrosesan informasi manusia.</li>
+                  <li>Bandingkan aplikasi tersebut dengan kompetitornya menggunakan pendekatan competitive analysis, lalu catat konvensi antarmuka yang sama-sama dipakai keduanya.</li>
+                </ol>
+              </section>
+
+              <section class="note-block accent-emerald">
+                <h3>Referensi</h3>
+                <ol class="reference-list">
+                  <li>Wilbert O. Galitz. 2007. <em>The Essential Guide to User Interface Design: An Introduction to GUI Design Principles and Techniques</em>, Third Edition. Wiley Publishing, hlm. 71–102.</li>
+                  <li>Jenny Preece, Yvonne Rogers, Helen Sharp. 2002. <em>Interaction Design: Beyond Human-Computer Interaction</em>. John Wiley &amp; Sons.</li>
+                  <li>UX Mastery. "What Does a User-Centred Design Process Look Like?" uxmastery.com.</li>
+                  <li>HubSpot Knowledge Base. "How to Create Personas." knowledge.hubspot.com.</li>
+                  <li>Smashing Magazine. "A Closer Look at Personas – Part 1." smashingmagazine.com.</li>
+                  <li>Tuts+ Web Design. "Defining and Applying Personas to UX Design." webdesign.tutsplus.com.</li>
+                  <li>StoryboardThat. "Using Personas to Identify Your Target Customers." storyboardthat.com.</li>
+                </ol>
+              </section>
+            </div>
+          </article>
+        </div>
+        <!-- AI-CONTENT-END -->
+      </section>
+
+      <section class="quiz-section" id="kuis-evaluasi" aria-labelledby="quizTitle">
+        <div class="notes-header">
+          <div>
+            <p class="section-kicker">Evaluasi Mandiri</p>
+            <h2 class="section-title" id="quizTitle">Kuis Pilihan Ganda: Know User — UCD &amp; Persona</h2>
+          </div>
+          <span class="notes-status" id="quizStatus">Soal 1 / 30</span>
+        </div>
+        <p class="section-intro">30 soal pilihan ganda untuk menguji pemahaman Anda tentang materi Minggu 2. Pilih satu jawaban pada setiap soal untuk langsung melihat pembahasan singkatnya, lalu lanjutkan ke soal berikutnya.</p>
+
+        <div class="quiz-progress-track" aria-hidden="true"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+
+        <div class="quiz-card" id="quizArea"></div>
+      </section>
+
+      <footer class="page-footer">
+        <span>HAPPY PRISM Weekly Notes</span>
+        <span>Dirancang untuk catatan kuliah yang terstruktur dan mudah dicetak.</span>
+      </footer>
+    </main>
   </div>
-</header>
 
-<div class="shell">
+  <!-- CLAUDE: salin isi template ini ke #weeklyNotes untuk setiap pertemuan, lalu isi seluruh slot. -->
+  <template id="weekTemplate">
+    <article class="week-card" id="minggu-01" data-week="01">
+      <header class="week-head">
+        <div class="week-number">
+          <span>Minggu</span>
+          <strong>01</strong>
+        </div>
+        <div class="week-heading">
+          <p>[TANGGAL / SUBTOPIK OPSIONAL]</p>
+          <h2>[JUDUL TOPIK PERTEMUAN]</h2>
+        </div>
+      </header>
 
-  <aside class="sidebar">
-    <h4>Isi modul</h4>
-    <ol>
-      <li><a href="#definisi">1.1 Apa itu IMK</a></li>
-      <li><a href="#mengapa">1.2 Mengapa IMK penting</a></li>
-      <li><a href="#disiplin">1.3 Disiplin penyusun</a></li>
-      <li><a href="#sejarah">1.4 Sejarah &amp; paradigma</a></li>
-      <li><a href="#komponen">1.5 Manusia–komputer–interaksi</a></li>
-      <li><a href="#ucd">1.6 User-centered design</a></li>
-      <li><a href="#kasus">1.7 Studi kasus</a></li>
-      <li><a href="#latihan">Latihan</a></li>
-      <li><a href="#kritis">Pertanyaan kritis</a></li>
-      <li><a href="#referensi">Referensi</a></li>
-    </ol>
-  </aside>
+      <div class="week-body">
+        <section class="note-block accent-sky">
+          <h3>Tujuan Pembelajaran</h3>
+          <ul>
+            <li>[Tujuan pembelajaran pertama]</li>
+            <li>[Tujuan pembelajaran berikutnya]</li>
+          </ul>
+        </section>
 
-  <main>
+        <section class="note-block accent-emerald">
+          <h3>Konsep Inti</h3>
+          <p>[Jelaskan ide utama pertemuan secara ringkas dan akurat.]</p>
+        </section>
 
-  <div class="week-open">
-    <div class="num">Minggu 1</div>
-    <h2>Pengantar, ruang lingkup, dan cara berpikir IMK</h2>
-    <p>Minggu ini kita menggeser pertanyaan dari "bagaimana membuat sistem ini berjalan?" menjadi "bagaimana membuat sistem ini bisa dijalankan manusia tanpa penderitaan?". Dua pertanyaan itu menghasilkan keputusan teknis yang berbeda.</p>
-    <div class="goals">
-      <div>Menjelaskan definisi IMK dan posisinya di antara disiplin lain</div>
-      <div>Menguraikan tiga komponen: manusia, komputer, dan interaksi</div>
-      <div>Membedakan perancangan berpusat sistem dan berpusat pengguna</div>
-      <div>Menilai satu aplikasi nyata memakai kerangka IMK dasar</div>
-    </div>
-  </div>
+        <section class="note-block full accent-pink">
+          <h3>Pembahasan Utama</h3>
+          <p>[Uraikan materi secara sistematis. Tambahkan subjudul h4 bila pembahasan panjang.]</p>
+        </section>
 
-  <section id="definisi">
-    <span class="sec-no">1.1</span>
-    <h2 class="sec">Apa yang sebenarnya dipelajari IMK</h2>
-    <div class="lead-rule" style="background:var(--sky)"></div>
-    <p>Definisi klasik dari ACM SIGCHI: IMK adalah disiplin yang berkaitan dengan <strong>perancangan, evaluasi, dan implementasi sistem komputasi interaktif untuk digunakan manusia, serta studi tentang fenomena besar yang mengelilinginya</strong>. Perhatikan tiga kata kerja itu — merancang, mengevaluasi, mengimplementasi. IMK bukan mata kuliah menggambar layar; ia adalah siklus rekayasa yang objek ujinya adalah manusia.</p>
-    <p>Yang membuat IMK berbeda dari mata kuliah rekayasa perangkat lunak biasa adalah letak "kebenaran"-nya. Dalam algoritma, benar-salah ditentukan oleh spesifikasi formal. Dalam IMK, benar-salah ditentukan oleh <strong>bukti empiris dari perilaku pengguna</strong>. Sebuah tombol tidak "benar" karena logikanya rapi, tetapi karena sembilan dari sepuluh orang menemukannya dalam dua detik tanpa diberi tahu.</p>
+        <section class="note-block accent-orange">
+          <h3>Contoh atau Penerapan</h3>
+          <p>[Berikan contoh yang relevan dengan materi pengguna.]</p>
+        </section>
 
-    <div class="note">
-      <h4>Catatan dosen</h4>
-      <p>Kalau Anda hanya mengingat satu kalimat dari mata kuliah ini, ingat yang ini: <strong>Anda bukan pengguna Anda.</strong> Intuisi Anda sebagai mahasiswa Informatika tentang "ini sudah jelas kok" adalah salah satu sumber kesalahan desain paling konsisten, karena Anda sudah memiliki model mental sistemnya di kepala. Pengguna tidak.</p>
-    </div>
+        <section class="note-block accent-magenta">
+          <h3>Istilah Penting</h3>
+          <div class="key-term">
+            <strong>[Istilah]</strong>
+            <span>[Definisi singkat]</span>
+          </div>
+        </section>
 
-    <h3 class="sub">Tiga istilah yang sering tertukar</h3>
-    <table>
-      <thead><tr><th style="width:24%">Istilah</th><th>Fokus</th><th style="width:34%">Pertanyaan khasnya</th></tr></thead>
-      <tbody>
-        <tr><td><strong>IMK / HCI</strong></td><td>Disiplin ilmu: teori, metode, dan bukti empiris tentang manusia yang berinteraksi dengan komputasi</td><td>"Mengapa manusia gagal pada langkah ini?"</td></tr>
-        <tr><td><strong>UX</strong></td><td>Praktik industri: seluruh pengalaman pengguna sebelum, saat, dan sesudah memakai produk</td><td>"Apakah orang merasa produk ini layak dipakai lagi?"</td></tr>
-        <tr><td><strong>UI</strong></td><td>Artefak: lapisan konkret berupa tata letak, kontrol, tipografi, warna, gerak</td><td>"Apakah tombol ini terlihat dan terjangkau?"</td></tr>
-      </tbody>
-    </table>
-    <p>Hubungan ketiganya bertingkat: IMK menyediakan <em>alasan</em>, UX menyediakan <em>proses</em>, UI menyediakan <em>wujud</em>. UI yang cantik di atas model interaksi yang keliru tetap menghasilkan produk yang gagal — ini persis yang terjadi pada banyak aplikasi pemerintah yang tampilannya sudah modern tetapi alur verifikasinya memaksa pengguna bolak-balik antar aplikasi.</p>
-  </section>
+        <section class="note-block full accent-bronze">
+          <h3>Rangkuman</h3>
+          <p>[Tulis simpulan pertemuan dalam satu atau dua paragraf ringkas.]</p>
+        </section>
 
-  <section id="mengapa">
-    <span class="sec-no">1.2</span>
-    <h2 class="sec">Mengapa ini bukan sekadar soal estetika</h2>
-    <div class="lead-rule" style="background:var(--emerald)"></div>
-    <p>Argumen terkuat untuk IMK bukan "supaya bagus", melainkan <strong>biaya</strong>. Setiap kebingungan pengguna diterjemahkan menjadi angka: tiket support, transaksi batal, pelatihan ulang, denda regulasi, dan pada domain kritis — korban jiwa.</p>
+        <section class="note-block accent-sky">
+          <h3>Refleksi atau Latihan</h3>
+          <ol>
+            <li>[Pertanyaan pemahaman atau refleksi]</li>
+            <li>[Latihan penerapan]</li>
+          </ol>
+        </section>
 
-    <div class="concept-grid">
-      <div><span class="tag" style="background:var(--sky)"></span><h4>Biaya ekonomi</h4><p>Formulir checkout yang meminta data berlebihan menaikkan tingkat pengabaian keranjang. Satu field yang tidak perlu bisa bernilai ratusan juta rupiah per bulan pada skala e-commerce.</p></div>
-      <div><span class="tag" style="background:var(--emerald)"></span><h4>Biaya operasional</h4><p>Antarmuka yang buruk memindahkan beban ke manusia lain: petugas call center, admin, dan tim IT internal yang harus memperbaiki data yang salah input.</p></div>
-      <div><span class="tag" style="background:var(--orange)"></span><h4>Biaya keselamatan</h4><p>Pada sistem medis, penerbangan, dan pembangkit listrik, kesalahan interaksi berujung fatal. Kecelakaan Three Mile Island (1979) sebagian besar dianalisis sebagai kegagalan antarmuka ruang kendali, bukan kegagalan reaktor.</p></div>
-      <div><span class="tag" style="background:var(--magenta)"></span><h4>Biaya sosial</h4><p>Sistem yang hanya bisa dipakai kelompok tertentu — muda, melek teknologi, penglihatan normal, sinyal kuat — mengecualikan warga dari layanan publik yang wajib mereka akses.</p></div>
-    </div>
+        <section class="note-block accent-emerald">
+          <h3>Referensi</h3>
+          <ol class="reference-list">
+            <li>[Cantumkan hanya sumber yang tersedia atau terverifikasi]</li>
+          </ol>
+        </section>
+      </div>
+    </article>
+  </template>
 
-    <div class="note">
-      <h4>Prinsip yang perlu Anda internalisasi</h4>
-      <p>Ketika pengguna melakukan kesalahan berulang di titik yang sama, itu <strong>bukan kesalahan pengguna</strong>. Itu adalah data yang menunjukkan letak cacat desain. Donald Norman menyebutnya secara tajam: kalau ribuan orang membuat kesalahan yang sama, yang salah bukan ribuan orang itu.</p>
-    </div>
-  </section>
+  <script>
+    (() => {
+      const body = document.body;
+      const sidebar = document.getElementById('sidebar');
+      const menuButton = document.getElementById('menuButton');
+      const printButton = document.getElementById('printButton');
+      const weekNav = document.getElementById('weekNav');
+      const weeklyNotes = document.getElementById('weeklyNotes');
+      const emptyState = document.getElementById('emptyState');
+      const meetingCount = document.getElementById('meetingCount');
+      const notesStatus = document.getElementById('notesStatus');
+      const progress = document.getElementById('scrollProgress');
 
-  <section id="disiplin">
-    <span class="sec-no">1.3</span>
-    <h2 class="sec">IMK sebagai simpul banyak disiplin</h2>
-    <div class="lead-rule" style="background:var(--yellow)"></div>
-    <p>IMK lahir dari pertemuan bidang-bidang yang biasanya tidak saling bicara. Anda tidak perlu menguasai semuanya, tetapi Anda perlu tahu <em>dari mana sebuah argumen desain berasal</em>, karena itu menentukan bagaimana argumen tersebut bisa dibantah.</p>
-    <table>
-      <thead><tr><th style="width:30%">Disiplin</th><th>Kontribusi terhadap keputusan desain</th></tr></thead>
-      <tbody>
-        <tr><td>Psikologi kognitif</td><td>Batas memori kerja, atensi selektif, pembentukan model mental, jenis-jenis kesalahan manusia — dibahas mendalam di Minggu 2</td></tr>
-        <tr><td>Ergonomi &amp; faktor manusia</td><td>Batas fisik: jangkauan jari, ukuran target sentuh, kelelahan postur, keterbacaan pada jarak tertentu</td></tr>
-        <tr><td>Ilmu komputer &amp; rekayasa perangkat lunak</td><td>Apa yang teknis mungkin, latensi, arsitektur event, pola implementasi komponen</td></tr>
-        <tr><td>Desain grafis &amp; tipografi</td><td>Hierarki visual, kontras, ritme spasial, keterbacaan</td></tr>
-        <tr><td>Sosiologi &amp; antropologi</td><td>Konteks pemakaian nyata: siapa yang menonton layar Anda, norma sosial, kerja kolaboratif</td></tr>
-        <tr><td>Linguistik</td><td>Penamaan menu, pesan kesalahan, konsistensi kosakata antarmuka</td></tr>
-      </tbody>
-    </table>
-    <p>Implikasi praktisnya: saat rapat desain dan ada perdebatan, tanyakan "klaim ini datang dari disiplin mana?". Klaim ergonomis (misalnya "target 24 px terlalu kecil untuk jempol") dapat diuji dengan pengukuran. Klaim selera ("warna ini kurang enak dilihat") tidak dapat diuji dan karenanya tidak boleh mengalahkan klaim yang dapat diuji.</p>
-  </section>
+      const weeks = [...weeklyNotes.querySelectorAll('.week-card')];
+      const twoDigits = value => String(value).padStart(2, '0');
 
-  <section id="sejarah">
-    <span class="sec-no">1.4</span>
-    <h2 class="sec">Pergeseran paradigma interaksi</h2>
-    <div class="lead-rule" style="background:var(--orange)"></div>
-    <p>Sejarah IMK bukan daftar tahun untuk dihafal, melainkan rangkaian perubahan <strong>siapa yang harus menyesuaikan diri</strong>. Semakin ke kanan garis waktu, semakin banyak beban adaptasi yang dipindahkan dari manusia ke mesin.</p>
-    <div class="timeline">
-      <div class="ev"><div class="yr">1945 — Memex</div><p>Vannevar Bush membayangkan mesin yang menyimpan dan menautkan informasi mengikuti asosiasi pikiran manusia. Gagasan ini menjadi cikal bakal hypertext.</p></div>
-      <div class="ev"><div class="yr">1963–1968 — Sketchpad &amp; "Mother of All Demos"</div><p>Ivan Sutherland memperkenalkan manipulasi grafis langsung; Douglas Engelbart mendemonstrasikan mouse, windowing, dan kolaborasi jarak jauh. Interaksi tidak lagi harus berupa teks perintah.</p></div>
-      <div class="ev"><div class="yr">1970-an — Xerox PARC &amp; WIMP</div><p>Paradigma Windows, Icons, Menus, Pointer lahir. Konsekuensinya besar: pengguna tidak perlu lagi mengingat perintah, cukup mengenali pilihan yang tampak — pergeseran dari <em>recall</em> ke <em>recognition</em>.</p></div>
-      <div class="ev"><div class="yr">1980-an — IMK menjadi disiplin</div><p>Card, Moran, dan Newell menerbitkan <em>The Psychology of HCI</em> (1983); Norman menerbitkan <em>The Design of Everyday Things</em> (1988). Desain mulai punya dasar teori dan model prediktif.</p></div>
-      <div class="ev"><div class="yr">1990–2000-an — Web dan mobile</div><p>Pengguna berubah dari "operator terlatih" menjadi "siapa saja". Heuristik Nielsen dan usability testing menjadi praktik industri karena tidak ada lagi kesempatan melatih pengguna.</p></div>
-      <div class="ev"><div class="yr">2010-an–sekarang — Interaksi menyebar</div><p>Layar sentuh, suara, gestur, wearable, kendaraan, dan antarmuka berbasis AI. Tantangan barunya: interaksi yang tidak punya wujud fisik sering kehilangan <em>visibility</em> dan <em>affordance</em> — pengguna tidak tahu apa yang bisa dikatakan atau diminta.</p></div>
-    </div>
-    <div class="verdict">
-      <div class="good"><h4>Yang membaik</h4><p>Beban mengingat sintaks perintah nyaris hilang; sebagian besar sistem modern dapat dioperasikan dengan mengenali pilihan yang terlihat di layar.</p></div>
-      <div class="bad"><h4>Yang memburuk</h4><p>Gestur tersembunyi (swipe, long-press) dan antarmuka suara mengembalikan masalah lama: pengguna harus mengingat perintah yang tidak ditampilkan di mana pun.</p></div>
-    </div>
-  </section>
+      weekNav.innerHTML = '';
+      emptyState.hidden = weeks.length > 0;
+      meetingCount.textContent = `${weeks.length} pertemuan`;
+      notesStatus.textContent = weeks.length ? `${weeks.length} minggu tersusun` : 'Siap diisi';
 
-  <section id="komponen">
-    <span class="sec-no">1.5</span>
-    <h2 class="sec">Tiga komponen dan jurang di antaranya</h2>
-    <div class="lead-rule" style="background:var(--pink)"></div>
-    <p>Kerangka paling berguna untuk menganalisis interaksi apa pun adalah <strong>Siklus Aksi Norman</strong>. Manusia punya tujuan di kepalanya; sistem punya keadaan di memorinya. Keduanya berbicara bahasa yang berbeda, dan interaksi adalah usaha menyeberangi dua jurang.</p>
+      if (!weeks.length) {
+        weekNav.innerHTML = '<span class="nav-empty">Belum ada minggu yang diisi</span>';
+      } else {
+        weeks.forEach((week, index) => {
+          const number = week.dataset.week || twoDigits(index + 1);
+          const title = week.querySelector('h2')?.textContent?.trim() || `Pertemuan ${number}`;
+          const link = document.createElement('a');
+          link.href = `#${week.id}`;
+          link.dataset.number = number;
+          link.textContent = title;
+          link.addEventListener('click', () => {
+            body.classList.remove('menu-open');
+            menuButton.setAttribute('aria-expanded', 'false');
+          });
+          weekNav.appendChild(link);
+        });
 
-    <h3 class="sub">Gulf of Execution — jurang pelaksanaan</h3>
-    <p>Jarak antara apa yang <em>ingin dilakukan</em> pengguna dan apa yang <em>bisa dilakukan</em> lewat antarmuka. Jurang ini lebar ketika pengguna tahu persis tujuannya tetapi tidak menemukan cara melakukannya.</p>
-    <p>Contoh nyata: seorang pengguna ingin membatalkan langganan. Tujuannya jelas. Namun tombolnya disembunyikan tiga level di dalam menu "Akun → Pengaturan lanjutan → Kelola tagihan". Jurang pelaksanaan lebar — dan dalam kasus ini disengaja, yang termasuk pola gelap (<em>dark pattern</em>).</p>
+        const links = [...weekNav.querySelectorAll('a')];
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            links.forEach(link => link.classList.toggle('active', link.hash === `#${entry.target.id}`));
+          });
+        }, { rootMargin: '-18% 0px -68% 0px' });
+        weeks.forEach(week => observer.observe(week));
+      }
 
-    <h3 class="sub">Gulf of Evaluation — jurang penilaian</h3>
-    <p>Jarak antara <em>keadaan sistem sebenarnya</em> dan <em>pemahaman pengguna</em> tentang keadaan itu. Jurang ini lebar ketika sistem sudah melakukan sesuatu tetapi pengguna tidak yakin apakah berhasil.</p>
-    <p>Contoh nyata: pengguna menekan "Bayar", layar diam tiga detik tanpa perubahan. Pengguna menekan lagi. Terjadi dua transaksi. Penyebab kegagalan bukan pada sistem pembayaran, melainkan pada tidak adanya <strong>feedback</strong> — antarmuka gagal melaporkan keadaannya sendiri.</p>
+      menuButton.addEventListener('click', () => {
+        const isOpen = body.classList.toggle('menu-open');
+        menuButton.setAttribute('aria-expanded', String(isOpen));
+      });
 
-    <div class="concept-grid">
-      <div><span class="tag" style="background:var(--sky)"></span><h4>Visibility</h4><p>Keadaan sistem dan aksi yang tersedia harus terlihat. Kalau pengguna harus menebak, desainnya sudah gagal sebelum diuji.</p></div>
-      <div><span class="tag" style="background:var(--emerald)"></span><h4>Affordance</h4><p>Properti objek yang menyiratkan cara memakainya. Tombol tampak bisa ditekan; gagang tampak bisa ditarik. Pada layar, yang bekerja sebenarnya adalah <em>perceived affordance</em> — kesan yang ditangkap mata.</p></div>
-      <div><span class="tag" style="background:var(--yellow)"></span><h4>Signifier</h4><p>Penanda eksplisit yang memberi tahu di mana aksi terjadi: garis bawah pada tautan, ikon panah, teks "geser untuk membayar". Desain datar (<em>flat design</em>) sering menghapus signifier dan membuat pengguna tidak tahu mana yang bisa diklik.</p></div>
-      <div><span class="tag" style="background:var(--orange)"></span><h4>Mapping</h4><p>Kesesuaian antara kontrol dan efeknya. Slider volume yang naik ke atas untuk mengeraskan suara punya <em>natural mapping</em>; tombol kompor yang tata letaknya tidak sejajar dengan tungkunya tidak.</p></div>
-      <div><span class="tag" style="background:var(--pink)"></span><h4>Feedback</h4><p>Laporan segera tentang apa yang baru terjadi. Aturan praktisnya: di bawah 0,1 detik terasa instan; sampai 1 detik alur pikir masih utuh; di atas 10 detik perhatian pengguna berpindah dan sistem wajib menampilkan progres.</p></div>
-      <div><span class="tag" style="background:var(--magenta)"></span><h4>Constraint</h4><p>Pembatasan yang mencegah aksi salah sejak awal. Menonaktifkan tanggal yang sudah lewat pada kalender lebih baik daripada menampilkan pesan kesalahan setelah pengguna memilihnya.</p></div>
-    </div>
-
-    <div class="note">
-      <h4>Cara memakai kerangka ini saat mengevaluasi</h4>
-      <p>Untuk setiap masalah yang Anda temukan, paksa diri Anda menulis: <em>"Ini jurang pelaksanaan atau jurang penilaian? Prinsip mana yang dilanggar?"</em> Tanpa langkah ini, laporan evaluasi Anda akan berhenti pada "kurang menarik" — dan itu bukan temuan IMK, itu opini.</p>
-    </div>
-
-    <div class="crosslink">
-      <strong>Terhubung ke Minggu 2 →</strong> Enam prinsip di atas menjelaskan <em>apa</em> yang harus dirancang. Minggu depan kita membedah <em>mengapa</em> otak manusia bereaksi seperti itu — lewat persepsi, atensi, memori kerja, dan dua hukum terukur (Fitts &amp; Hick) yang menjelaskan kecepatan gerak dan keputusan manusia secara matematis.
-    </div>
-  </section>
-
-  <section id="ucd">
-    <span class="sec-no">1.6</span>
-    <h2 class="sec">Perancangan yang berpusat pada pengguna</h2>
-    <div class="lead-rule" style="background:var(--magenta)"></div>
-    <p><em>User-Centered Design</em> (UCD) adalah proses, bukan gaya visual. Standar ISO 9241-210 merumuskannya sebagai siklus yang berulang dan tidak boleh dipotong.</p>
-    <ol class="plain">
-      <li><strong>Pahami konteks pemakaian.</strong> Siapa penggunanya, apa tugasnya, di lingkungan seperti apa. Ojek daring dipakai sambil berdiri di pinggir jalan, satu tangan, layar terkena matahari — fakta ini mengubah keputusan ukuran tombol dan kontras.</li>
-      <li><strong>Rumuskan kebutuhan pengguna.</strong> Ubah temuan menjadi pernyataan kebutuhan yang dapat diuji, bukan daftar fitur.</li>
-      <li><strong>Buat solusi rancangan.</strong> Mulai dari sketsa dan prototipe kesetiaan rendah agar murah untuk dibuang.</li>
-      <li><strong>Evaluasi terhadap kebutuhan.</strong> Uji dengan pengguna nyata, lalu kembali ke langkah sebelumnya. Iterasi bukan tanda kegagalan; ketiadaan iterasi yang merupakan tanda bahaya.</li>
-    </ol>
-
-    <div class="verdict">
-      <div class="bad"><h4>Berpusat pada sistem</h4><p>Menu disusun mengikuti struktur basis data dan pembagian divisi perusahaan. Istilahnya memakai kosakata internal ("modul transaksi B2B"). Pengguna dipaksa mempelajari arsitektur sistem sebelum bisa memakainya.</p></div>
-      <div class="good"><h4>Berpusat pada pengguna</h4><p>Menu disusun mengikuti tugas yang ingin diselesaikan pengguna ("Kirim uang", "Bayar tagihan"). Istilahnya memakai kosakata pengguna. Struktur internal disembunyikan karena bukan urusan pengguna.</p></div>
-    </div>
-
-    <p>Tiga alat yang akan Anda pakai sepanjang semester: <strong>persona</strong> (representasi pengguna berbasis data, bukan karangan), <strong>skenario</strong> (narasi pemakaian dalam konteks nyata), dan <strong>analisis tugas</strong> (penguraian tujuan menjadi urutan langkah). Ketiganya berfungsi sebagai rem terhadap asumsi pribadi perancang.</p>
-  </section>
-
-  <section id="kasus">
-    <span class="sec-no">1.7</span>
-    <h2 class="sec">Studi kasus: membedah dua keputusan desain</h2>
-    <div class="lead-rule" style="background:var(--bronze)"></div>
-
-    <h3 class="sub">Kasus A — Peta langsung pada layar pertama aplikasi transportasi</h3>
-    <p>Aplikasi seperti Gojek dan Grab menampilkan peta dengan posisi pengguna sudah terdeteksi sebelum pengguna melakukan apa pun. Mengapa ini keputusan yang kuat secara teori IMK?</p>
-    <ul class="plain">
-      <li><strong>Mempersempit jurang pelaksanaan.</strong> Tugas utama ("pergi dari sini ke sana") langsung tersedia tanpa navigasi menu.</li>
-      <li><strong>Mengubah recall menjadi recognition.</strong> Pengguna tidak perlu mengetik alamat asal dari memori; ia cukup memverifikasi titik yang sudah ditampilkan.</li>
-      <li><strong>Memanfaatkan model mental yang sudah ada.</strong> Peta adalah representasi yang sudah dikuasai pengguna sejak sebelum mengenal aplikasi, sehingga tidak ada biaya belajar tambahan.</li>
-    </ul>
-    <p>Kritik yang tetap perlu diajukan: pada kondisi sinyal GPS lemah — gang sempit, dalam gedung — titik yang terdeteksi bisa meleset ratusan meter. Kalau antarmuka menampilkan lokasi keliru dengan keyakinan penuh dan tanpa penanda ketidakpastian, ia menciptakan jurang penilaian baru: pengguna percaya sistem sudah benar padahal tidak.</p>
-
-    <h3 class="sub">Kasus B — Pesan kesalahan pada formulir pendaftaran</h3>
-    <div class="verdict">
-      <div class="bad"><h4>"Terjadi kesalahan. Silakan coba lagi."</h4><p>Melanggar prinsip <em>help users recognize and recover from errors</em>. Tidak menyebut apa yang salah, di field mana, dan apa yang harus diperbaiki. Pengguna hanya bisa menebak, dan menebak adalah beban kognitif yang diciptakan sistem.</p></div>
-      <div class="good"><h4>"Kata sandi perlu minimal 8 karakter. Saat ini 5."</h4><p>Menyebut lokasi masalah, aturan yang berlaku, dan keadaan saat ini. Pengguna dapat langsung bertindak tanpa berpikir. Lebih baik lagi bila aturan ditampilkan <em>sebelum</em> pengguna mengetik, sehingga kesalahan dicegah, bukan dilaporkan.</p></div>
-    </div>
-    <p>Pelajaran umumnya: urutan mutu penanganan kesalahan adalah <strong>mencegah &gt; membimbing &gt; melaporkan</strong>. Sebagian besar sistem berhenti di tahap melaporkan karena itu yang paling murah diimplementasikan, bukan karena itu yang terbaik bagi pengguna.</p>
-  </section>
-
-  <section id="latihan">
-    <span class="sec-no">Tugas</span>
-    <h2 class="sec">Latihan dan studi kasus</h2>
-    <div class="lead-rule" style="background:var(--emerald)"></div>
-    <p>Kerjakan minimal dua dari tiga tugas berikut. Setiap jawaban wajib menyebut <strong>teori atau prinsip yang mendasarinya</strong>.</p>
-
-    <div class="task">
-      <h4>Tugas A — Audit jurang interaksi</h4>
-      <p>Pilih satu aplikasi yang Anda pakai harian. Rekam layar saat menyelesaikan satu tugas dari awal hingga akhir (misalnya membayar tagihan listrik). Identifikasi minimal tiga titik gesekan, lalu untuk tiap titik tulis: <em>(a)</em> apa yang pengguna coba lakukan, <em>(b)</em> ini jurang pelaksanaan atau penilaian, <em>(c)</em> prinsip Norman mana yang dilanggar, <em>(d)</em> usulan perbaikan konkret.</p>
-    </div>
-
-    <div class="task b">
-      <h4>Tugas B — Bandingkan sistem vs pengguna</h4>
-      <p>Cari satu aplikasi (bisa akademik, kampus, atau pemerintah) yang menurut Anda disusun berdasarkan struktur internal organisasi, bukan tugas pengguna. Petakan menunya, lalu rancang ulang strukturnya berdasarkan tugas yang ingin diselesaikan pengguna. Jelaskan bedanya dengan mengacu UCD.</p>
-    </div>
-
-    <div class="task c">
-      <h4>Tugas C — Klasifikasi pesan kesalahan</h4>
-      <p>Kumpulkan lima pesan kesalahan dari aplikasi berbeda. Nilai masing-masing dengan urutan mencegah &gt; membimbing &gt; melaporkan. Tulis versi perbaikan untuk pesan yang paling buruk.</p>
-    </div>
-  </section>
-
-  <section id="kritis">
-    <span class="sec-no">Diskusi</span>
-    <h2 class="sec">Pertanyaan kritis</h2>
-    <div class="lead-rule" style="background:var(--magenta)"></div>
-
-    <details>
-      <summary>Apakah perancang bertanggung jawab atas pengguna yang memakai sistem dengan cara yang tidak diniatkan?</summary>
-      <div class="body"><p>Dalam tradisi IMK, ya, sebagian besar. Pemakaian tak terduga adalah data tentang kebutuhan nyata yang tidak terakomodasi, bukan kesalahan pengguna. Pertanyaan lanjutannya lebih tajam: bila sebuah pola desain terbukti membuat orang melakukan hal yang merugikan dirinya sendiri — berlangganan tanpa sadar, menyerahkan data berlebihan — maka desain tersebut bukan netral secara etika.</p></div>
-    </details>
-
-    <details>
-      <summary>Apakah konsistensi dengan aplikasi lain selalu kebaikan?</summary>
-      <div class="body"><p>Tidak selalu. Konsistensi memudahkan transfer model mental, tetapi ada kasus di mana konsistensi dengan pola lama justru mempertahankan desain yang memang buruk. Melanggar konvensi hanya bisa dibenarkan bila ada bukti terukur bahwa alternatifnya lebih baik.</p></div>
-    </details>
-
-    <details>
-      <summary>Apakah antarmuka berbasis AI percakapan menghapus kebutuhan akan IMK?</summary>
-      <div class="body"><p>Justru sebaliknya. Antarmuka percakapan menghilangkan visibility dan affordance — tidak ada menu yang menunjukkan apa yang bisa diminta, sehingga pengguna kembali ke beban <em>recall</em>. Jurang penilaian juga melebar karena pengguna sulit menilai apakah jawaban sistem benar. Prinsip lama tetap berlaku; yang berubah hanya bentuk pelanggarannya.</p></div>
-    </details>
-  </section>
-
-  </main>
-</div>
-
-<footer id="referensi">
-  <div class="footer-inner">
-    <h4>Referensi utama</h4>
-    <ul>
-      <li>Norman, D. A. (2013). <em>The Design of Everyday Things: Revised and Expanded Edition</em>. Basic Books. — Bab 1–2 untuk affordance, signifier, mapping, dan siklus aksi.</li>
-      <li>Dix, A., Finlay, J., Abowd, G., &amp; Beale, R. (2004). <em>Human–Computer Interaction</em> (3rd ed.). Prentice Hall. — Bab 3 untuk paradigma interaksi.</li>
-      <li>Preece, J., Sharp, H., &amp; Rogers, Y. (2019). <em>Interaction Design: Beyond Human–Computer Interaction</em> (5th ed.). Wiley. — Bab 1–3 untuk proses desain.</li>
-      <li>ISO 9241-210:2019. <em>Ergonomics of human–system interaction — Part 210: Human-centred design for interactive systems</em>.</li>
-      <li>ACM SIGCHI Curricula for Human–Computer Interaction — definisi ruang lingkup IMK yang menjadi acuan bab ini.</li>
-    </ul>
-    <div class="spectrum-bar">
-      <i style="background:#3CB4E6"></i><i style="background:#32B18E"></i><i style="background:#FFD730"></i><i style="background:#FF8040"></i><i style="background:#F05696"></i><i style="background:#9C208C"></i><i style="background:#B89C57"></i><i style="background:#959595"></i>
-    </div>
-  </div>
-</footer>
-
-<script>
-(function(){
-  "use strict";
-  var links = Array.prototype.slice.call(document.querySelectorAll('.sidebar a'));
-  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
-  if ('IntersectionObserver' in window && targets.length){
-    var obs = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){
-          links.forEach(function(l){ l.classList.remove('on'); });
-          var m = links.filter(function(l){ return l.getAttribute('href') === '#'+e.target.id; })[0];
-          if(m) m.classList.add('on');
+      sidebar.addEventListener('click', event => event.stopPropagation());
+      document.addEventListener('click', event => {
+        if (window.innerWidth <= 960 && body.classList.contains('menu-open') && !sidebar.contains(event.target) && event.target !== menuButton) {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
         }
       });
-    }, {rootMargin:'-20% 0px -70% 0px'});
-    targets.forEach(function(t){ obs.observe(t); });
-  }
-})();
-</script>
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      printButton.addEventListener('click', () => window.print());
+
+      const updateProgress = () => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = total > 0 ? (window.scrollY / total) * 100 : 0;
+        progress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      };
+
+      updateProgress();
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+    })();
+  </script>
+
+  <!-- Perluasan: skrip modul kuis 30 soal pilihan ganda (tidak mengubah skrip inti di atas) -->
+  <script>
+    (() => {
+      const questions = [
+        {
+          q: "UCD (User-Centered Design) berfokus pada pemahaman terhadap tiga hal utama sepanjang proses pengembangan, yaitu...",
+          options: [
+            "Pengguna, tujuan dan tugas mereka, serta lingkungan penggunaan",
+            "Anggaran, jadwal proyek, dan teknologi yang dipakai",
+            "Kompetitor, harga pasar, dan strategi promosi",
+            "Developer, tester, dan manajer proyek"
+          ],
+          correct: 0,
+          explain: "UCD memusatkan perhatian pada users, goals & tasks, dan environment (fisik, organisasional, sosial) sepanjang siklus pengembangan."
+        },
+        {
+          q: "Menurut ISO 13407, manakah yang BUKAN termasuk prinsip human-centered design?",
+          options: [
+            "Keterlibatan aktif pengguna",
+            "Alokasi fungsi yang tepat antara pengguna dan sistem",
+            "Iterasi solusi desain",
+            "Maksimalisasi keuntungan finansial perusahaan secepat mungkin"
+          ],
+          correct: 3,
+          explain: "Empat prinsip ISO 13407 adalah active involvement of users, appropriate allocation of function, iteration of design solutions, dan multidisciplinary design teams."
+        },
+        {
+          q: "Pendekatan user-centered dibangun di atas tiga fondasi utama, yaitu...",
+          options: [
+            "Riset pasar, analisis kompetitor, dan penetapan harga",
+            "Early focus on users and tasks, empirical measurement, dan iterative design",
+            "Standarisasi kode, pengujian otomatis, dan deployment",
+            "Branding, promosi, dan penjualan"
+          ],
+          correct: 1,
+          explain: "Tiga fondasi user-centered approach: early focus on users and tasks, empirical measurement, dan iterative design."
+        },
+        {
+          q: "Pada siklus 'a simple interaction design model', setelah tahap Identify needs/establish requirements, langkah berikutnya adalah...",
+          options: [
+            "Langsung ke Final product",
+            "(Re)Design",
+            "Kampanye pemasaran",
+            "Deployment ke server produksi"
+          ],
+          correct: 1,
+          explain: "Siklusnya adalah identify needs -> (re)design -> build interactive version -> evaluate, lalu bisa kembali ke identify needs atau menuju final product."
+        },
+        {
+          q: "Dua pertanyaan praktis mendasar pada tahap identifying needs and establishing requirements adalah...",
+          options: [
+            "Siapa pengguna dan apa kebutuhan (needs) mereka?",
+            "Berapa anggaran dan kapan tenggat waktu proyek?",
+            "Bahasa pemrograman apa yang akan dipakai?",
+            "Siapa investor dan berapa target keuntungan?"
+          ],
+          correct: 0,
+          explain: "Isu praktis pada tahap ini adalah 'Who are the users?' dan 'What are needs?'."
+        },
+        {
+          q: "Wawancara yang tidak diarahkan oleh skrip, kaya informasi namun sulit direplikasi disebut wawancara...",
+          options: ["Terstruktur", "Tidak terstruktur (unstructured)", "Semi-terstruktur", "Tertutup"],
+          correct: 1,
+          explain: "Unstructured interview bersifat kaya (rich) namun tidak replicable karena tidak diarahkan oleh skrip."
+        },
+        {
+          q: "Wawancara yang dipandu skrip namun tetap dapat mengeksplorasi isu menarik lebih dalam disebut...",
+          options: ["Terstruktur", "Tidak terstruktur", "Semi-terstruktur", "Kuesioner lisan"],
+          correct: 2,
+          explain: "Semi-structured interview memberi keseimbangan antara kekayaan data (richness) dan kemampuan direplikasi."
+        },
+        {
+          q: "Pertanyaan wawancara dengan format jawaban yang telah ditentukan sebelumnya (misalnya ya/tidak) disebut...",
+          options: ["Open question", "Closed question", "Leading question", "Compound question"],
+          correct: 1,
+          explain: "Closed question memiliki predetermined answer format sehingga lebih mudah dianalisis."
+        },
+        {
+          q: "Manakah hal yang harus DIHINDARI saat menyusun pertanyaan wawancara?",
+          options: [
+            "Pertanyaan singkat dan jelas",
+            "Pertanyaan yang mengarahkan (leading question)",
+            "Bahasa yang mudah dipahami interviewee",
+            "Kalimat tunggal yang sederhana"
+          ],
+          correct: 1,
+          explain: "Materi menyebutkan agar interviewer menghindari long questions, compound sentences, jargon, leading questions, dan bias tak sadar."
+        },
+        {
+          q: "Alat bantu berupa prototipe atau skenario yang digunakan untuk memancing respons interviewee disebut...",
+          options: ["Props", "Persona", "Storyboard akhir", "Wireframe produksi"],
+          correct: 0,
+          explain: "Props adalah devices for prompting interviewee, misalnya sebuah prototipe atau skenario."
+        },
+        {
+          q: "Empat prinsip utama Contextual Inquiry adalah...",
+          options: [
+            "Context, Partnership, Interpretation, Focus",
+            "Budget, Timeline, Scope, Quality",
+            "People, Process, Technology, Data",
+            "Design, Build, Test, Deploy"
+          ],
+          correct: 0,
+          explain: "Contextual inquiry berpegang pada empat prinsip: context, partnership, interpretation, dan focus."
+        },
+        {
+          q: "Contextual inquiry biasanya dilakukan di...",
+          options: [
+            "Laboratorium usability khusus",
+            "Tempat kerja atau workstation pengguna",
+            "Kantor pusat perusahaan pengembang",
+            "Ruang rapat tim desainer"
+          ],
+          correct: 1,
+          explain: "Contextual inquiry adalah bentuk wawancara di tempat kerja pengguna, biasanya berlangsung 2-3 jam."
+        },
+        {
+          q: "Salah satu keuntungan kuesioner daring (online) dibandingkan kuesioner kertas adalah...",
+          options: [
+            "Selalu bebas dari masalah sampling",
+            "Waktu analisis data berkurang karena data langsung tersimpan di basis data",
+            "Tidak memerlukan responden sama sekali",
+            "Tidak mungkin terjadi kesalahan pengisian"
+          ],
+          correct: 1,
+          explain: "Keuntungan kuesioner online meliputi respons cepat, tanpa biaya salin/kirim, data tersimpan di basis data, dan waktu analisis berkurang."
+        },
+        {
+          q: "Masalah utama kuesioner online yang disebutkan dalam materi adalah...",
+          options: [
+            "Sampling sulit dikontrol karena ukuran populasi sering tidak diketahui",
+            "Biaya distribusi yang sangat mahal",
+            "Tidak dapat dikirim lewat email",
+            "Membutuhkan waktu lama untuk sampai ke responden"
+          ],
+          correct: 0,
+          explain: "Materi menyebutkan sampling menjadi masalah ketika ukuran populasi daring tidak diketahui, selain risiko responden mengisi berulang kali."
+        },
+        {
+          q: "Observasi tidak langsung terhadap aktivitas pengguna dapat dilakukan melalui...",
+          options: [
+            "Wawancara tatap muka langsung",
+            "Diaries dan interaction logging",
+            "Focus group discussion",
+            "Survei kepuasan pelanggan tahunan"
+          ],
+          correct: 1,
+          explain: "Indirect observation mencakup diaries dan interaction logging sebagai cara melacak aktivitas pengguna tanpa observasi langsung."
+        },
+        {
+          q: "Kerangka Goetz and LeCompte (1984) digunakan untuk memandu observasi dengan pertanyaan seperti...",
+          options: [
+            "Who, What, When, Where, Why, How",
+            "Strength, Weakness, Opportunity, Threat",
+            "Five Forces Porter",
+            "Diagram fishbone sebab-akibat"
+          ],
+          correct: 0,
+          explain: "Kerangka ini memandu observasi dengan pertanyaan siapa yang hadir, apa perannya, apa yang terjadi, kapan, di mana, mengapa, dan bagaimana aktivitas terorganisasi."
+        },
+        {
+          q: "Dalam etnografi, derajat partisipasi peneliti yang bervariasi dari 'outside' hingga 'inside' menggambarkan...",
+          options: [
+            "Jenis kamera yang digunakan peneliti",
+            "Sejauh mana peneliti membenamkan diri dalam budaya yang diteliti",
+            "Lokasi geografis penelitian",
+            "Durasi total penelitian dalam hari"
+          ],
+          correct: 1,
+          explain: "Derajat partisipasi peneliti dapat bervariasi sepanjang skala dari 'outside' ke 'inside' dalam ethnography."
+        },
+        {
+          q: "Teknik observasi langsung di lingkungan terkontrol yang meminta pengguna menyuarakan pikirannya saat menggunakan sistem disebut...",
+          options: ["Ethnography", "Think-aloud technique", "Contextual inquiry", "Diary study"],
+          correct: 1,
+          explain: "Think-aloud technique adalah observasi langsung dalam controlled setting di mana pengguna diminta berpikir keras saat mengerjakan tugas."
+        },
+        {
+          q: "Tujuan utama Competitive/Comparative Analysis dalam mengembangkan alternatif desain adalah...",
+          options: [
+            "Menentukan harga jual produk",
+            "Mengetahui tren pasar, ekspektasi pengguna, dan konvensi antarmuka yang berlaku",
+            "Menghitung return on investment proyek",
+            "Memilih bahasa pemrograman yang akan dipakai"
+          ],
+          correct: 1,
+          explain: "Analisis kompetitif membantu mengetahui tren pasar, ekspektasi pengguna, apa yang perlu/tidak perlu dilakukan, konvensi antarmuka, dan fitur standar."
+        },
+        {
+          q: "Heuristic Evaluation umumnya dilakukan oleh...",
+          options: [
+            "Pengguna akhir tanpa pengalaman desain",
+            "Evaluator ahli (expert evaluators)",
+            "Manajer proyek",
+            "Tim pemasaran produk"
+          ],
+          correct: 1,
+          explain: "Heuristic evaluation normally dilakukan oleh expert evaluators, meskipun bisa juga bermanfaat bagi siapa saja."
+        },
+        {
+          q: "Persona dalam UCD paling tepat didefinisikan sebagai...",
+          options: [
+            "Model pengguna arketipal hasil riset pengguna",
+            "Nama fitur baru pada aplikasi",
+            "Diagram alur sistem backend",
+            "Dokumen kontrak kerja dengan klien"
+          ],
+          correct: 0,
+          explain: "Persona adalah models of archetypical users yang disusun berdasarkan hasil riset pengguna."
+        },
+        {
+          q: "Perbedaan mendasar antara Goals dan Tasks menurut materi adalah...",
+          options: [
+            "Goals adalah apa yang ingin dicapai pengguna, Tasks adalah langkah-langkah untuk mencapainya",
+            "Goals dan Tasks memiliki arti yang sama persis",
+            "Tasks selalu lebih penting daripada Goals",
+            "Goals hanya berlaku untuk aplikasi berbasis web"
+          ],
+          correct: 0,
+          explain: "Goals menjelaskan apa yang ingin dicapai pengguna tanpa menjelaskan caranya, sedangkan Tasks menjelaskan langkah-langkah mencapainya."
+        },
+        {
+          q: "Scenario dalam konteks UCD paling tepat digambarkan sebagai...",
+          options: [
+            "Deskripsi tertulis persona mencapai tujuan melalui serangkaian tugas dalam konteks tertentu",
+            "Kode program yang siap dijalankan",
+            "Daftar bug hasil pengujian sistem",
+            "Dokumen anggaran proyek"
+          ],
+          correct: 0,
+          explain: "Scenario adalah written description of a persona achieving a goal through a set of tasks in a specific context."
+        },
+        {
+          q: "Komponen yang umumnya tercantum dalam sebuah persona desain web meliputi...",
+          options: [
+            "Usia, jenis kelamin, pekerjaan, hobi, serta kesukaan/ketidaksukaan pengguna",
+            "Struktur basis data aplikasi",
+            "Kode sumber front-end",
+            "Anggaran pemasaran tahunan"
+          ],
+          correct: 0,
+          explain: "Persona umumnya memuat age, sex, occupation, hobbies, likes/dislikes, dan detail relevan lain terhadap produk."
+        },
+        {
+          q: "Tahap 'Building interactive versions of the designs' pada UCD bertujuan untuk...",
+          options: [
+            "Menggantikan seluruh proses evaluasi pengguna",
+            "Membuat prototipe yang dapat diujicobakan dalam usability testing",
+            "Menyelesaikan proyek tanpa revisi lebih lanjut",
+            "Menentukan harga jual akhir produk"
+          ],
+          correct: 1,
+          explain: "Versi interaktif (prototipe) dibangun agar dapat digunakan dalam usability testing bersama pengguna."
+        },
+        {
+          q: "Dalam tahap evaluasi desain, kriteria keberhasilan (success criteria) sebaiknya ditetapkan...",
+          options: [
+            "Setelah seluruh pengujian selesai dilakukan",
+            "Sebelum pengujian dimulai, idealnya sejak awal proyek",
+            "Tidak perlu ditetapkan secara eksplisit",
+            "Oleh pengguna saat pengujian sedang berlangsung"
+          ],
+          correct: 1,
+          explain: "Materi menyebutkan agar success criteria ditetapkan prior to testing, idealnya sejak awal proyek (best done at the project outset)."
+        },
+        {
+          q: "Model tiga fase pemrosesan informasi manusia (Human Information Processing System) terdiri atas...",
+          options: [
+            "Perceptual System, Cognitive System, Motor System",
+            "Input, Process, Output secara umum",
+            "Sensor, Aktuator, Kontroler",
+            "Encoding, Storage, Retrieval saja"
+          ],
+          correct: 0,
+          explain: "Tiga fase tersebut adalah Perceptual System (read-scan), Cognitive System (think), dan Motor System (response)."
+        },
+        {
+          q: "Sensory buffer pada sistem perseptual manusia memiliki karakteristik...",
+          options: [
+            "Kapasitas tak terbatas dan durasi permanen",
+            "Dapat menyimpan detail tinggi, namun durasinya sangat singkat",
+            "Hanya mampu menyimpan informasi verbal",
+            "Sama sekali tidak dipengaruhi oleh konteks"
+          ],
+          correct: 1,
+          explain: "Sensory buffer can hold a high level of detail, but is very short in duration sebelum informasi meluruh atau diteruskan ke otak."
+        },
+        {
+          q: "Perbedaan utama antara Short-Term Memory (STM) dan Long-Term Memory (LTM) adalah...",
+          options: [
+            "STM terbatas kapasitas dan durasinya, sedangkan LTM relatif tidak terbatas dan bersifat permanen",
+            "STM memiliki kapasitas lebih besar daripada LTM",
+            "LTM hanya mampu menyimpan gambar, bukan konsep",
+            "STM dan LTM pada dasarnya identik fungsinya"
+          ],
+          correct: 0,
+          explain: "STM limited in capacity and duration, sedangkan LTM unlimited in capacity and permanent duration meskipun butuh usaha untuk menyimpan informasi baru."
+        },
+        {
+          q: "Respons psikologis yang umum muncul akibat antarmuka yang dirancang buruk, menurut materi, adalah...",
+          options: [
+            "Kebingungan, annoyance, frustrasi, panik/stres, dan kebosanan",
+            "Selalu meningkatkan produktivitas pengguna",
+            "Loyalitas pengguna yang meningkat drastis",
+            "Tidak ada dampak psikologis sama sekali"
+          ],
+          correct: 0,
+          explain: "Respon psikologis khas untuk desain buruk yang disebutkan adalah kebingungan, annoyance, frustrasi, panik/stres, dan kebosanan, yang dapat diikuti reaksi fisik seperti pengabaian sistem."
+        }
+      ];
+
+      let current = 0;
+      const answers = new Array(questions.length).fill(null);
+
+      const quizArea = document.getElementById('quizArea');
+      const quizStatus = document.getElementById('quizStatus');
+      const progressFill = document.getElementById('quizProgressFill');
+
+      const letter = i => String.fromCharCode(65 + i);
+
+      function renderQuestion() {
+        const item = questions[current];
+        const chosen = answers[current];
+        quizStatus.textContent = `Soal ${current + 1} / ${questions.length}`;
+        progressFill.style.width = `${(current / questions.length) * 100}%`;
+
+        const optionsHtml = item.options.map((opt, i) => {
+          let cls = 'quiz-option';
+          if (chosen !== null) {
+            if (i === item.correct) cls += ' is-correct';
+            else if (i === chosen) cls += ' is-wrong';
+          }
+          return `<button type="button" class="${cls}" data-index="${i}" ${chosen !== null ? 'disabled' : ''}>
+            <span class="quiz-option-letter">${letter(i)}</span>
+            <span>${opt}</span>
+          </button>`;
+        }).join('');
+
+        let feedbackHtml = '';
+        if (chosen !== null) {
+          const isCorrect = chosen === item.correct;
+          feedbackHtml = `<div class="quiz-feedback ${isCorrect ? 'is-correct' : 'is-wrong'}">
+            <strong>${isCorrect ? 'Jawaban tepat.' : 'Belum tepat.'}</strong>
+            ${item.explain}
+          </div>`;
+        }
+
+        quizArea.innerHTML = `
+          <p class="quiz-question-eyebrow">Soal ${current + 1}</p>
+          <p class="quiz-question-text">${item.q}</p>
+          <div class="quiz-options">${optionsHtml}</div>
+          ${feedbackHtml}
+          <div class="quiz-nav">
+            <button type="button" class="button button-ghost" id="quizPrev" ${current === 0 ? 'disabled' : ''}>Sebelumnya</button>
+            <button type="button" class="button button-primary" id="quizNext" ${chosen === null ? 'disabled' : ''}>${current === questions.length - 1 ? 'Lihat Hasil' : 'Berikutnya'}</button>
+          </div>
+        `;
+
+        quizArea.querySelectorAll('.quiz-option').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (answers[current] !== null) return;
+            answers[current] = Number(btn.dataset.index);
+            renderQuestion();
+          });
+        });
+
+        document.getElementById('quizPrev').addEventListener('click', () => {
+          if (current > 0) { current -= 1; renderQuestion(); }
+        });
+
+        document.getElementById('quizNext').addEventListener('click', () => {
+          if (current < questions.length - 1) { current += 1; renderQuestion(); }
+          else { renderResult(); }
+        });
+      }
+
+      function renderResult() {
+        progressFill.style.width = '100%';
+        quizStatus.textContent = 'Selesai';
+        const score = answers.reduce((total, ans, i) => total + (ans === questions[i].correct ? 1 : 0), 0);
+        const percent = Math.round((score / questions.length) * 100);
+
+        let remark;
+        if (percent >= 85) remark = 'Pemahaman Anda tentang UCD dan Persona User sudah sangat baik.';
+        else if (percent >= 65) remark = 'Pemahaman Anda cukup baik. Tinjau kembali bagian yang masih keliru pada Pembahasan Utama.';
+        else remark = 'Disarankan membaca ulang bagian Pembahasan Utama sebelum melanjutkan ke pertemuan berikutnya.';
+
+        const wrongItems = questions
+          .map((item, i) => ({ item, i }))
+          .filter(({ item, i }) => answers[i] !== item.correct);
+
+        const reviewHtml = wrongItems.length
+          ? `<div class="quiz-review">${wrongItems.map(({ item, i }) => `
+              <div class="quiz-review-item">
+                <strong>Soal ${i + 1}: ${item.q}</strong>
+                Jawaban benar: ${letter(item.correct)}. ${item.options[item.correct]}<br>
+                ${item.explain}
+              </div>
+            `).join('')}</div>`
+          : '<p class="quiz-remark">Semua jawaban benar. Kerja bagus.</p>';
+
+        quizArea.innerHTML = `
+          <div class="quiz-result">
+            <p class="quiz-question-eyebrow">Hasil Kuis</p>
+            <div class="quiz-score">${score}<span>/${questions.length}</span></div>
+            <p class="quiz-remark">${percent}% jawaban benar. ${remark}</p>
+            <button type="button" class="button button-primary" id="quizRestart">Ulangi Kuis</button>
+          </div>
+          ${reviewHtml}
+        `;
+
+        document.getElementById('quizRestart').addEventListener('click', () => {
+          current = 0;
+          answers.fill(null);
+          renderQuestion();
+        });
+      }
+
+      renderQuestion();
+    })();
+  </script>
 </body>
 </html>
