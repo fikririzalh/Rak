@@ -506,7 +506,7 @@
         books: [
           { title: "First Week", url: "Interkasi Manusia dan Komputer/imk-minggu-1.html", color: "#3CB4E6" },
           { title: "Second Week", url: "Interkasi Manusia dan Komputer/imk-minggu-2.html", color: "#32B18E" },
-          { title: "Third Week", url: "Interkasi Manusia dan Komputer/third week.html", color: "#F05696" },
+          { title: "Third Week", url: "Interkasi Manusia dan Komputer/imk-minggu-3.html", color: "#F05696" },
           { title: "Fourth Week", url: "Interkasi Manusia dan Komputer/fourth week.html", color: "#FF8040" },
           { title: "Fifth Week", url: "Interkasi Manusia dan Komputer/fifth week.html", color: "#FFD730" }
         ]
@@ -522,7 +522,15 @@
         ]
       },
       {
-        title: "Fisika Dasar",
+        title: "Database III",
+        books: [
+          { title: "Data Mining", url: "Database III/database-minggu 2.html", color: "#FF8040" },
+          { title: "Dinamika", url: "Fisika Dasar/dinamika.html", color: "#FFD730" },
+          { title: "Usaha & Energi", url: "Fisika Dasar/usaha energi.html", color: "#B89C57" }
+        ]
+      },
+      {
+        title: "Kapita Selekta",
         books: [
           { title: "Kinematika", url: "Fisika Dasar/kinematika.html", color: "#FF8040" },
           { title: "Dinamika", url: "Fisika Dasar/dinamika.html", color: "#FFD730" },
@@ -533,28 +541,69 @@
 
     const ORIGINAL_MATERIALS = [
       {
-        title: "Interaksi Manusia dan Komputer",
+        title: "Materi Interaksi Manusia dan Komputer",
         files: [
-          { name: "RPS", url: "Materi/Interkasi Manusia dan Komputer/Pertemuan 1 - IMK - Slide PPT Minggu 1.pdf", ext: "pdf" },
-          { name: "Materi UCD", url: "Materi/Interkasi Manusia dan Komputer/Pertemuan 2 - IMK - Slide PPT Minggu 2.pdf", ext: "pdf" },
-          { name: "Catatan Turunan.docx", url: "Materi/Kalkulus 1/Catatan Turunan.docx", ext: "docx" }
+          { name: "RPS", url: "Materi/Interkasi Manusia dan Komputer/RPS - IMK - Slide PPT Minggu 1.pdf", ext: "pdf" },
+          { name: "Materi UCD", url: "Materi/Interkasi Manusia dan Komputer/UCD - IMK - Slide PPT Minggu 2.pdf", ext: "pdf" },
+          { name: "Pedoman UCD", url: "Materi/Interkasi Manusia dan Komputer/Pedoman UCD - IMK - Slide PPT Minggu 3.pdf", ext: "pdf" }
+        ]
+      },
+      {
+        title: "Tugas Interaksi Manusia dan Komputer",
+        files: [
+          { name: "Tugas Halaman 64", url: "Tugas/Interkasi Manusia dan Komputer/IMK_Tugas Halaman 64_Persona User_Fikri Rizal H_230611091.pdf", ext: "pdf" },
+          { name: "Tugas Halaman 64", url: "Tugas/Interkasi Manusia dan Komputer/IMK_Tugas Halaman 64_Persona User_Fikri Rizal H_230611091.docx", ext: "docx" },
+          { name: "", url: "", ext: "pptx" },
+          { name: "", url: " ", ext: "csv" }
         ]
       },
       {
         title: "Manajemen Proyek Perangkat Lunak",
         files: [
-          { name: "RPS", url: "Materi/Manajemen Proyek Perangkat Lunak/RPS MPPL.pdf", ext: "pdf" },
-          { name: "Pengantar Manajemen Poyek Perangkat Lunak", url: "Materi/Manajemen Proyek Perangkat Lunak/Pengantar Manajemen Poyek Perangkat Lunak.pdf", ext: "pdf" }
+          { name: "RPS", url: "Materi/Manajemen Proyek Perangkat Lunak/RPS - MPPL- Slide PPT Minggu 1.pdf", ext: "pdf" },
+          { name: "Pengantar Manajemen Poyek Perangkat Lunak", url: "Materi/Manajemen Proyek Perangkat Lunak/Pengantar MPPL - MPPL- Slide PPT Minggu 2.pdf", ext: "pdf" }
         ]
       },
       {
-        title: "Fisika Dasar",
+        title: "Tugas Manajemen Proyek Perangkat Lunak",
         files: [
-          { name: "Rumus Kinematika.xlsx", url: "Materi/Fisika Dasar/Rumus Kinematika.xlsx", ext: "xlsx" },
-          { name: "Praktikum.pptx", url: "Materi/Fisika Dasar/Praktikum.pptx", ext: "pptx" },
-          { name: "Data Eksperimen.csv", url: "Materi/Fisika Dasar/Data Eksperimen.csv", ext: "csv" }
+          { name: "Tubes", url: "Tugas/Manajemen Proyek Perangkat Lunak/Tugas Besar.txt", ext: "txt" },
+          { name: "", url: "", ext: "pptx" },
+          { name: "", url: " ", ext: "csv" }
         ]
-      }
+      },
+      {
+        title: "Database III",
+        files: [
+          { name: "RPS", url: "Materi/Database III/RPS - Database III- Slide PPT Minggu 1.pptx", ext: "pptx" },
+          { name: "Data Mining", url: "Materi/Database III/Data Mining - Database III- Slide PPT Minggu 2.pdf", ext: "pdf" },
+          { name: "Tree", url: "Materi/Database III/Data Mining Tree - Database III- Slide PPT Minggu 3.pdf", ext: "pdf" }
+        ]
+      },
+      {
+        title: "Tugas Database III",
+        files: [
+          { name: "Aplikasi Data Mining", url: "", ext: "txt" },
+          { name: "", url: "", ext: "pptx" },
+          { name: "", url: " ", ext: "csv" }
+        ]
+      },
+      {
+        title: "Kapita Selekta",
+        files: [
+          { name: "", url: "", ext: "xlsx" },
+          { name: "", url: "", ext: "pptx" },
+          { name: "", url: " ", ext: "csv" }
+        ]
+      },
+      {
+        title: "Tugas Kapita Selekta",
+        files: [
+          { name: "", url: "", ext: "xlsx" },
+          { name: "", url: "", ext: "pptx" },
+          { name: "", url: " ", ext: "csv" }
+        ]
+      },
     ];
 
     /* =========================================================

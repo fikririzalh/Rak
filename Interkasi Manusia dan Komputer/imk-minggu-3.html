@@ -1,0 +1,1272 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Base catatan kuliah mingguan dengan tema HAPPY PRISM.">
+  <meta name="theme-color" content="#001F4F">
+  <title>Catatan Kuliah Mingguan | HAPPY PRISM</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23001F4F'/%3E%3Cpath d='M32 10 54 50H10Z' fill='%233CB4E6'/%3E%3Cpath d='m32 10 9 40H23Z' fill='%23F05696'/%3E%3Cpath d='M23 50h18L32 10Z' fill='%23FFD730' fill-opacity='.85'/%3E%3C/svg%3E">
+
+  <!--
+    KONTRAK PENGISIAN UNTUK CLAUDE
+
+    Tugas: ubah base ini menjadi catatan kuliah mingguan berdasarkan materi pengguna.
+
+    ATURAN WAJIB:
+    1. Kembalikan SATU file index.html lengkap. Jangan memberi potongan kode atau penjelasan di luar file.
+    2. Pertahankan seluruh CSS, JavaScript, class, id, struktur navigasi, dan palet HAPPY PRISM.
+    3. Ubah hanya placeholder metadata dan area di antara AI-CONTENT-START serta AI-CONTENT-END.
+    4. Salin struktur <template id="weekTemplate"> untuk setiap pertemuan. Tempel hasilnya di #weeklyNotes.
+    5. Beri setiap artikel id unik: minggu-01, minggu-02, dan seterusnya. Samakan data-week dengan nomornya.
+    6. Setelah catatan terisi, ubah <body data-filled="true"> menjadi <body data-filled="true">.
+    7. Susun jumlah minggu sesuai materi. Jangan menambah topik yang tidak diberikan hanya untuk memenuhi jumlah tertentu.
+    8. Gunakan bahasa Indonesia akademik yang jelas, aktif, ringkas, dan mudah dipelajari.
+    9. Setiap minggu harus memuat: tujuan belajar, konsep inti, pembahasan, contoh atau penerapan, istilah penting, rangkuman, refleksi atau latihan, serta referensi bila tersedia.
+    10. Jangan mengarang data, kutipan, DOI, nama jurnal, atau daftar pustaka. Jika sumber belum tersedia, tulis "Referensi belum dicantumkan dalam materi sumber."
+    11. Gunakan tabel hanya untuk perbandingan yang membutuhkan pemetaan tepat. Gunakan bullet untuk daftar singkat.
+    12. Jangan menambahkan CDN, framework, font eksternal, gambar eksternal, atau file lain. Hasil harus tetap berjalan offline.
+    13. Jaga hierarki heading: h1 untuk judul halaman, h2 untuk topik minggu, h3 untuk bagian catatan.
+    14. Jangan menghapus template, aturan ini, fitur navigasi, tombol cetak, atau dukungan tampilan mobile.
+
+    DATA YANG HARUS DIISI DARI PERMINTAAN PENGGUNA:
+    - [NAMA MATA KULIAH]
+    - [KODE MATA KULIAH]
+    - [NAMA DOSEN]
+    - [PROGRAM STUDI]
+    - [SEMESTER / TAHUN AKADEMIK]
+    - seluruh catatan per minggu di #weeklyNotes
+  -->
+
+  <style>
+    :root {
+      --sky: #3CB4E6;
+      --emerald: #32B18E;
+      --pink: #F05696;
+      --orange: #FF8040;
+      --yellow: #FFD730;
+      --snow: #F0F0F0;
+      --grey: #D0D0D0;
+      --silver: #959595;
+      --bronze: #B89C57;
+      --magenta: #9C208C;
+      --midnight: #001F4F;
+      --white: #FFFFFF;
+      --ink: #10213B;
+      --muted: #60708A;
+      --line: rgba(0, 31, 79, .12);
+      --shadow: 0 18px 50px rgba(0, 31, 79, .10);
+      --prism: linear-gradient(90deg, var(--sky), var(--emerald), var(--yellow), var(--orange), var(--pink), var(--magenta));
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --sidebar: 18.75rem;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--snow);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    button, a { font: inherit; }
+
+    a { color: inherit; }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 100;
+      width: 0;
+      height: 5px;
+      background: var(--prism);
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 1.5rem;
+      overflow-y: auto;
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .sidebar::before {
+      content: "";
+      display: block;
+      height: 7px;
+      margin: -1.5rem -1.5rem 1.5rem;
+      background: var(--prism);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 2rem;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.8rem;
+      aspect-ratio: 1;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      transform: rotate(-4deg);
+      box-shadow: 6px 6px 0 var(--pink);
+    }
+
+    .brand strong,
+    .brand span { display: block; }
+
+    .brand strong {
+      font-size: .95rem;
+      letter-spacing: .09em;
+    }
+
+    .brand span {
+      color: rgba(255, 255, 255, .68);
+      font-size: .78rem;
+    }
+
+    .course-card {
+      padding: 1.1rem;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: var(--radius-md);
+    }
+
+    .micro-label {
+      margin: 0 0 .45rem;
+      color: var(--sky);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .course-card h2 {
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+      line-height: 1.35;
+    }
+
+    .course-meta {
+      display: grid;
+      gap: .7rem;
+      margin: 0;
+    }
+
+    .course-meta div {
+      display: grid;
+      grid-template-columns: 4.4rem 1fr;
+      gap: .5rem;
+      padding-top: .7rem;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .course-meta dt {
+      color: rgba(255, 255, 255, .58);
+      font-size: .78rem;
+    }
+
+    .course-meta dd {
+      margin: 0;
+      font-size: .78rem;
+      font-weight: 650;
+    }
+
+    .nav-heading {
+      margin: 1.8rem 0 .65rem;
+      color: rgba(255, 255, 255, .52);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-nav {
+      display: grid;
+      gap: .35rem;
+    }
+
+    .week-nav a,
+    .nav-empty {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      min-height: 2.65rem;
+      padding: .55rem .7rem;
+      color: rgba(255, 255, 255, .72);
+      border-radius: 10px;
+      font-size: .86rem;
+      text-decoration: none;
+    }
+
+    .week-nav a::before {
+      content: attr(data-number);
+      display: grid;
+      place-items: center;
+      width: 1.7rem;
+      height: 1.7rem;
+      flex: 0 0 auto;
+      color: var(--midnight);
+      background: var(--sky);
+      border-radius: 8px;
+      font-size: .7rem;
+      font-weight: 900;
+    }
+
+    .week-nav a:hover,
+    .week-nav a.active {
+      color: var(--white);
+      background: rgba(255, 255, 255, .11);
+    }
+
+    .week-nav a.active::before { background: var(--yellow); }
+
+    .nav-empty {
+      color: rgba(255, 255, 255, .45);
+      border: 1px dashed rgba(255, 255, 255, .18);
+    }
+
+    .sidebar-actions {
+      display: grid;
+      gap: .65rem;
+      margin-top: 1.5rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      min-height: 2.8rem;
+      padding: .7rem 1rem;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .button-primary {
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .button-primary:hover { background: #FFE36A; }
+
+    .content {
+      min-width: 0;
+      padding: clamp(1.15rem, 3vw, 3.25rem);
+    }
+
+    .mobile-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .menu-button {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      min-height: 20rem;
+      padding: clamp(1.5rem, 5vw, 4rem);
+      overflow: hidden;
+      color: var(--white);
+      background: var(--midnight);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      border-radius: 999px;
+      filter: blur(1px);
+    }
+
+    .hero::before {
+      width: 18rem;
+      height: 18rem;
+      top: -7rem;
+      right: -4rem;
+      background: var(--pink);
+      opacity: .88;
+    }
+
+    .hero::after {
+      width: 13rem;
+      height: 13rem;
+      right: 8rem;
+      bottom: -7rem;
+      background: var(--emerald);
+      opacity: .86;
+    }
+
+    .prism-lines {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .26;
+      background-image: linear-gradient(115deg, transparent 45%, var(--yellow) 45% 48%, transparent 48%), linear-gradient(65deg, transparent 58%, var(--sky) 58% 61%, transparent 61%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin: 0 0 1.4rem;
+      color: var(--yellow);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 2rem;
+      height: 4px;
+      background: var(--prism);
+      border-radius: 99px;
+    }
+
+    .hero h1 {
+      max-width: 11ch;
+      margin: 0;
+      font-size: clamp(2.45rem, 6vw, 5.6rem);
+      line-height: .96;
+      letter-spacing: -.055em;
+    }
+
+    .hero-copy {
+      max-width: 44rem;
+      margin: 1.5rem 0 0;
+      color: rgba(255, 255, 255, .76);
+      font-size: 1.05rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 2rem;
+    }
+
+    .hero-tag {
+      padding: .5rem .8rem;
+      color: var(--white);
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .guide-panel {
+      margin-top: 1.5rem;
+      padding: clamp(1.4rem, 3vw, 2.4rem);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    body[data-filled="true"] .guide-panel { display: none; }
+
+    .section-kicker {
+      margin: 0 0 .35rem;
+      color: var(--magenta);
+      font-size: .75rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 0;
+      color: var(--midnight);
+      font-size: clamp(1.65rem, 3vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -.03em;
+    }
+
+    .section-intro {
+      max-width: 50rem;
+      margin: .75rem 0 0;
+      color: var(--muted);
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+      margin: 1.6rem 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: rules;
+    }
+
+    .rules-grid li {
+      position: relative;
+      min-height: 8.2rem;
+      padding: 1.2rem 1.15rem 1.15rem 4rem;
+      background: #F8FAFC;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      counter-increment: rules;
+    }
+
+    .rules-grid li::before {
+      content: counter(rules, decimal-leading-zero);
+      position: absolute;
+      top: 1.15rem;
+      left: 1.15rem;
+      display: grid;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 10px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .rules-grid strong {
+      display: block;
+      margin-bottom: .25rem;
+      color: var(--midnight);
+    }
+
+    .rules-grid span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .ai-command {
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      color: var(--midnight);
+      background: rgba(60, 180, 230, .12);
+      border-left: 5px solid var(--sky);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: .92rem;
+    }
+
+    .notes-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: clamp(2.3rem, 6vw, 4.5rem) 0 1.2rem;
+    }
+
+    .notes-status {
+      flex: 0 0 auto;
+      padding: .45rem .75rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      min-height: 23rem;
+      padding: 2rem;
+      text-align: center;
+      background: var(--white);
+      border: 2px dashed var(--grey);
+      border-radius: var(--radius-lg);
+    }
+
+    .empty-state[hidden] { display: none; }
+
+    .empty-symbol {
+      position: relative;
+      width: 5.5rem;
+      height: 5.5rem;
+      margin: 0 auto 1.25rem;
+      background: var(--sky);
+      border-radius: 22px;
+      transform: rotate(5deg);
+      box-shadow: 12px 12px 0 var(--pink), -8px -8px 0 var(--yellow);
+    }
+
+    .empty-symbol::before,
+    .empty-symbol::after {
+      content: "";
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 2.2rem;
+      height: 5px;
+      background: var(--midnight);
+      border-radius: 99px;
+      transform: translate(-50%, -50%);
+    }
+
+    .empty-symbol::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+    .empty-state h2 {
+      margin: 0;
+      color: var(--midnight);
+      font-size: 1.55rem;
+    }
+
+    .empty-state p {
+      max-width: 34rem;
+      margin: .55rem auto 0;
+      color: var(--muted);
+    }
+
+    #weeklyNotes {
+      display: grid;
+      gap: 1.35rem;
+    }
+
+    .week-card {
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .week-head {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      min-height: 10rem;
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .week-number {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .week-number span {
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-number strong {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .week-heading {
+      display: grid;
+      align-content: center;
+      padding: 1.5rem 2rem;
+    }
+
+    .week-heading p {
+      margin: 0 0 .35rem;
+      color: var(--sky);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .week-heading h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.35rem);
+      line-height: 1.15;
+    }
+
+    .week-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      padding: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .note-block {
+      padding: 1.2rem;
+      background: #FAFBFD;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .note-block.full { grid-column: 1 / -1; }
+
+    .note-block.accent-sky { border-top: 5px solid var(--sky); }
+    .note-block.accent-emerald { border-top: 5px solid var(--emerald); }
+    .note-block.accent-pink { border-top: 5px solid var(--pink); }
+    .note-block.accent-orange { border-top: 5px solid var(--orange); }
+    .note-block.accent-magenta { border-top: 5px solid var(--magenta); }
+    .note-block.accent-bronze { border-top: 5px solid var(--bronze); }
+
+    .note-block h3 {
+      margin: 0 0 .65rem;
+      color: var(--midnight);
+      font-size: 1.05rem;
+    }
+
+    .note-block p,
+    .note-block ul,
+    .note-block ol { margin: .6rem 0 0; }
+
+    .note-block ul,
+    .note-block ol { padding-left: 1.25rem; }
+
+    .note-block li + li { margin-top: .35rem; }
+
+    .note-table-wrap { overflow-x: auto; }
+
+    .note-table {
+      width: 100%;
+      margin-top: .75rem;
+      border-collapse: collapse;
+      font-size: .92rem;
+    }
+
+    .note-table th,
+    .note-table td {
+      padding: .75rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--grey);
+    }
+
+    .note-table th {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .key-term {
+      display: grid;
+      grid-template-columns: minmax(7rem, .35fr) 1fr;
+      gap: .7rem;
+      padding: .65rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .key-term:last-child { border-bottom: 0; }
+    .key-term strong { color: var(--magenta); }
+
+    .reference-list {
+      padding-left: 1.2rem;
+      overflow-wrap: anywhere;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2.2rem;
+      padding: 1.2rem 0;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: .8rem;
+    }
+
+    @media (max-width: 960px) {
+      .app-shell { display: block; }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 90;
+        width: min(86vw, var(--sidebar));
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+        box-shadow: 20px 0 60px rgba(0, 0, 0, .25);
+      }
+
+      body.menu-open { overflow: hidden; }
+      body.menu-open .sidebar { transform: translateX(0); }
+
+      .mobile-bar { display: flex; }
+
+      .content { padding-top: 1rem; }
+    }
+
+    @media (max-width: 680px) {
+      .hero { min-height: 22rem; }
+      .hero::after { right: 1rem; }
+      .rules-grid,
+      .week-body { grid-template-columns: 1fr; }
+      .note-block.full { grid-column: auto; }
+      .notes-header { align-items: start; flex-direction: column; }
+      .week-head { grid-template-columns: 4.8rem minmax(0, 1fr); }
+      .week-heading { padding: 1.2rem; }
+      .week-number strong { font-size: 2.25rem; }
+      .page-footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+
+    @media print {
+      @page { margin: 1.5cm; }
+      body { background: var(--white); }
+      .scroll-progress,
+      .sidebar,
+      .mobile-bar,
+      .guide-panel,
+      .empty-state,
+      .notes-status { display: none !important; }
+      .app-shell { display: block; }
+      .content { padding: 0; }
+      .hero {
+        min-height: 0;
+        margin-bottom: 1.2rem;
+        padding: 2rem;
+        box-shadow: none;
+      }
+      .week-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+      .note-block { break-inside: avoid; }
+    }
+  </style>
+</head>
+
+<body data-filled="true">
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi catatan kuliah">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">HP</div>
+        <div>
+          <strong>HAPPY PRISM</strong>
+          <span>Weekly Notes System</span>
+        </div>
+      </div>
+
+      <section class="course-card" aria-labelledby="courseName">
+        <p class="micro-label">Mata Kuliah</p>
+        <h2 id="courseName" data-field="course">Interaksi Manusia dan Komputer (IMK)</h2>
+        <dl class="course-meta">
+          <div>
+            <dt>Kode</dt>
+            <dd data-field="course-code">Belum dicantumkan</dd>
+          </div>
+          <div>
+            <dt>Dosen</dt>
+            <dd data-field="lecturer">Tim Dosen IMK</dd>
+          </div>
+          <div>
+            <dt>Prodi</dt>
+            <dd data-field="program">Informatika, Fakultas Teknik</dd>
+          </div>
+          <div>
+            <dt>Periode</dt>
+            <dd data-field="period">Belum dicantumkan (Modul 03)</dd>
+          </div>
+        </dl>
+      </section>
+
+      <p class="nav-heading">Daftar Pertemuan</p>
+      <nav class="week-nav" id="weekNav" aria-label="Daftar catatan mingguan">
+        <span class="nav-empty">Belum ada minggu yang diisi</span>
+      </nav>
+
+      <div class="sidebar-actions">
+        <button class="button button-primary" id="printButton" type="button" aria-label="Cetak catatan atau simpan sebagai PDF">
+          Cetak / Simpan PDF
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="mobile-bar">
+        <strong>HAPPY PRISM</strong>
+        <button class="button menu-button" id="menuButton" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+      </div>
+
+      <header class="hero" id="top">
+        <div class="prism-lines" aria-hidden="true"></div>
+        <p class="eyebrow">Ruang Belajar Mingguan</p>
+        <h1>Catatan Kuliah Mingguan</h1>
+        <p class="hero-copy">Satu ruang terstruktur untuk menyimpan konsep, pembahasan, contoh, refleksi, dan referensi dari setiap pertemuan.</p>
+        <div class="hero-tags" aria-label="Informasi catatan">
+          <span class="hero-tag" data-field="course">Interaksi Manusia dan Komputer (IMK)</span>
+          <span class="hero-tag" data-field="period">Belum dicantumkan (Modul 03)</span>
+          <span class="hero-tag" id="meetingCount">0 pertemuan</span>
+        </div>
+      </header>
+
+      <section class="guide-panel" id="claudeGuide" aria-labelledby="guideTitle">
+        <p class="section-kicker">Instruksi Pengisian</p>
+        <h2 class="section-title" id="guideTitle">Aturan kerja untuk Claude</h2>
+        <p class="section-intro">Base ini sengaja belum memuat materi. Saat materi diberikan, Claude harus mengisi area catatan tanpa mengubah desain, navigasi, atau fungsi halaman.</p>
+
+        <ol class="rules-grid">
+          <li>
+            <strong>Gunakan materi pengguna</strong>
+            <span>Jaga urutan topik. Jangan menambah fakta, sumber, atau pertemuan tanpa dasar.</span>
+          </li>
+          <li>
+            <strong>Isi metadata utama</strong>
+            <span>Ganti nama mata kuliah, kode, dosen, program studi, serta periode pada semua slot.</span>
+          </li>
+          <li>
+            <strong>Salin template minggu</strong>
+            <span>Buat satu artikel untuk setiap pertemuan dengan nomor, id, dan judul yang unik.</span>
+          </li>
+          <li>
+            <strong>Susun catatan utuh</strong>
+            <span>Bahas tujuan, konsep, uraian, contoh, istilah, rangkuman, latihan, dan referensi.</span>
+          </li>
+          <li>
+            <strong>Jaga akurasi akademik</strong>
+            <span>Jangan mengarang sitasi. Tandai secara jujur ketika materi belum menyediakan referensi.</span>
+          </li>
+          <li>
+            <strong>Kembalikan file lengkap</strong>
+            <span>Hasil akhir harus berupa index.html utuh yang dapat dibuka langsung tanpa internet.</span>
+          </li>
+        </ol>
+
+        <div class="ai-command">
+          <strong>Perintah singkat:</strong> Isi base ini menggunakan materi yang saya lampirkan. Patuhi KONTRAK PENGISIAN UNTUK CLAUDE di bagian head. Pertahankan desain dan kembalikan satu index.html lengkap.
+        </div>
+      </section>
+
+      <section aria-labelledby="notesTitle">
+        <div class="notes-header">
+          <div>
+            <p class="section-kicker">Arsip Pertemuan</p>
+            <h2 class="section-title" id="notesTitle">Catatan per minggu</h2>
+          </div>
+          <span class="notes-status" id="notesStatus">Siap diisi</span>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          <div>
+            <div class="empty-symbol" aria-hidden="true"></div>
+            <h2>Area catatan masih kosong</h2>
+            <p>Kirim file ini bersama materi kuliah kepada Claude. Struktur minggu akan muncul otomatis setelah area konten diisi.</p>
+          </div>
+        </div>
+
+        <!-- AI-CONTENT-START: CLAUDE MENEMPEL SEMUA ARTICLE .week-card DI DALAM ELEMEN INI -->
+        <div id="weeklyNotes" data-ai-edit-zone="weekly-notes">
+        <article class="week-card" id="minggu-03" data-week="03">
+          <header class="week-head">
+            <div class="week-number"><span>Minggu</span><strong>03</strong></div>
+            <div class="week-heading">
+              <p>Modul 03 · Proses Desain UI Langkah 2–3</p>
+              <h2>Teori, Prinsip, dan Pedoman Usability serta User Centered Design (UCD)</h2>
+            </div>
+          </header>
+
+          <div class="week-body">
+            <section class="note-block accent-sky">
+              <h3>Tujuan Pembelajaran</h3>
+              <ul>
+                <li>Menjelaskan pentingnya memahami fungsi bisnis berdasarkan Persona User sebagai acuan merancang antarmuka.</li>
+                <li>Menerapkan tahapan mengidentifikasi alur kerja setiap task berdasarkan Persona User (task analysis, HTA).</li>
+                <li>Memahami prinsip desain interaksi dan menerapkannya untuk menghasilkan antarmuka yang baik.</li>
+              </ul>
+            </section>
+
+            <section class="note-block accent-emerald">
+              <h3>Konsep Inti</h3>
+              <p>Antarmuka yang baik tidak dimulai dari layar, tetapi dari <strong>pemahaman terhadap bisnis dan pengguna</strong>. Alurnya: kumpulkan kebutuhan, pahami <em>mental model</em> pengguna, rancang <em>conceptual model</em> yang selaras dengannya, tetapkan standar, lalu terapkan prinsip desain (konsistensi, kesederhanaan, konteks). Semakin dekat conceptual model dengan mental model, semakin terasa intuitif sistemnya.</p>
+            </section>
+
+            <section class="note-block full accent-pink">
+              <h3>Pembahasan Utama: Peta Tujuh Langkah</h3>
+              <p>Slide menyajikan proses desain UI, <em>Step 2 – Understand the Business Function</em>, dalam tujuh langkah umum:</p>
+              <ol>
+                <li>Business definition and requirements analysis.</li>
+                <li>Determine basic business functions.</li>
+                <li>Describe current activities through task analysis.</li>
+                <li>Develop a conceptual model of the system.</li>
+                <li>Establish design standards or style guides.</li>
+                <li>Establish system usability design goals.</li>
+                <li>Define training and documentation needs.</li>
+              </ol>
+              <p>Setelah itu proses berlanjut ke <em>Step 3 – Understand the Principles of Good Interface and Screen Design</em>.</p>
+            </section>
+
+            <section class="note-block full accent-orange">
+              <h3>Langkah 1: Analisis Kebutuhan dan Pengumpulan Data</h3>
+              <p>Tujuan fase ini adalah menetapkan <strong>kebutuhan akan sebuah sistem</strong>. Deskripsi produk disusun dari masukan pengguna, pemasaran, atau pihak berkepentingan lain, dan pengembang perlu memahami kebijakan serta budaya kerja organisasi. Metode pengumpulan data terbagi dua:</p>
+              <ul>
+                <li><strong>Observasi</strong>: perancang masuk ke lingkungan pengguna dan mengamati aktivitas sehari-hari; pengguna tidak berpartisipasi langsung.</li>
+                <li><strong>Elisitasi</strong>: pengguna berpartisipasi, baik langsung (wawancara, focus group) maupun tidak langsung (kuesioner, dll.).</li>
+              </ul>
+              <p>Slide menugaskan kita menjelaskan kelebihan dan kekurangan tiap metode. Tabel berikut adalah analisis pengayaan (bukan kutipan slide) beserta ketentuan dari slide:</p>
+              <div class="note-table-wrap">
+                <table class="note-table">
+                  <thead><tr><th>Metode</th><th>Ketentuan menurut slide</th><th>Kelebihan</th><th>Kekurangan</th></tr></thead>
+                  <tbody>
+                    <tr><td>Observasi langsung</td><td>Syarat minimum (Tull &amp; Hawkins, 1983): data tersedia, perilaku berulang/dapat diprediksi, kejadian berdurasi singkat. Pedoman Whitten (2000): tentukan who-what-where-when-why-how, minta izin, jelaskan tujuan, jaga profil rendah, catat, tinjau catatan bersama subjek, jangan menyela, jangan fokus pada hal sepele, jangan berasumsi.</td><td>Menangkap perilaku nyata, bukan yang diakui pengguna.</td><td>Memakan waktu; kehadiran pengamat dapat mengubah perilaku; tidak menjelaskan alasan.</td></tr>
+                    <tr><td>Wawancara</td><td>Tatap muka. Persiapan (Whitten, 2000): pilih responden, siapkan pertanyaan, lakukan, tindak lanjuti.</td><td>Mendalam; bisa menggali "mengapa".</td><td>Mahal per responden; hasil bergantung keterampilan pewawancara.</td></tr>
+                    <tr><td>Kuesioner</td><td>Format bebas atau tetap. Langkah: tentukan fakta/opini dan respondennya, pilih format, tulis, uji pada sampel kecil, gandakan dan sebar.</td><td>Menjangkau banyak orang dengan biaya rendah.</td><td>Kurang mendalam; pertanyaan ambigu tidak dapat diklarifikasi; tingkat respons bisa rendah.</td></tr>
+                    <tr><td>Focus group &amp; brainstorming</td><td>Focus group: rapat terstruktur dengan fasilitator agar tak ada yang mendominasi, meningkatkan penerimaan dan mengurangi resistensi. Brainstorming: lebih informal, ide sebanyak mungkin tanpa analisis sampai habis.</td><td>Cepat menghasilkan banyak sudut pandang; melibatkan pengguna.</td><td>Rentan didominasi individu tertentu; opini kelompok belum tentu mewakili perilaku nyata.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Slide juga mencatat semua metode ini dapat dilakukan lewat media daring. Contoh <em>direct methods</em>: wawancara tatap muka/telepon, focus group tradisional, workshop terfasilitasi, observational field study, prototyping (kebutuhan dan UI), usability laboratory testing, card sorting untuk situs web. Contoh <em>indirect methods</em>: perantara MIS, survei atau kuesioner (kertas/elektronik), electronic focus group, marketing and sales, support line, email/bulletin board, user group, analisis kompetitor, trade show, analisis media lain, dan system testing.</p>
+            </section>
+
+            <section class="note-block full accent-magenta">
+              <h3>Persona sebagai Acuan Fungsi Bisnis</h3>
+              <p>Persona adalah deskripsi rinci tentang tipe pengguna: apa yang mereka pedulikan dan bagaimana mereka menyelesaikan masalah saat ini. Enam langkah membuatnya:</p>
+              <ol>
+                <li><strong>Brainstorm</strong> tipe persona (pembeli, reseller, teknisi, pengguna, regulator, dan sebagainya).</li>
+                <li><strong>Riset dan wawancara</strong> orang dari tiap tipe tentang pain point dan penggunaan produk.</li>
+                <li><strong>Tulis persona</strong> secara rinci.</li>
+                <li><strong>Sortir dan prioritaskan</strong> bersama tim bisnis dan teknis: primer, sekunder, tersier (pendekatan target atau segitiga).</li>
+                <li><strong>Diskusikan</strong>, misalnya "Apakah dua persona ini sama?" atau "Bagaimana jika kita tukar keduanya?"</li>
+                <li><strong>Finalisasi, cetak, distribusikan</strong> agar profil primer menjadi rujukan harian tim.</li>
+              </ol>
+              <p><strong>Contoh dari slide (Marjorie Bannet)</strong>: tujuannya tidak merasa kesepian, tetap terhubung dengan anak dan keluarganya, menghindari pengalaman teknologi yang membuat frustrasi, dan tidak bergantung pada orang lain. Dari sini muncul tuntutan desain: antarmuka harus sangat jelas, minim langkah, dan tidak membuatnya merasa bodoh saat salah. Alasannya: kebutuhan persona menentukan fungsi mana yang kritis dan seberapa sederhana alurnya.</p>
+            </section>
+
+            <section class="note-block full accent-bronze">
+              <h3>Langkah 2 dan 4: Mental Model, Conceptual Model, dan Metafora</h3>
+              <p><strong>Mental model</strong> adalah representasi internal seseorang atas pemahamannya tentang sesuatu. Ia terbentuk bertahap lewat pengalaman, pelatihan, dan instruksi, membuat orang mampu memahami, menjelaskan, dan melakukan sesuatu, bahkan memprediksi tindakan yang belum pernah atau sudah lupa dilakukan. Memahami mental model berarti memahami bagaimana pengguna memandang tugasnya, kebutuhannya, preferensi kerjanya, dan cara mereka menyelesaikannya. Mental model memuat metafora dan objek yang disaring untuk menjadi kerangka program. Teknik yang ditunjukkan slide: diagram mental model (kelompok aktivitas di atas, dukungan/fitur di bawahnya) yang disusun dengan sticky notes.</p>
+              <p><strong>Conceptual model</strong> adalah kerangka konseptual penyajian fungsi sistem: objek, hubungan, properti, dan aksi yang tampil di antarmuka. Ia didasarkan pada mental model pengguna, dengan tujuan membantu pengguna membangun mental model yang berguna. Alat bantu: brainstorming, card sort, persona, skenario, semantic network, cognitive walkthrough.</p>
+              <h4>Pedoman merancang conceptual model</h4>
+              <ul>
+                <li>Cerminkan mental model pengguna, bukan perancang.</li>
+                <li>Gunakan analogi fisik atau metafora; patuhi ekspektasi, kebiasaan, rutinitas, dan stereotip.</li>
+                <li>Sediakan kompatibilitas aksi-respons; buat bagian dan proses tak terlihat menjadi terlihat.</li>
+                <li>Beri umpan balik yang tepat dan benar; hindari yang tidak perlu; jaga konsistensi.</li>
+                <li>Sediakan dokumentasi dan bantuan yang memperkuat model; dukung mental model pemula maupun ahli.</li>
+              </ul>
+              <h4>Mendefinisikan objek dan metafora</h4>
+              <p>Tentukan semua objek yang dimanipulasi, perilaku dan karakteristiknya, hubungan antarobjek, aksi yang dilakukan, serta atribut yang harus disimpan, ditampilkan, atau boleh diedit. Objek dan aksi yang paling sering muncul di alur kerja harus dibuat sangat jelas dan mudah dimanipulasi. Metafora memakai pengetahuan tentang satu hal untuk memahami hal lain. Pedomannya: pilih analogi terbaik untuk tiap objek dan aksi, gunakan metafora dunia nyata yang sederhana dan umum, beberapa metafora boleh berdampingan, tetap gunakan metafora utama meski tidak bisa direplikasi persis secara visual, dan uji metafora terpilih.</p>
+              <h4>Mental model baru pengguna dan jarak antar-model</h4>
+              <p>Bila sistem mencerminkan mental model dengan tepat, mental model diperkuat dan muncul rasa "intuitif". Bila tidak, hasilnya kebingungan, kesalahan, hilangnya kepercayaan, frustrasi, hingga tidak mampu menyelesaikan tugas. Jika jurang conceptual dan mental model terlanjur ada, biasanya ditambal dengan dokumentasi dan pelatihan ekstensif, yang lebih mahal daripada desain yang tepat sejak awal. Slide juga menampilkan jarak antara mental model perancang, pengguna, dan evaluator.</p>
+            </section>
+
+            <section class="note-block full accent-sky">
+              <h3>Langkah 3: Task Analysis dan Hierarchical Task Analysis (HTA)</h3>
+              <p>Task analysis adalah rangkaian aktivitas yang mengubah sistem dari keadaan awal ke tujuan yang diinginkan. Karena perubahannya bisa besar, tugas dipecah menjadi urutan subtask yang masing-masing lebih sederhana. Aktivitas menurut Rees (2001): kumpulkan informasi lewat observasi/konsultasi pengguna; representasikan tugas dalam notasi deskripsi tugas; analisis untuk memperoleh deskripsi optimal; gunakan hasilnya untuk merancang atau memperbaiki UI. Alat lain: diagram Ishikawa, use case, storyboarding, profil pemangku kepentingan primer.</p>
+              <p>Teknik paling populer adalah <strong>HTA</strong>: tujuan (level 0) dipecah menjadi tugas, lalu subtugas, disertai <strong>plan</strong> yang menetapkan urutan atau kondisi pelaksanaan (mis. "do all in sequence", "do any one", "when kettle boils do 1.4").</p>
+              <p><strong>Contoh dari slide, "Borrow a book from the library":</strong> plan 0 = lakukan 1-3-4 (jika buku tidak ada di rak yang diharapkan, 2-3-4). Subtugas: 1 go to the library, 2 find required book, 3 retrieve book from shelf, 4 take book to counter. Tugas 2 dipecah: 2.1 access catalog, 2.2 access search screen, 2.3 enter search criteria, 2.4 identify required book, 2.5 note location, dengan plan 2 = 2.1-2.4-2.5 (jika buku belum teridentifikasi: 2.2-2.3-2.4-2.5). Contoh lain di slide: membuat secangkir teh (Dix et al.) dan mengoperasikan proyektor.</p>
+              <p><strong>Mengapa berguna untuk UI?</strong> HTA memperlihatkan langkah mana yang berlebihan, urutan yang dipaksakan, dan titik yang rawan salah, sehingga jumlah langkah dan beban memori pengguna bisa dipangkas sebelum satu layar pun digambar.</p>
+            </section>
+
+            <section class="note-block full accent-emerald">
+              <h3>Langkah 5–7: Standar, Tujuan Usability, Pelatihan, dan Dokumentasi</h3>
+              <p><strong>Standar dan style guide</strong> menjelaskan tampilan dan perilaku antarmuka serta prinsip, aturan, pedoman, dan konvensi yang wajib diikuti pada desain rinci, berdasarkan karakteristik perangkat keras/lunak dan prinsip desain layar yang baik. Manfaat bagi pengguna: kinerja lebih cepat, kesalahan dan waktu pelatihan berkurang, pemakaian sistem lebih baik, kepuasan dan penerimaan naik, biaya pengembangan dan dukungan turun. Bagi pengembang: antarmuka lebih terlihat dan sederhana, ada alat bantu desain, usaha rangkap berkurang, dan tersedia tolok ukur uji kualitas.</p>
+              <div class="note-table-wrap">
+                <table class="note-table">
+                  <thead><tr><th>Jenis</th><th>Isi menurut slide</th></tr></thead>
+                  <tbody>
+                    <tr><td>Sejarah</td><td>1981: kompilasi pedoman antarmuka dan layar pertama oleh Galitz. 1986: US Air Force merilis pedoman desain UI.</td></tr>
+                    <tr><td>Style guide komersial</td><td>Apple Human Interface Guidelines (Macintosh), IBM Ease of Use, Microsoft Windows XP UI Guidelines, Sun Java Look and Feel.</td></tr>
+                    <tr><td>Standar UI (ISO)</td><td>ISO 9241 (ergonomi kerja dengan layar), ISO 14915 (ergonomi perangkat lunak multimedia), ISO 13407 (proses desain berpusat manusia), ISO/CD 20282 (kemudahan pengoperasian produk sehari-hari).</td></tr>
+                    <tr><td>Web</td><td>Konvensi belum sempat matang; standar de facto muncul saat mayoritas situs besar memakai satu cara yang sama; W3C (2001) ikut mengupayakan standar global.</td></tr>
+                    <tr><td>Style guide kustom</td><td>Sertakan checklist, alasan tiap pedoman, kondisi pemilihan alternatif desain, contoh desain benar, dokumen yang dirancang baik, serta indeks, daftar isi, glosarium.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Tujuan usability</strong> (langkah 6) pada slide dijabarkan sebagai kebiasaan kerja: gunakan semua sumber rujukan, pakai alat pengembangan yang mendukung pedoman, dan terapkan pedoman segera. <strong>Pelatihan</strong> (video, manual, tutorial daring, quick reference, bantuan daring) dan <strong>dokumentasi</strong> disusun dari kebutuhan pengguna, conceptual design, dan target kinerja; menulis dokumentasi selama pengembangan menyingkap kekurangan lebih dini sehingga biaya perubahan turun.</p>
+            </section>
+
+            <section class="note-block full accent-pink">
+              <h3>Step 3: Prinsip Antarmuka dan Layar yang Baik</h3>
+              <p>Antarmuka yang baik mencerminkan kemampuan, kebutuhan, dan tugas penggunanya dalam batasan fisik perangkat keras, memanfaatkan kemampuan perangkat lunak kendali secara efektif, dan mencapai tujuan bisnis sistem. Pertimbangan manusia: hilangkan semua gangguan dan hal yang membuat putus asa; pengguna menginginkan <strong>kesederhanaan, kejelasan, dan mudah dimengerti</strong>. Saat berinteraksi, pengguna mengidentifikasi tugas/kebutuhan, memutuskan cara menyelesaikannya, memanipulasi kontrol, mengumpulkan data sambil menyaring yang bermakna, lalu menilai hasil untuk mengambil keputusan.</p>
+              <p><strong>Tujuan desain:</strong> kurangi beban visual, intelektual, memori, dan motorik, serta minimalkan beban atau instruksi yang dipaksakan teknologi. Ini memiliki dasar kognitif: memori kerja terbatas, sehingga antarmuka yang meminta pengguna mengingat atau menghitung sendiri terasa melelahkan.</p>
+              <div class="note-table-wrap">
+                <table class="note-table">
+                  <thead><tr><th>Prinsip (Rees, 2001)</th><th>Isi</th><th>Tanda desain baik</th><th>Tanda desain buruk</th></tr></thead>
+                  <tbody>
+                    <tr><td>1. Consistency</td><td>Membuat interaksi dapat diprediksi. Dua aturan: label konsisten, dan semua aksi pengguna dapat dibatalkan (undo).</td><td>Istilah dan letak tombol sama di semua layar; ada "Batal/Undo".</td><td>Satu fungsi bernama berbeda-beda; aksi permanen tanpa konfirmasi.</td></tr>
+                    <tr><td>2. Simplicity</td><td>Tampilkan hanya yang perlu, minta input seminimal mungkin, fokus pada pengguna dan tugas, konsep penting jelas, gunakan representasi visual dengan manipulasi langsung, jaga kejelasan pada penamaan, alur kendali, dan tata letak.</td><td>Satu tujuan utama per layar; isian otomatis dan pilihan menggantikan pengetikan.</td><td>Formulir panjang, banyak iklan/opsi bersaing dengan tombol utama.</td></tr>
+                    <tr><td>3. Context</td><td>Interaksi tampil sebagai urutan tampilan yang dapat dikenali dan dibedakan. Tiga alat: WYSIWYG, properties, dialogs.</td><td>Pengguna tahu sedang di langkah mana; ringkasan pesanan sesuai hasil akhir.</td><td>Pengguna tersesat, tak tahu posisi dan langkah berikutnya.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>WYSIWYG: informasi di layar berbentuk identik dengan luarannya di media lain. Properties: atribut objek (ukuran, bentuk, warna) yang dapat dikendalikan pengguna lewat kotak properti. Dialogs: variasi kecil tampilan untuk meminta sedikit informasi (teks, angka, opsi, ya/tidak) dan hilang setelah input selesai. Slide juga menyebut prinsip lanjutan dari Shneiderman, Mayhew, dan IBM. Pedoman UI dikelompokkan menjadi enam bagian yang masih berlaku: data entry, data display, sequence control, user guidance, data transfer, data protection; ditambah GNOME HIG sebagai pedoman industri.</p>
+            </section>
+
+            <section class="note-block accent-orange">
+              <h3>Contoh atau Penerapan</h3>
+              <p><strong>Ilustrasi HTA (contoh buatan untuk tantangan slide, bukan dari slide): pesan ojek online</strong></p>
+              <ol>
+                <li>0. Memesan perjalanan; plan 0: lakukan 1-2-3-4-5 berurutan. Jika pengemudi membatalkan, ulangi dari 3.</li>
+                <li>1. Membuka aplikasi dan login.</li>
+                <li>2. Menentukan rute: 2.1 isi titik jemput, 2.2 isi tujuan, 2.3 cek estimasi tarif.</li>
+                <li>3. Memilih layanan dan metode pembayaran.</li>
+                <li>4. Menunggu dan menemui pengemudi: 4.1 pantau posisi di peta, 4.2 cocokkan identitas pengemudi dan kendaraan.</li>
+                <li>5. Menyelesaikan perjalanan: bayar, beri rating.</li>
+              </ol>
+              <p>Temuan yang bisa didapat: langkah 2.1 dapat dipersingkat dengan lokasi otomatis (kurangi motor work); tarif harus terlihat sebelum konfirmasi (context dan feedback). Untuk kelompokmu, lanjutkan pemecahan sampai level yang cukup untuk memutuskan desain layar.</p>
+            </section>
+
+            <section class="note-block accent-magenta">
+              <h3>Istilah Penting</h3>
+              <div class="key-term"><strong>Observasi</strong><span>Mengamati pengguna di lingkungannya tanpa partisipasi langsung.</span></div>
+              <div class="key-term"><strong>Elisitasi</strong><span>Pengumpulan kebutuhan dengan partisipasi pengguna (langsung/tidak langsung).</span></div>
+              <div class="key-term"><strong>Persona</strong><span>Deskripsi rinci tipe pengguna yang menjadi acuan desain.</span></div>
+              <div class="key-term"><strong>Mental model</strong><span>Pemahaman internal pengguna tentang cara sesuatu bekerja.</span></div>
+              <div class="key-term"><strong>Conceptual model</strong><span>Kerangka penyajian fungsi sistem berbasis mental model.</span></div>
+              <div class="key-term"><strong>Metafora</strong><span>Memakai pengetahuan tentang hal yang dikenal untuk memahami hal lain.</span></div>
+              <div class="key-term"><strong>Task analysis</strong><span>Menguraikan aktivitas dari kondisi awal ke tujuan.</span></div>
+              <div class="key-term"><strong>HTA</strong><span>Task analysis hierarkis: tugas, subtugas, dan plan urutannya.</span></div>
+              <div class="key-term"><strong>Style guide</strong><span>Dokumen aturan tampilan dan perilaku antarmuka.</span></div>
+              <div class="key-term"><strong>Consistency</strong><span>Interaksi dapat diprediksi; label sama, ada undo.</span></div>
+              <div class="key-term"><strong>Simplicity</strong><span>Hanya yang perlu untuk tujuan pengguna.</span></div>
+              <div class="key-term"><strong>Context</strong><span>Urutan tampilan yang dapat dikenali; WYSIWYG, properties, dialogs.</span></div>
+            </section>
+
+            <section class="note-block full accent-bronze">
+              <h3>Rangkuman</h3>
+              <p>Minggu ini menghubungkan pemahaman bisnis dengan desain layar. Kebutuhan dikumpulkan lewat observasi dan elisitasi, dirangkum sebagai persona, lalu dipetakan menjadi mental model dan task analysis (HTA). Conceptual model yang selaras dengan mental model membuat sistem terasa intuitif; bila tidak, biaya pelatihan dan dokumentasi membengkak.</p>
+              <p>Standar dan style guide menjaga keseragaman, sedangkan tiga prinsip dasar (consistency, simplicity, context) beserta tujuan mengurangi beban visual, intelektual, memori, dan motorik menjadi ukuran untuk menilai baik-buruknya sebuah antarmuka.</p>
+            </section>
+
+            <section class="note-block full accent-sky">
+              <h3>Evaluasi Antarmuka: Tantangan Situs Tiket ke Ternate</h3>
+              <p>Slide meminta kamu mengusulkan itinerari pesawat ke Ternate lewat Traveloka, Pegipegi, Citilink, Garuda Indonesia, dan Lion Air, lalu membandingkan serta mengkritik ketiganya dengan tiga prinsip Rees. Gunakan lembar evaluasi ini dan isi dari pengalaman langsung (jangan menebak):</p>
+              <div class="note-table-wrap">
+                <table class="note-table">
+                  <thead><tr><th>Prinsip</th><th>Pertanyaan uji</th><th>Cara mencatat temuan</th></tr></thead>
+                  <tbody>
+                    <tr><td>Consistency</td><td>Apakah istilah (mis. "Cari", "Pesan", "Lanjut") dan posisi tombol sama antar-halaman? Bisakah kamu kembali dan mengubah pilihan tanpa kehilangan data?</td><td>Skor 1–5 per situs + tangkapan layar bukti.</td></tr>
+                    <tr><td>Simplicity</td><td>Berapa ketukan dan isian dari beranda sampai konfirmasi? Adakah elemen yang tidak relevan dengan tujuan memesan?</td><td>Hitung langkah dengan bantuan HTA singkat.</td></tr>
+                    <tr><td>Context</td><td>Apakah selalu jelas kamu di langkah keberapa? Apakah ringkasan pesanan (dialog/konfirmasi) sama dengan hasil akhir? Adakah penanda progres?</td><td>Catat titik di mana kamu bingung.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Dasar penilaian: desain dianggap buruk bila menambah beban memori (harus mengingat harga dari halaman sebelumnya) atau motorik (mengetik ulang data), dan baik bila menguranginya.</p>
+            </section>
+
+            <section class="note-block accent-sky">
+              <h3>Refleksi atau Latihan</h3>
+              <ol>
+                <li>Mengapa perancang cenderung memasukkan mental model sendiri ke desain, dan apa akibatnya bagi pengguna seperti persona Marjorie?</li>
+                <li>Kapan observasi lebih tepat daripada kuesioner, dan sebaliknya? Beri satu contoh per metode.</li>
+                <li>Buat HTA (minimal 2 level beserta plan) untuk salah satu topik: aplikasi ojek online dari pemesanan sampai rating, sistem informasi pemakaman dari booking sampai layanan purnajual, atau ujian SIM dari pendaftaran sampai penerbitan.</li>
+                <li>Pilih metafora dari aplikasi yang kamu pakai (mis. keranjang belanja). Di titik mana metafora itu gagal dan bagaimana mengujinya?</li>
+                <li>Apakah semua aksi di aplikasi favoritmu dapat dibatalkan? Jelaskan pelanggaran prinsip konsistensi yang kamu temukan.</li>
+                <li>Kritis: jika style guide sudah lengkap, apakah pengujian dengan pengguna masih perlu? Beri argumen.</li>
+              </ol>
+            </section>
+
+            <section class="note-block accent-emerald">
+              <h3>Referensi</h3>
+              <ol class="reference-list">
+                <li>Slide IMK Modul 03, Tim Dosen IMK, Universitas Widyatama.</li>
+                <li>Bahan bacaan HTA (dari slide): uxmatters.com/mt/archives/2010/02/hierarchical-task-analysis.php; taskarchitect.com/blog/what-is-hierarchical-task-analysis; taskarchitect.com/blog/7-steps-hierarchical-task-analysis.</li>
+                <li>Bahan bacaan prinsip UI (dari slide): developer.gnome.org/hig/stable/; bokardo.com/principles-of-user-interface-design/; ambysoft.com/essays/userInterfaceDesign.html.</li>
+                <li>Suplemen mental model (dari slide): okcancel.com/archives/article/2005/08/mental-model-building-step-by-step.html; crazyegg.com/blog/how-to-design-mental-models/.</li>
+                <li>Sumber yang dirujuk slide tanpa daftar pustaka lengkap: Tull &amp; Hawkins (1983); Whitten (2000); Rees (2001); Galitz (1981); Dix et al. Detail bibliografi belum dicantumkan dalam materi sumber.</li>
+              </ol>
+            </section>
+          </div>
+        </article>
+      </div>
+        <!-- AI-CONTENT-END -->
+      </section>
+
+      <footer class="page-footer">
+        <span>HAPPY PRISM Weekly Notes</span>
+        <span>Dirancang untuk catatan kuliah yang terstruktur dan mudah dicetak.</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- CLAUDE: salin isi template ini ke #weeklyNotes untuk setiap pertemuan, lalu isi seluruh slot. -->
+  <template id="weekTemplate">
+    <article class="week-card" id="minggu-01" data-week="01">
+      <header class="week-head">
+        <div class="week-number">
+          <span>Minggu</span>
+          <strong>01</strong>
+        </div>
+        <div class="week-heading">
+          <p>[TANGGAL / SUBTOPIK OPSIONAL]</p>
+          <h2>[JUDUL TOPIK PERTEMUAN]</h2>
+        </div>
+      </header>
+
+      <div class="week-body">
+        <section class="note-block accent-sky">
+          <h3>Tujuan Pembelajaran</h3>
+          <ul>
+            <li>[Tujuan pembelajaran pertama]</li>
+            <li>[Tujuan pembelajaran berikutnya]</li>
+          </ul>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Konsep Inti</h3>
+          <p>[Jelaskan ide utama pertemuan secara ringkas dan akurat.]</p>
+        </section>
+
+        <section class="note-block full accent-pink">
+          <h3>Pembahasan Utama</h3>
+          <p>[Uraikan materi secara sistematis. Tambahkan subjudul h4 bila pembahasan panjang.]</p>
+        </section>
+
+        <section class="note-block accent-orange">
+          <h3>Contoh atau Penerapan</h3>
+          <p>[Berikan contoh yang relevan dengan materi pengguna.]</p>
+        </section>
+
+        <section class="note-block accent-magenta">
+          <h3>Istilah Penting</h3>
+          <div class="key-term">
+            <strong>[Istilah]</strong>
+            <span>[Definisi singkat]</span>
+          </div>
+        </section>
+
+        <section class="note-block full accent-bronze">
+          <h3>Rangkuman</h3>
+          <p>[Tulis simpulan pertemuan dalam satu atau dua paragraf ringkas.]</p>
+        </section>
+
+        <section class="note-block accent-sky">
+          <h3>Refleksi atau Latihan</h3>
+          <ol>
+            <li>[Pertanyaan pemahaman atau refleksi]</li>
+            <li>[Latihan penerapan]</li>
+          </ol>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Referensi</h3>
+          <ol class="reference-list">
+            <li>[Cantumkan hanya sumber yang tersedia atau terverifikasi]</li>
+          </ol>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    (() => {
+      const body = document.body;
+      const sidebar = document.getElementById('sidebar');
+      const menuButton = document.getElementById('menuButton');
+      const printButton = document.getElementById('printButton');
+      const weekNav = document.getElementById('weekNav');
+      const weeklyNotes = document.getElementById('weeklyNotes');
+      const emptyState = document.getElementById('emptyState');
+      const meetingCount = document.getElementById('meetingCount');
+      const notesStatus = document.getElementById('notesStatus');
+      const progress = document.getElementById('scrollProgress');
+
+      const weeks = [...weeklyNotes.querySelectorAll('.week-card')];
+      const twoDigits = value => String(value).padStart(2, '0');
+
+      weekNav.innerHTML = '';
+      emptyState.hidden = weeks.length > 0;
+      meetingCount.textContent = `${weeks.length} pertemuan`;
+      notesStatus.textContent = weeks.length ? `${weeks.length} minggu tersusun` : 'Siap diisi';
+
+      if (!weeks.length) {
+        weekNav.innerHTML = '<span class="nav-empty">Belum ada minggu yang diisi</span>';
+      } else {
+        weeks.forEach((week, index) => {
+          const number = week.dataset.week || twoDigits(index + 1);
+          const title = week.querySelector('h2')?.textContent?.trim() || `Pertemuan ${number}`;
+          const link = document.createElement('a');
+          link.href = `#${week.id}`;
+          link.dataset.number = number;
+          link.textContent = title;
+          link.addEventListener('click', () => {
+            body.classList.remove('menu-open');
+            menuButton.setAttribute('aria-expanded', 'false');
+          });
+          weekNav.appendChild(link);
+        });
+
+        const links = [...weekNav.querySelectorAll('a')];
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            links.forEach(link => link.classList.toggle('active', link.hash === `#${entry.target.id}`));
+          });
+        }, { rootMargin: '-18% 0px -68% 0px' });
+        weeks.forEach(week => observer.observe(week));
+      }
+
+      menuButton.addEventListener('click', () => {
+        const isOpen = body.classList.toggle('menu-open');
+        menuButton.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      sidebar.addEventListener('click', event => event.stopPropagation());
+      document.addEventListener('click', event => {
+        if (window.innerWidth <= 960 && body.classList.contains('menu-open') && !sidebar.contains(event.target) && event.target !== menuButton) {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      printButton.addEventListener('click', () => window.print());
+
+      const updateProgress = () => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = total > 0 ? (window.scrollY / total) * 100 : 0;
+        progress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      };
+
+      updateProgress();
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+    })();
+  </script>
+</body>
+</html>
