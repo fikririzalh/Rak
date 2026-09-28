@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Base catatan kuliah mingguan dengan tema HAPPY PRISM.">
+  <meta name="theme-color" content="#001F4F">
+  <title>Catatan Kuliah Mingguan | HAPPY PRISM</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23001F4F'/%3E%3Cpath d='M32 10 54 50H10Z' fill='%233CB4E6'/%3E%3Cpath d='m32 10 9 40H23Z' fill='%23F05696'/%3E%3Cpath d='M23 50h18L32 10Z' fill='%23FFD730' fill-opacity='.85'/%3E%3C/svg%3E">
+
+  <!--
+    KONTRAK PENGISIAN UNTUK CLAUDE
+
+    Tugas: ubah base ini menjadi catatan kuliah mingguan berdasarkan materi pengguna.
+
+    ATURAN WAJIB:
+    1. Kembalikan SATU file index.html lengkap. Jangan memberi potongan kode atau penjelasan di luar file.
+    2. Pertahankan seluruh CSS, JavaScript, class, id, struktur navigasi, dan palet HAPPY PRISM.
+    3. Ubah hanya placeholder metadata dan area di antara AI-CONTENT-START serta AI-CONTENT-END.
+    4. Salin struktur <template id="weekTemplate"> untuk setiap pertemuan. Tempel hasilnya di #weeklyNotes.
+    5. Beri setiap artikel id unik: minggu-01, minggu-02, dan seterusnya. Samakan data-week dengan nomornya.
+    6. Setelah catatan terisi, ubah <body data-filled="true"> menjadi <body data-filled="true">.
+    7. Susun jumlah minggu sesuai materi. Jangan menambah topik yang tidak diberikan hanya untuk memenuhi jumlah tertentu.
+    8. Gunakan bahasa Indonesia akademik yang jelas, aktif, ringkas, dan mudah dipelajari.
+    9. Setiap minggu harus memuat: tujuan belajar, konsep inti, pembahasan, contoh atau penerapan, istilah penting, rangkuman, refleksi atau latihan, serta referensi bila tersedia.
+    10. Jangan mengarang data, kutipan, DOI, nama jurnal, atau daftar pustaka. Jika sumber belum tersedia, tulis "Referensi belum dicantumkan dalam materi sumber."
+    11. Gunakan tabel hanya untuk perbandingan yang membutuhkan pemetaan tepat. Gunakan bullet untuk daftar singkat.
+    12. Jangan menambahkan CDN, framework, font eksternal, gambar eksternal, atau file lain. Hasil harus tetap berjalan offline.
+    13. Jaga hierarki heading: h1 untuk judul halaman, h2 untuk topik minggu, h3 untuk bagian catatan.
+    14. Jangan menghapus template, aturan ini, fitur navigasi, tombol cetak, atau dukungan tampilan mobile.
+
+    DATA YANG HARUS DIISI DARI PERMINTAAN PENGGUNA:
+    - [NAMA MATA KULIAH]
+    - [KODE MATA KULIAH]
+    - [NAMA DOSEN]
+    - [PROGRAM STUDI]
+    - [SEMESTER / TAHUN AKADEMIK]
+    - seluruh catatan per minggu di #weeklyNotes
+  -->
+
+  <style>
+    :root {
+      --sky: #3CB4E6;
+      --emerald: #32B18E;
+      --pink: #F05696;
+      --orange: #FF8040;
+      --yellow: #FFD730;
+      --snow: #F0F0F0;
+      --grey: #D0D0D0;
+      --silver: #959595;
+      --bronze: #B89C57;
+      --magenta: #9C208C;
+      --midnight: #001F4F;
+      --white: #FFFFFF;
+      --ink: #10213B;
+      --muted: #60708A;
+      --line: rgba(0, 31, 79, .12);
+      --shadow: 0 18px 50px rgba(0, 31, 79, .10);
+      --prism: linear-gradient(90deg, var(--sky), var(--emerald), var(--yellow), var(--orange), var(--pink), var(--magenta));
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --sidebar: 18.75rem;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--snow);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    button, a { font: inherit; }
+
+    a { color: inherit; }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 100;
+      width: 0;
+      height: 5px;
+      background: var(--prism);
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 1.5rem;
+      overflow-y: auto;
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .sidebar::before {
+      content: "";
+      display: block;
+      height: 7px;
+      margin: -1.5rem -1.5rem 1.5rem;
+      background: var(--prism);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 2rem;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.8rem;
+      aspect-ratio: 1;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      transform: rotate(-4deg);
+      box-shadow: 6px 6px 0 var(--pink);
+    }
+
+    .brand strong,
+    .brand span { display: block; }
+
+    .brand strong {
+      font-size: .95rem;
+      letter-spacing: .09em;
+    }
+
+    .brand span {
+      color: rgba(255, 255, 255, .68);
+      font-size: .78rem;
+    }
+
+    .course-card {
+      padding: 1.1rem;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: var(--radius-md);
+    }
+
+    .micro-label {
+      margin: 0 0 .45rem;
+      color: var(--sky);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .course-card h2 {
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+      line-height: 1.35;
+    }
+
+    .course-meta {
+      display: grid;
+      gap: .7rem;
+      margin: 0;
+    }
+
+    .course-meta div {
+      display: grid;
+      grid-template-columns: 4.4rem 1fr;
+      gap: .5rem;
+      padding-top: .7rem;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .course-meta dt {
+      color: rgba(255, 255, 255, .58);
+      font-size: .78rem;
+    }
+
+    .course-meta dd {
+      margin: 0;
+      font-size: .78rem;
+      font-weight: 650;
+    }
+
+    .nav-heading {
+      margin: 1.8rem 0 .65rem;
+      color: rgba(255, 255, 255, .52);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-nav {
+      display: grid;
+      gap: .35rem;
+    }
+
+    .week-nav a,
+    .nav-empty {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      min-height: 2.65rem;
+      padding: .55rem .7rem;
+      color: rgba(255, 255, 255, .72);
+      border-radius: 10px;
+      font-size: .86rem;
+      text-decoration: none;
+    }
+
+    .week-nav a::before {
+      content: attr(data-number);
+      display: grid;
+      place-items: center;
+      width: 1.7rem;
+      height: 1.7rem;
+      flex: 0 0 auto;
+      color: var(--midnight);
+      background: var(--sky);
+      border-radius: 8px;
+      font-size: .7rem;
+      font-weight: 900;
+    }
+
+    .week-nav a:hover,
+    .week-nav a.active {
+      color: var(--white);
+      background: rgba(255, 255, 255, .11);
+    }
+
+    .week-nav a.active::before { background: var(--yellow); }
+
+    .nav-empty {
+      color: rgba(255, 255, 255, .45);
+      border: 1px dashed rgba(255, 255, 255, .18);
+    }
+
+    .sidebar-actions {
+      display: grid;
+      gap: .65rem;
+      margin-top: 1.5rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      min-height: 2.8rem;
+      padding: .7rem 1rem;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .button-primary {
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .button-primary:hover { background: #FFE36A; }
+
+    .content {
+      min-width: 0;
+      padding: clamp(1.15rem, 3vw, 3.25rem);
+    }
+
+    .mobile-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .menu-button {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      min-height: 20rem;
+      padding: clamp(1.5rem, 5vw, 4rem);
+      overflow: hidden;
+      color: var(--white);
+      background: var(--midnight);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      border-radius: 999px;
+      filter: blur(1px);
+    }
+
+    .hero::before {
+      width: 18rem;
+      height: 18rem;
+      top: -7rem;
+      right: -4rem;
+      background: var(--pink);
+      opacity: .88;
+    }
+
+    .hero::after {
+      width: 13rem;
+      height: 13rem;
+      right: 8rem;
+      bottom: -7rem;
+      background: var(--emerald);
+      opacity: .86;
+    }
+
+    .prism-lines {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .26;
+      background-image: linear-gradient(115deg, transparent 45%, var(--yellow) 45% 48%, transparent 48%), linear-gradient(65deg, transparent 58%, var(--sky) 58% 61%, transparent 61%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin: 0 0 1.4rem;
+      color: var(--yellow);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 2rem;
+      height: 4px;
+      background: var(--prism);
+      border-radius: 99px;
+    }
+
+    .hero h1 {
+      max-width: 11ch;
+      margin: 0;
+      font-size: clamp(2.45rem, 6vw, 5.6rem);
+      line-height: .96;
+      letter-spacing: -.055em;
+    }
+
+    .hero-copy {
+      max-width: 44rem;
+      margin: 1.5rem 0 0;
+      color: rgba(255, 255, 255, .76);
+      font-size: 1.05rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 2rem;
+    }
+
+    .hero-tag {
+      padding: .5rem .8rem;
+      color: var(--white);
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .guide-panel {
+      margin-top: 1.5rem;
+      padding: clamp(1.4rem, 3vw, 2.4rem);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    body[data-filled="true"] .guide-panel { display: none; }
+
+    .section-kicker {
+      margin: 0 0 .35rem;
+      color: var(--magenta);
+      font-size: .75rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 0;
+      color: var(--midnight);
+      font-size: clamp(1.65rem, 3vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -.03em;
+    }
+
+    .section-intro {
+      max-width: 50rem;
+      margin: .75rem 0 0;
+      color: var(--muted);
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+      margin: 1.6rem 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: rules;
+    }
+
+    .rules-grid li {
+      position: relative;
+      min-height: 8.2rem;
+      padding: 1.2rem 1.15rem 1.15rem 4rem;
+      background: #F8FAFC;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      counter-increment: rules;
+    }
+
+    .rules-grid li::before {
+      content: counter(rules, decimal-leading-zero);
+      position: absolute;
+      top: 1.15rem;
+      left: 1.15rem;
+      display: grid;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 10px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .rules-grid strong {
+      display: block;
+      margin-bottom: .25rem;
+      color: var(--midnight);
+    }
+
+    .rules-grid span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .ai-command {
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      color: var(--midnight);
+      background: rgba(60, 180, 230, .12);
+      border-left: 5px solid var(--sky);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: .92rem;
+    }
+
+    .notes-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: clamp(2.3rem, 6vw, 4.5rem) 0 1.2rem;
+    }
+
+    .notes-status {
+      flex: 0 0 auto;
+      padding: .45rem .75rem;
+      color: var(--midnight);
+      background: var(--yellow);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      min-height: 23rem;
+      padding: 2rem;
+      text-align: center;
+      background: var(--white);
+      border: 2px dashed var(--grey);
+      border-radius: var(--radius-lg);
+    }
+
+    .empty-state[hidden] { display: none; }
+
+    .empty-symbol {
+      position: relative;
+      width: 5.5rem;
+      height: 5.5rem;
+      margin: 0 auto 1.25rem;
+      background: var(--sky);
+      border-radius: 22px;
+      transform: rotate(5deg);
+      box-shadow: 12px 12px 0 var(--pink), -8px -8px 0 var(--yellow);
+    }
+
+    .empty-symbol::before,
+    .empty-symbol::after {
+      content: "";
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 2.2rem;
+      height: 5px;
+      background: var(--midnight);
+      border-radius: 99px;
+      transform: translate(-50%, -50%);
+    }
+
+    .empty-symbol::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+    .empty-state h2 {
+      margin: 0;
+      color: var(--midnight);
+      font-size: 1.55rem;
+    }
+
+    .empty-state p {
+      max-width: 34rem;
+      margin: .55rem auto 0;
+      color: var(--muted);
+    }
+
+    #weeklyNotes {
+      display: grid;
+      gap: 1.35rem;
+    }
+
+    .week-card {
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .week-head {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      min-height: 10rem;
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .week-number {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      color: var(--midnight);
+      background: var(--yellow);
+    }
+
+    .week-number span {
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .week-number strong {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .week-heading {
+      display: grid;
+      align-content: center;
+      padding: 1.5rem 2rem;
+    }
+
+    .week-heading p {
+      margin: 0 0 .35rem;
+      color: var(--sky);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .week-heading h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.35rem);
+      line-height: 1.15;
+    }
+
+    .week-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      padding: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .note-block {
+      padding: 1.2rem;
+      background: #FAFBFD;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .note-block.full { grid-column: 1 / -1; }
+
+    .note-block.accent-sky { border-top: 5px solid var(--sky); }
+    .note-block.accent-emerald { border-top: 5px solid var(--emerald); }
+    .note-block.accent-pink { border-top: 5px solid var(--pink); }
+    .note-block.accent-orange { border-top: 5px solid var(--orange); }
+    .note-block.accent-magenta { border-top: 5px solid var(--magenta); }
+    .note-block.accent-bronze { border-top: 5px solid var(--bronze); }
+
+    .note-block h3 {
+      margin: 0 0 .65rem;
+      color: var(--midnight);
+      font-size: 1.05rem;
+    }
+
+    .note-block p,
+    .note-block ul,
+    .note-block ol { margin: .6rem 0 0; }
+
+    .note-block ul,
+    .note-block ol { padding-left: 1.25rem; }
+
+    .note-block li + li { margin-top: .35rem; }
+
+    .note-table-wrap { overflow-x: auto; }
+
+    .note-table {
+      width: 100%;
+      margin-top: .75rem;
+      border-collapse: collapse;
+      font-size: .92rem;
+    }
+
+    .note-table th,
+    .note-table td {
+      padding: .75rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--grey);
+    }
+
+    .note-table th {
+      color: var(--white);
+      background: var(--midnight);
+    }
+
+    .key-term {
+      display: grid;
+      grid-template-columns: minmax(7rem, .35fr) 1fr;
+      gap: .7rem;
+      padding: .65rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .key-term:last-child { border-bottom: 0; }
+    .key-term strong { color: var(--magenta); }
+
+    .reference-list {
+      padding-left: 1.2rem;
+      overflow-wrap: anywhere;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2.2rem;
+      padding: 1.2rem 0;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: .8rem;
+    }
+
+    @media (max-width: 960px) {
+      .app-shell { display: block; }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 90;
+        width: min(86vw, var(--sidebar));
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+        box-shadow: 20px 0 60px rgba(0, 0, 0, .25);
+      }
+
+      body.menu-open { overflow: hidden; }
+      body.menu-open .sidebar { transform: translateX(0); }
+
+      .mobile-bar { display: flex; }
+
+      .content { padding-top: 1rem; }
+    }
+
+    @media (max-width: 680px) {
+      .hero { min-height: 22rem; }
+      .hero::after { right: 1rem; }
+      .rules-grid,
+      .week-body { grid-template-columns: 1fr; }
+      .note-block.full { grid-column: auto; }
+      .notes-header { align-items: start; flex-direction: column; }
+      .week-head { grid-template-columns: 4.8rem minmax(0, 1fr); }
+      .week-heading { padding: 1.2rem; }
+      .week-number strong { font-size: 2.25rem; }
+      .page-footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+
+    @media print {
+      @page { margin: 1.5cm; }
+      body { background: var(--white); }
+      .scroll-progress,
+      .sidebar,
+      .mobile-bar,
+      .guide-panel,
+      .empty-state,
+      .notes-status { display: none !important; }
+      .app-shell { display: block; }
+      .content { padding: 0; }
+      .hero {
+        min-height: 0;
+        margin-bottom: 1.2rem;
+        padding: 2rem;
+        box-shadow: none;
+      }
+      .week-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+      .note-block { break-inside: avoid; }
+    }
+  </style>
+</head>
+
+<body data-filled="true">
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi catatan kuliah">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">HP</div>
+        <div>
+          <strong>HAPPY PRISM</strong>
+          <span>Weekly Notes System</span>
+        </div>
+      </div>
+
+      <section class="course-card" aria-labelledby="courseName">
+        <p class="micro-label">Mata Kuliah</p>
+        <h2 id="courseName" data-field="course">Database III</h2>
+        <dl class="course-meta">
+          <div>
+            <dt>Kode</dt>
+            <dd data-field="course-code">Belum dicantumkan</dd>
+          </div>
+          <div>
+            <dt>Dosen</dt>
+            <dd data-field="lecturer">Belum dicantumkan</dd>
+          </div>
+          <div>
+            <dt>Prodi</dt>
+            <dd data-field="program">Teknik Informatika</dd>
+          </div>
+          <div>
+            <dt>Periode</dt>
+            <dd data-field="period">Belum dicantumkan</dd>
+          </div>
+        </dl>
+      </section>
+
+      <p class="nav-heading">Daftar Pertemuan</p>
+      <nav class="week-nav" id="weekNav" aria-label="Daftar catatan mingguan">
+        <span class="nav-empty">Belum ada minggu yang diisi</span>
+      </nav>
+
+      <div class="sidebar-actions">
+        <button class="button button-primary" id="printButton" type="button" aria-label="Cetak catatan atau simpan sebagai PDF">
+          Cetak / Simpan PDF
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="mobile-bar">
+        <strong>HAPPY PRISM</strong>
+        <button class="button menu-button" id="menuButton" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
+      </div>
+
+      <header class="hero" id="top">
+        <div class="prism-lines" aria-hidden="true"></div>
+        <p class="eyebrow">Ruang Belajar Mingguan</p>
+        <h1>Catatan Kuliah Mingguan</h1>
+        <p class="hero-copy">Satu ruang terstruktur untuk menyimpan konsep, pembahasan, contoh, refleksi, dan referensi dari setiap pertemuan.</p>
+        <div class="hero-tags" aria-label="Informasi catatan">
+          <span class="hero-tag" data-field="course">Database III</span>
+          <span class="hero-tag" data-field="period">Belum dicantumkan</span>
+          <span class="hero-tag" id="meetingCount">0 pertemuan</span>
+        </div>
+      </header>
+
+      <section class="guide-panel" id="claudeGuide" aria-labelledby="guideTitle">
+        <p class="section-kicker">Instruksi Pengisian</p>
+        <h2 class="section-title" id="guideTitle">Aturan kerja untuk Claude</h2>
+        <p class="section-intro">Base ini sengaja belum memuat materi. Saat materi diberikan, Claude harus mengisi area catatan tanpa mengubah desain, navigasi, atau fungsi halaman.</p>
+
+        <ol class="rules-grid">
+          <li>
+            <strong>Gunakan materi pengguna</strong>
+            <span>Jaga urutan topik. Jangan menambah fakta, sumber, atau pertemuan tanpa dasar.</span>
+          </li>
+          <li>
+            <strong>Isi metadata utama</strong>
+            <span>Ganti nama mata kuliah, kode, dosen, program studi, serta periode pada semua slot.</span>
+          </li>
+          <li>
+            <strong>Salin template minggu</strong>
+            <span>Buat satu artikel untuk setiap pertemuan dengan nomor, id, dan judul yang unik.</span>
+          </li>
+          <li>
+            <strong>Susun catatan utuh</strong>
+            <span>Bahas tujuan, konsep, uraian, contoh, istilah, rangkuman, latihan, dan referensi.</span>
+          </li>
+          <li>
+            <strong>Jaga akurasi akademik</strong>
+            <span>Jangan mengarang sitasi. Tandai secara jujur ketika materi belum menyediakan referensi.</span>
+          </li>
+          <li>
+            <strong>Kembalikan file lengkap</strong>
+            <span>Hasil akhir harus berupa index.html utuh yang dapat dibuka langsung tanpa internet.</span>
+          </li>
+        </ol>
+
+        <div class="ai-command">
+          <strong>Perintah singkat:</strong> Isi base ini menggunakan materi yang saya lampirkan. Patuhi KONTRAK PENGISIAN UNTUK CLAUDE di bagian head. Pertahankan desain dan kembalikan satu index.html lengkap.
+        </div>
+      </section>
+
+      <section aria-labelledby="notesTitle">
+        <div class="notes-header">
+          <div>
+            <p class="section-kicker">Arsip Pertemuan</p>
+            <h2 class="section-title" id="notesTitle">Catatan per minggu</h2>
+          </div>
+          <span class="notes-status" id="notesStatus">Siap diisi</span>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          <div>
+            <div class="empty-symbol" aria-hidden="true"></div>
+            <h2>Area catatan masih kosong</h2>
+            <p>Kirim file ini bersama materi kuliah kepada Claude. Struktur minggu akan muncul otomatis setelah area konten diisi.</p>
+          </div>
+        </div>
+
+        <!-- AI-CONTENT-START: CLAUDE MENEMPEL SEMUA ARTICLE .week-card DI DALAM ELEMEN INI -->
+        <div id="weeklyNotes" data-ai-edit-zone="weekly-notes">
+    <article class="week-card" id="minggu-03" data-week="03">
+      <header class="week-head">
+        <div class="week-number"><span>Minggu</span><strong>03</strong></div>
+        <div class="week-heading">
+          <p>Data Mining &middot; Lecture 4 (CSE 881)</p>
+          <h2>Klasifikasi dengan Decision Tree</h2>
+        </div>
+      </header>
+
+      <div class="week-body">
+        <section class="note-block accent-sky">
+          <h3>Tujuan Pembelajaran</h3>
+          <ul>
+            <li>Mendefinisikan klasifikasi: tuple (x, y), training set, dan model yang memetakan x ke label y.</li>
+            <li>Membaca struktur decision tree dan menerapkannya pada data uji dengan menelusuri dari root ke leaf.</li>
+            <li>Menjelaskan Algoritma Hunt beserta dua masalah desain: cara memecah data dan kapan berhenti.</li>
+            <li>Menentukan test condition untuk atribut biner, nominal, ordinal, dan kontinu.</li>
+            <li>Menghitung Gini, Entropy, Classification Error, Information Gain, dan Gain Ratio secara manual.</li>
+          </ul>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Konsep Inti</h3>
+          <p>Klasifikasi adalah proses <strong>belajar dari data berlabel</strong> agar dapat menebak label data baru. Decision tree melakukannya dengan serangkaian pertanyaan atribut (misalnya &ldquo;Home Owner?&rdquo;) yang membagi data secara rekursif. Setiap pertanyaan dipilih secara <strong>greedy</strong>: yang membuat simpul anak paling <em>murni</em> (impurity paling rendah). Pemilihan ini diukur dengan Gini, Entropy, atau Classification Error.</p>
+        </section>
+
+        <section class="note-block full accent-pink">
+          <h3>Pembahasan Utama</h3>
+
+          <h4>1. Definisi dan contoh tugas klasifikasi</h4>
+          <p>Diberikan kumpulan record (<em>training set</em>) berbentuk tuple (<strong>x</strong>, <strong>y</strong>). <strong>x</strong> adalah himpunan atribut (predictor, variabel independen, input) dan <strong>y</strong> adalah label kelas (response, variabel dependen, output). Tugasnya: mempelajari model yang memetakan setiap x ke salah satu label y yang sudah ditentukan.</p>
+          <div class="note-table-wrap">
+            <table class="note-table">
+              <tr><th>Tugas</th><th>Atribut (x)</th><th>Label kelas (y)</th></tr>
+              <tr><td>Mengategorikan email</td><td>Fitur dari header dan isi email</td><td>spam / non-spam</td></tr>
+              <tr><td>Mengidentifikasi sel tumor</td><td>Fitur dari hasil MRI</td><td>ganas / jinak</td></tr>
+              <tr><td>Mengatalogkan galaksi</td><td>Fitur dari citra teleskop</td><td>elips, spiral, tak beraturan</td></tr>
+            </table>
+          </div>
+
+          <h4>2. Alur membangun model</h4>
+          <p>Ada dua tahap. <strong>Induksi</strong>: algoritma pembelajar membangun model dari training set. <strong>Deduksi</strong>: model diterapkan pada test set yang labelnya belum diketahui (tanda &ldquo;?&rdquo;). Decision tree hanyalah satu dari banyak teknik. Slide mengelompokkannya sebagai berikut.</p>
+          <ul>
+            <li><strong>Base classifier</strong>: Decision Tree, Rule-based, Nearest-neighbor, Neural Network, Na&iuml;ve Bayes dan Bayesian Belief Network, Support Vector Machine.</li>
+            <li><strong>Ensemble classifier</strong>: Boosting, Bagging, Random Forest.</li>
+          </ul>
+
+          <h4>3. Anatomi decision tree</h4>
+          <p>Data latihan: 10 peminjam dengan atribut <em>Home Owner</em> (kategorikal), <em>Marital Status</em> (kategorikal), <em>Annual Income</em> (kontinu), dan kelas <em>Defaulted Borrower</em>. Pohon hasilnya: root <strong>Home Owner</strong>; jika Yes &rarr; NO; jika No &rarr; simpul <strong>MarSt</strong>. Di MarSt, Married &rarr; NO, sedangkan Single/Divorced &rarr; simpul <strong>Income</strong> (&lt; 80K &rarr; NO, &gt; 80K &rarr; YES). Atribut pada simpul disebut <em>splitting attribute</em>; simpul akhir (kotak biru) adalah <em>leaf</em> berisi label kelas.</p>
+          <p><strong>Menerapkan model:</strong> uji data (Home Owner = No, Marital Status = Married, Income = 80K). Mulai dari root, Home Owner = No &rarr; ke MarSt; Married &rarr; leaf NO. Maka Defaulted diberi label <strong>No</strong>; nilai Income tidak dipakai. Slide juga menekankan bahwa <strong>lebih dari satu pohon dapat cocok dengan data yang sama</strong> (pohon alternatif dengan root MarSt), sehingga perlu kriteria untuk memilih pohon yang baik.</p>
+
+          <h4>4. Algoritma Hunt</h4>
+          <p>Algoritma induksi yang ada: Hunt (salah satu yang paling awal), CART, ID3, C4.5, SLIQ, SPRINT. Hunt memakai D<sub>t</sub>, yaitu himpunan record training yang sampai di simpul t.</p>
+          <ol>
+            <li>Jika semua record di D<sub>t</sub> berkelas sama y<sub>t</sub>, maka t adalah <strong>leaf</strong> berlabel y<sub>t</sub>.</li>
+            <li>Jika D<sub>t</sub> berisi lebih dari satu kelas, pilih <strong>attribute test</strong> untuk memecah data menjadi subset, lalu terapkan prosedur yang sama secara rekursif pada tiap subset.</li>
+          </ol>
+          <p>Pada data peminjam, tahap (a) satu leaf &ldquo;Defaulted = No&rdquo; (kelas mayoritas); (b) pecah di Home Owner; (c) cabang No dipecah di Marital Status; (d) cabang Single/Divorced dipecah di Income (&lt; 80K = No, &ge; 80K = Yes).</p>
+
+          <h4>5. Dua masalah desain induksi</h4>
+          <ul>
+            <li><strong>Bagaimana memecah record?</strong> Perlu cara menyatakan test condition (bergantung tipe atribut) dan ukuran kebaikan sebuah test condition.</li>
+            <li><strong>Kapan berhenti?</strong> Berhenti bila semua record sekelas atau bernilai atribut identik. Boleh juga <em>early termination</em>.</li>
+          </ul>
+
+          <h4>6. Test condition menurut tipe atribut</h4>
+          <div class="note-table-wrap">
+            <table class="note-table">
+              <tr><th>Tipe atribut</th><th>Multi-way split</th><th>Binary (2-way) split</th></tr>
+              <tr><td>Nominal (mis. Marital Status)</td><td>Satu cabang per nilai: Single, Divorced, Married</td><td>Bagi nilai jadi dua himpunan, mis. {Married} vs {Single, Divorced}. Perlu mencari partisi optimal.</td></tr>
+              <tr><td>Ordinal (mis. Shirt Size)</td><td>Satu cabang per nilai</td><td>Harus <strong>menjaga urutan</strong>: {Small, Medium} vs {Large, Extra Large} sah; {Small, Large} vs {Medium, Extra Large} <em>melanggar</em> urutan.</td></tr>
+              <tr><td>Kontinu (mis. Annual Income)</td><td>Diskretisasi menjadi rentang, mis. &lt;10K, [10K,25K), [25K,50K), [50K,80K), &gt;80K</td><td>Keputusan biner A &lt; v atau A &ge; v, misalnya Income &gt; 80K?</td></tr>
+            </table>
+          </div>
+          <p>Untuk atribut kontinu ada dua pendekatan. <strong>Diskretisasi</strong> ke atribut ordinal: <em>statis</em> (sekali di awal) atau <em>dinamis</em> (interval sama, frekuensi sama/persentil, atau clustering). <strong>Keputusan biner</strong> mempertimbangkan semua kemungkinan cut dan memilih yang terbaik, tetapi lebih mahal secara komputasi.</p>
+
+          <h4>7. Ukuran impurity simpul</h4>
+          <p>Bandingkan Gambar 25: sebelum split ada 10 record kelas 0 dan 10 record kelas 1. Manakah yang terbaik: Gender, Car Type, atau Customer ID? Pendekatan greedy lebih menyukai simpul dengan distribusi kelas yang lebih <strong>murni</strong>: simpul (C0:5, C1:5) berimpuritas tinggi, sedangkan (C0:9, C1:1) rendah. Tiga ukurannya (p(j|t) = frekuensi relatif kelas j di simpul t):</p>
+          <div class="note-table-wrap">
+            <table class="note-table">
+              <tr><th>Ukuran</th><th>Rumus</th><th>Maks.</th><th>Min.</th></tr>
+              <tr><td>Gini</td><td>1 &minus; &Sigma; [p(j|t)]&sup2;</td><td>1 &minus; 1/n<sub>c</sub></td><td>0</td></tr>
+              <tr><td>Entropy</td><td>&minus; &Sigma; p(j|t) log<sub>2</sub> p(j|t)</td><td>log<sub>2</sub> n<sub>c</sub></td><td>0</td></tr>
+              <tr><td>Classification Error</td><td>1 &minus; max<sub>i</sub> P(i|t)</td><td>1 &minus; 1/n<sub>c</sub></td><td>0</td></tr>
+            </table>
+          </div>
+          <p>Nilai maksimum tercapai saat record tersebar merata (informasi paling sedikit); nilai 0 saat semua record satu kelas (informasi paling berguna). Ketiganya berbentuk lengkung dengan puncak di p = 0,5 pada kasus dua kelas.</p>
+          <div class="note-table-wrap">
+            <table class="note-table">
+              <tr><th>Simpul (C1, C2)</th><th>Gini</th><th>Entropy</th><th>Error</th></tr>
+              <tr><td>(0, 6)</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>(1, 5)</td><td>1 &minus; (1/6)&sup2; &minus; (5/6)&sup2; = 0,278</td><td>0,65</td><td>1/6</td></tr>
+              <tr><td>(2, 4)</td><td>1 &minus; (2/6)&sup2; &minus; (4/6)&sup2; = 0,444</td><td>0,92</td><td>1/3</td></tr>
+              <tr><td>(3, 3)</td><td>0,500</td><td>1</td><td>0,5</td></tr>
+            </table>
+          </div>
+          <p>Catatan: pada slide 38, baris Entropy (1,5) tertulis log<sub>2</sub>(1/6) untuk suku kedua; yang benar log<sub>2</sub>(5/6). Hasil 0,65 tetap benar.</p>
+
+          <h4>8. Mencari split terbaik</h4>
+          <ol>
+            <li>Hitung impurity <strong>P</strong> sebelum split.</li>
+            <li>Hitung impurity <strong>M</strong> setelah split: impurity tiap anak, lalu rata-rata berbobot.</li>
+            <li>Pilih test condition dengan <strong>Gain = P &minus; M</strong> terbesar (setara: M terkecil).</li>
+          </ol>
+          <p>Untuk simpul p yang dipecah menjadi k anak: GINI<sub>split</sub> = &Sigma; (n<sub>i</sub>/n) &middot; GINI(i), dengan n<sub>i</sub> jumlah record di anak i dan n jumlah record di induk. Gini dipakai di CART, SLIQ, dan SPRINT. Bobot membuat partisi yang <em>besar dan murni</em> lebih diutamakan.</p>
+          <p><strong>Atribut biner.</strong> Induk (C1 = 6, C2 = 6), Gini = 0,500. Split B? menghasilkan N1 (5, 1) dan N2 (2, 4). Gini(N1) = 1 &minus; (5/6)&sup2; &minus; (1/6)&sup2; = 0,278; Gini(N2) = 1 &minus; (2/6)&sup2; &minus; (4/6)&sup2; = 0,444. Gini anak = 6/12 &times; 0,278 + 6/12 &times; 0,444 = <strong>0,361</strong>, jadi Gain = 0,500 &minus; 0,361 = 0,139.</p>
+          <p><strong>Atribut kategorikal.</strong> Kumpulkan count matrix per nilai, lalu bandingkan (data Car Type, 20 record):</p>
+          <div class="note-table-wrap">
+            <table class="note-table">
+              <tr><th>Split Car Type</th><th>C1 / C2 per cabang</th><th>Gini</th></tr>
+              <tr><td>Multi-way: Family | Sports | Luxury</td><td>1/3 | 8/0 | 1/7</td><td>0,163</td></tr>
+              <tr><td>Biner: {Sports, Luxury} | {Family}</td><td>9/7 | 1/3</td><td>0,468</td></tr>
+              <tr><td>Biner: {Sports} | {Family, Luxury}</td><td>8/0 | 2/10</td><td>0,167</td></tr>
+            </table>
+          </div>
+          <p>Verifikasi multi-way: (4/20)(0,375) + (8/20)(0) + (8/20)(0,219) = 0,163. Multi-way terendah, tetapi di antara split biner {Sports} vs {Family, Luxury} terbaik.</p>
+          <p><strong>Atribut kontinu.</strong> Mencoba setiap nilai v dan memindai seluruh database untuk tiap v itu boros karena pekerjaan berulang. Cara efisien: (1) <strong>urutkan</strong> nilai atribut, (2) <strong>pindai linear</strong> sambil memperbarui count matrix dan Gini, (3) pilih posisi split dengan Gini terkecil. Pada data Income terurut (60, 70, 75, 85, 90, 95, 100, 120, 125, 220), posisi split di titik tengah antar nilai. Split terbaik di <strong>97</strong> dengan Gini 0,300: sisi &le; 97 berisi 3 Yes + 3 No (Gini 0,5, bobot 6/10), sisi &gt; 97 berisi 4 No (Gini 0, bobot 4/10), total 0,3.</p>
+
+          <h4>9. Entropy, Information Gain, dan Gain Ratio</h4>
+          <p><strong>Information Gain</strong> = Entropy(p) &minus; &Sigma; (n<sub>i</sub>/n) Entropy(i). Pilih split yang memaksimalkan gain (dipakai ID3 dan C4.5). Perhitungan entropy mirip dengan Gini.</p>
+          <p><strong>Masalahnya:</strong> Information Gain cenderung memilih split dengan <em>banyak partisi kecil tetapi murni</em>. Pada contoh 20 pelanggan, Customer ID menghasilkan 20 anak, masing-masing berisi satu record, sehingga entropy semua anak = 0 dan gain tertinggi (= 1), padahal atribut ini tidak berguna untuk memprediksi pelanggan baru.</p>
+          <p><strong>Gain Ratio</strong> = GAIN<sub>split</sub> / SplitINFO, dengan SplitINFO = &minus; &Sigma; (n<sub>i</sub>/n) log<sub>2</sub>(n<sub>i</sub>/n). Partisi beranak banyak dihukum karena SplitINFO-nya besar. Dipakai pada C4.5 untuk mengatasi kelemahan Information Gain.</p>
+
+          <h4>10. Classification Error vs Gini</h4>
+          <p>Error(t) = 1 &minus; max<sub>i</sub> P(i|t). Kelemahannya: kurang peka. Induk (C1 = 7, C2 = 3): Gini = 0,42 dan Error = 0,3. Split A? menghasilkan N1 (3, 0) dan N2 (4, 3). Gini anak = 3/10 &times; 0 + 7/10 &times; 0,489 &asymp; 0,343 (slide menulis 0,342), jadi Gini membaik. Error anak = 3/10 &times; 0 + 7/10 &times; 3/7 = 0,3, <strong>tidak berubah</strong>. Karena itu Gini/Entropy lebih dipakai untuk memilih split.</p>
+
+          <h4>11. Kelebihan decision tree</h4>
+          <ul>
+            <li>Murah untuk dibangun dan sangat cepat mengklasifikasi record baru.</li>
+            <li>Mudah diinterpretasi bila pohonnya kecil.</li>
+            <li>Akurasinya sebanding dengan teknik klasifikasi lain pada banyak dataset sederhana.</li>
+          </ul>
+        </section>
+
+        <section class="note-block full accent-orange">
+          <h3>Contoh atau Penerapan</h3>
+          <p><strong>Kasus: memilih root pada data Defaulted Borrower (sistem penilaian kredit).</strong> Dari 10 record ada 3 Yes (ID 5, 8, 10) dan 7 No, sehingga Gini induk = 1 &minus; 0,3&sup2; &minus; 0,7&sup2; = <strong>0,42</strong>. Split Home Owner: Yes = 3 record (ID 1, 4, 7) semuanya No, Gini 0; No = 7 record (3 Yes, 4 No), Gini = 1 &minus; (3/7)&sup2; &minus; (4/7)&sup2; = 0,489. Gini split = 0,3 &times; 0 + 0,7 &times; 0,489 = <strong>0,343</strong>, Gain = 0,42 &minus; 0,343 = 0,077. Pola ini sama dengan contoh slide 45.</p>
+          <p><strong>Kasus: memilih atribut pada 20 pelanggan dealer (C0 = 10, C1 = 10).</strong> Perhitungan tambahan untuk memperjelas materi:</p>
+          <div class="note-table-wrap">
+            <table class="note-table">
+              <tr><th>Atribut</th><th>Info Gain</th><th>SplitINFO</th><th>Gain Ratio</th></tr>
+              <tr><td>Gender (6/4 | 4/6)</td><td>0,029</td><td>1,000</td><td>0,029</td></tr>
+              <tr><td>Car Type (1/3 | 8/0 | 1/7)</td><td>0,620</td><td>1,522</td><td>0,407</td></tr>
+              <tr><td>Customer ID (20 anak)</td><td>1,000</td><td>4,322</td><td>0,231</td></tr>
+            </table>
+          </div>
+          <p>Info Gain memilih Customer ID (menyesatkan); Gain Ratio memilih <strong>Car Type</strong>.</p>
+          <p><strong>Kaitan dengan SQL.</strong> Count matrix dapat diperoleh dengan agregasi. Contoh menghitung Gini split untuk Car Type (tabel <code>pelanggan</code>, kolom <code>car_type</code> dan <code>kelas</code>; sintaks gaya MySQL):</p>
+<pre style="overflow-x:auto;padding:.8rem;background:#F0F0F0;border-radius:8px;font-size:.85rem">WITH cnt AS (
+  SELECT car_type,
+         SUM(kelas = 'C0') AS c0,
+         SUM(kelas = 'C1') AS c1
+  FROM pelanggan
+  GROUP BY car_type
+)
+SELECT SUM( (c0 + c1) / (SELECT COUNT(*) FROM pelanggan)
+            * (1 - POWER(c0/(c0+c1), 2) - POWER(c1/(c0+c1), 2)) ) AS gini_split
+FROM cnt;   -- hasil untuk data slide: &asymp; 0,163</pre>
+        </section>
+
+        <section class="note-block full accent-magenta">
+          <h3>Istilah Penting</h3>
+          <div class="key-term"><strong>Training set</strong><span>Kumpulan record berlabel yang dipakai membangun model.</span></div>
+          <div class="key-term"><strong>Induksi / Deduksi</strong><span>Induksi: membangun model dari data latih. Deduksi: menerapkan model pada data uji.</span></div>
+          <div class="key-term"><strong>Splitting attribute</strong><span>Atribut yang dipakai sebuah simpul untuk memecah data.</span></div>
+          <div class="key-term"><strong>Leaf</strong><span>Simpul akhir yang menyimpan label kelas.</span></div>
+          <div class="key-term"><strong>Algoritma Hunt</strong><span>Induksi rekursif: leaf bila satu kelas, selain itu pecah dengan attribute test.</span></div>
+          <div class="key-term"><strong>Impurity</strong><span>Tingkat campuran kelas dalam simpul; semakin murni semakin baik.</span></div>
+          <div class="key-term"><strong>Gini index</strong><span>1 &minus; &Sigma; p&sup2;; dipakai CART, SLIQ, SPRINT.</span></div>
+          <div class="key-term"><strong>Entropy / Info Gain</strong><span>Ukuran ketidakpastian dan penurunannya setelah split; dipakai ID3 dan C4.5.</span></div>
+          <div class="key-term"><strong>Gain Ratio</strong><span>Info Gain dibagi SplitINFO untuk menghukum split beranak banyak (C4.5).</span></div>
+          <div class="key-term"><strong>Diskretisasi</strong><span>Mengubah atribut kontinu menjadi rentang ordinal (statis atau dinamis).</span></div>
+        </section>
+
+        <section class="note-block full accent-bronze">
+          <h3>Rangkuman</h3>
+          <p>Klasifikasi mempelajari pemetaan atribut x ke label y dari training set; decision tree mewujudkannya sebagai pohon pertanyaan yang diterapkan dari root ke leaf. Pohon dibangun rekursif (Algoritma Hunt) dengan memilih, secara greedy, test condition yang menurunkan impurity paling besar, sesuai tipe atribut dan jumlah cabangnya.</p>
+          <p>Gini, Entropy, dan Classification Error mengukur impurity; Gini dan Info Gain dipakai luas, Info Gain perlu dikoreksi Gain Ratio agar tidak memilih atribut seperti ID, dan Error kurang peka. Pohon cepat, murah, dan mudah dibaca.</p>
+        </section>
+
+        <section class="note-block accent-sky">
+          <h3>Refleksi atau Latihan</h3>
+          <ol>
+            <li>Terapkan pohon peminjam pada data uji: Home Owner = Yes, Married, 120K; dan Home Owner = No, Single, 60K. Apa label masing-masing?</li>
+            <li>Hitung Gini, Entropy, dan Error untuk simpul (C1 = 3, C2 = 3) dan (C1 = 4, C2 = 0).</li>
+            <li>Induk (C1 = 8, C2 = 4). Split X menghasilkan (6, 1) dan (2, 3). Hitung Gini split dan Gain.</li>
+            <li>Mengapa {Small, Large} vs {Medium, Extra Large} tidak sah untuk Shirt Size?</li>
+            <li>Mengapa Customer ID tidak layak dijadikan splitting attribute meski gain-nya tertinggi?</li>
+            <li>Buat query SQL count matrix untuk kolom Marital Status pada tabel peminjam, lalu hitung Gini split multi-way-nya.</li>
+          </ol>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Referensi</h3>
+          <ol class="reference-list">
+            <li>Slide &ldquo;CSE 881: Data Mining &ndash; Lecture 4 (Classification with Decision Trees)&rdquo;, materi Database III Minggu 3.</li>
+            <li>Referensi lain belum dicantumkan dalam materi sumber.</li>
+          </ol>
+        </section>
+      </div>
+    </article>
+      </div>
+        <!-- AI-CONTENT-END -->
+      </section>
+
+      <footer class="page-footer">
+        <span>HAPPY PRISM Weekly Notes</span>
+        <span>Dirancang untuk catatan kuliah yang terstruktur dan mudah dicetak.</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- CLAUDE: salin isi template ini ke #weeklyNotes untuk setiap pertemuan, lalu isi seluruh slot. -->
+  <template id="weekTemplate">
+    <article class="week-card" id="minggu-01" data-week="01">
+      <header class="week-head">
+        <div class="week-number">
+          <span>Minggu</span>
+          <strong>01</strong>
+        </div>
+        <div class="week-heading">
+          <p>[TANGGAL / SUBTOPIK OPSIONAL]</p>
+          <h2>[JUDUL TOPIK PERTEMUAN]</h2>
+        </div>
+      </header>
+
+      <div class="week-body">
+        <section class="note-block accent-sky">
+          <h3>Tujuan Pembelajaran</h3>
+          <ul>
+            <li>[Tujuan pembelajaran pertama]</li>
+            <li>[Tujuan pembelajaran berikutnya]</li>
+          </ul>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Konsep Inti</h3>
+          <p>[Jelaskan ide utama pertemuan secara ringkas dan akurat.]</p>
+        </section>
+
+        <section class="note-block full accent-pink">
+          <h3>Pembahasan Utama</h3>
+          <p>[Uraikan materi secara sistematis. Tambahkan subjudul h4 bila pembahasan panjang.]</p>
+        </section>
+
+        <section class="note-block accent-orange">
+          <h3>Contoh atau Penerapan</h3>
+          <p>[Berikan contoh yang relevan dengan materi pengguna.]</p>
+        </section>
+
+        <section class="note-block accent-magenta">
+          <h3>Istilah Penting</h3>
+          <div class="key-term">
+            <strong>[Istilah]</strong>
+            <span>[Definisi singkat]</span>
+          </div>
+        </section>
+
+        <section class="note-block full accent-bronze">
+          <h3>Rangkuman</h3>
+          <p>[Tulis simpulan pertemuan dalam satu atau dua paragraf ringkas.]</p>
+        </section>
+
+        <section class="note-block accent-sky">
+          <h3>Refleksi atau Latihan</h3>
+          <ol>
+            <li>[Pertanyaan pemahaman atau refleksi]</li>
+            <li>[Latihan penerapan]</li>
+          </ol>
+        </section>
+
+        <section class="note-block accent-emerald">
+          <h3>Referensi</h3>
+          <ol class="reference-list">
+            <li>[Cantumkan hanya sumber yang tersedia atau terverifikasi]</li>
+          </ol>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    (() => {
+      const body = document.body;
+      const sidebar = document.getElementById('sidebar');
+      const menuButton = document.getElementById('menuButton');
+      const printButton = document.getElementById('printButton');
+      const weekNav = document.getElementById('weekNav');
+      const weeklyNotes = document.getElementById('weeklyNotes');
+      const emptyState = document.getElementById('emptyState');
+      const meetingCount = document.getElementById('meetingCount');
+      const notesStatus = document.getElementById('notesStatus');
+      const progress = document.getElementById('scrollProgress');
+
+      const weeks = [...weeklyNotes.querySelectorAll('.week-card')];
+      const twoDigits = value => String(value).padStart(2, '0');
+
+      weekNav.innerHTML = '';
+      emptyState.hidden = weeks.length > 0;
+      meetingCount.textContent = `${weeks.length} pertemuan`;
+      notesStatus.textContent = weeks.length ? `${weeks.length} minggu tersusun` : 'Siap diisi';
+
+      if (!weeks.length) {
+        weekNav.innerHTML = '<span class="nav-empty">Belum ada minggu yang diisi</span>';
+      } else {
+        weeks.forEach((week, index) => {
+          const number = week.dataset.week || twoDigits(index + 1);
+          const title = week.querySelector('h2')?.textContent?.trim() || `Pertemuan ${number}`;
+          const link = document.createElement('a');
+          link.href = `#${week.id}`;
+          link.dataset.number = number;
+          link.textContent = title;
+          link.addEventListener('click', () => {
+            body.classList.remove('menu-open');
+            menuButton.setAttribute('aria-expanded', 'false');
+          });
+          weekNav.appendChild(link);
+        });
+
+        const links = [...weekNav.querySelectorAll('a')];
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            links.forEach(link => link.classList.toggle('active', link.hash === `#${entry.target.id}`));
+          });
+        }, { rootMargin: '-18% 0px -68% 0px' });
+        weeks.forEach(week => observer.observe(week));
+      }
+
+      menuButton.addEventListener('click', () => {
+        const isOpen = body.classList.toggle('menu-open');
+        menuButton.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      sidebar.addEventListener('click', event => event.stopPropagation());
+      document.addEventListener('click', event => {
+        if (window.innerWidth <= 960 && body.classList.contains('menu-open') && !sidebar.contains(event.target) && event.target !== menuButton) {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          body.classList.remove('menu-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      printButton.addEventListener('click', () => window.print());
+
+      const updateProgress = () => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = total > 0 ? (window.scrollY / total) * 100 : 0;
+        progress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      };
+
+      updateProgress();
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+    })();
+  </script>
+</body>
+</html>
