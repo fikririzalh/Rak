@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gini Index &amp; Entropy - Mammal vs Reptile</title>
+<style>
+:root{--bg:#ffffff;--ink:#1c2230;--mut:#5c6578;--line:#d3d9e4;--soft:#f2f5fa;--acc:#1d4ed8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161f;--ink:#e6eaf3;--mut:#9aa4b8;--line:#2c3446;--soft:#1b2130;--acc:#8fb0ff}}
+:root[data-theme="dark"]{--bg:#12161f;--ink:#e6eaf3;--mut:#9aa4b8;--line:#2c3446;--soft:#1b2130;--acc:#8fb0ff}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:740px;margin:0 auto;padding:20px 16px 56px}
+h1{font-size:1.6rem;line-height:1.2;margin:6px 0 14px}
+h2{font-size:1.35rem;margin:38px 0 10px;padding-top:14px;border-top:3px solid var(--ink)}
+h3{font-size:1.12rem;margin:28px 0 8px;padding-top:8px;border-top:1px solid var(--line)}
+h4{font-size:1rem;margin:20px 0 6px}
+p{margin:0 0 10px;max-width:70ch}
+.wrap{overflow-x:auto;margin:8px 0 14px}
+table{border-collapse:collapse;min-width:300px}
+th,td{border:1px solid var(--line);padding:5px 12px;text-align:center}
+th{background:var(--soft)}
+.f{background:var(--soft);border-radius:8px;padding:8px 14px;margin:8px 0;font-family:Georgia,"Times New Roman",serif;font-size:1.02rem;overflow-x:auto;white-space:nowrap}
+.box{border:2px solid var(--ink);font-weight:700;display:inline-block;padding:6px 16px}
+pre{background:var(--soft);border-radius:8px;padding:10px 14px;overflow-x:auto;font:.9rem/1.45 ui-monospace,Menlo,Consolas,monospace}
+.ok{color:var(--mut);font-size:.92rem}
+.warn{border-left:5px solid var(--acc);background:var(--soft);padding:8px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+tr.best td{font-weight:800;background:var(--soft)}
+</style>
+</head>
+<body>
+<main id="m"></main>
+<script>
+var o=[],k=0;
+var H1=t=>o.push('<h1>'+t+'</h1>'),H=t=>o.push('<h2>'+t+'</h2>'),H3=t=>o.push('<h3>'+t+'</h3>'),H4=t=>o.push('<h4>'+t+'</h4>');
+var P=t=>o.push('<p>'+t+'</p>'),PRE=t=>o.push('<pre>'+t+'</pre>');
+var FB=(...l)=>o.push('<div class="f">'+l.join('<br>')+'</div>');
+var B=t=>o.push('<div class="f box">'+t+'</div>');
+var T=(h,rows)=>o.push('<div class="wrap"><table><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+rows.map(r=>(r.cls?'<tr class="'+r.cls+'">':'<tr>')+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table></div>');
+var N=x=>{var v=parseFloat(x.toFixed(6));return String(Object.is(v,-0)?0:v)};
+var S=(a,b)=>a+'<sub>'+b+'</sub>',L='log<sub>2</sub>';
+var R=[['Yes','Yes','Yes',4,'Mammal'],['Yes','Yes','Yes',4,'Mammal'],['Yes','Yes','Yes',4,'Mammal'],['Yes','Yes','Yes',4,'Mammal'],['No','Yes','Yes',4,'Mammal'],['Yes','No','Yes',4,'Mammal'],['Yes','No','Yes',2,'Reptile'],['Yes','No','Yes',2,'Reptile'],['No','No','No',0,'Reptile'],['Yes','No','Yes',2,'Reptile']].map((x,i)=>({n:i+1,t:x[0],h:x[1],b:x[2],l:x[3],s:x[4]}));
+var COLS=['No','Toothed','Hair','Breathes','Legs','Species'];
+var st=rows=>{var n=rows.length,m=rows.filter(x=>x.s=='Mammal').length,r=n-m,pm=m/n,pr=r/n;return{n:n,m:m,r:r,pm:pm,pr:pr,g:1-pm*pm-pr*pr,e:(m==0||r==0)?0:-(pm*Math.log2(pm)+pr*Math.log2(pr))}};
+var rt=(rows,ci)=>T(COLS,rows.map(x=>{var c=[x.n,x.t,x.h,x.b,x.l,x.s];if(ci)c[ci]='<b>'+c[ci]+'</b>';c[5]='<b>'+c[5]+'</b>';return c}));
+var ct=s=>T(['Species','Jumlah','Proporsi'],[['Mammal',s.m,s.m+'/'+s.n+' = '+N(s.pm)],['Reptile',s.r,s.r+'/'+s.n+' = '+N(s.pr)],['<b>Total</b>','<b>'+s.n+'</b>','<b>1.0</b>']]);
+var gL=(s,nm)=>[S('Gini',nm)+' = 1 − ('+s.m+'/'+s.n+')² − ('+s.r+'/'+s.n+')²','= 1 − '+N(s.pm*s.pm)+' − '+N(s.pr*s.pr),'= '+N(s.g)];
+var eL=(s,nm)=>{if(s.m==0||s.r==0){var a=s.m?1:0,b=s.r?1:0;return [S('Entropy',nm)+' = −['+a+' '+L+'('+a+') + '+b+' '+L+'('+b+')] = −[0 + 0]','= 0 (murni)']}
+var lm=Math.log2(s.pm),lr=Math.log2(s.pr);
+return [S('Entropy',nm)+' = −[('+s.m+'/'+s.n+') '+L+'('+s.m+'/'+s.n+') + ('+s.r+'/'+s.n+') '+L+'('+s.r+'/'+s.n+')]','= −['+N(s.pm)+'('+N(lm)+') + '+N(s.pr)+'('+N(lr)+')]','= '+N(-s.pm*lm)+' + '+N(-s.pr*lr),'= '+N(s.e)]};
+
+var A=(a,b,c)=>R.filter(x=>x[a]==b||(c!==undefined&&x[a]==c));
+var all=st(R);
+var SP=[
+{h2:'C. Atribut Toothed',id:'Toothed',col:1,a:'Toothed',g:[['Toothed = Yes',x=>x.t=='Yes'],['Toothed = No',x=>x.t=='No']]},
+{h2:'D. Atribut Hair',id:'Hair',col:2,a:'Hair',g:[['Hair = Yes',x=>x.h=='Yes'],['Hair = No',x=>x.h=='No']]},
+{h2:'E. Atribut Breathes',id:'Breathes',col:3,a:'Breathes',g:[['Breathes = Yes',x=>x.b=='Yes'],['Breathes = No',x=>x.b=='No']]},
+{h2:'F. Atribut Legs',intro:'Legs bernilai angka (0, 2, 4). Nilai 0 adalah nilai yang sah, bukan data kosong. Ada dua cara split: <b>multiway</b> (tiga cabang sekaligus) atau <b>binary</b> (dua cabang, ada 3 kemungkinan pengelompokan).',h3:'F1. Multiway Split {0} {2} {4}',id:'Legs multiway',col:4,a:'Legs',g:[['Legs = 0',x=>x.l==0],['Legs = 2',x=>x.l==2],['Legs = 4',x=>x.l==4]]},
+{h3:'F2. Binary Split Opsi A: {0} vs {2, 4}',id:'Legs binary A {0} vs {2,4}',col:4,a:'Legs',g:[['Legs = {0}',x=>x.l==0],['Legs = {2, 4}',x=>x.l==2||x.l==4]]},
+{h3:'F3. Binary Split Opsi B: {2} vs {0, 4}',id:'Legs binary B {2} vs {0,4}',col:4,a:'Legs',g:[['Legs = {2}',x=>x.l==2],['Legs = {0, 4}',x=>x.l==0||x.l==4]]},
+{h3:'F4. Binary Split Opsi C: {4} vs {0, 2}',id:'Legs binary C {4} vs {0,2}',col:4,a:'Legs',g:[['Legs = {4}',x=>x.l==4],['Legs = {0, 2}',x=>x.l==0||x.l==2]]}
+];
+
+H1('Gini Index &amp; Entropy — Dataset Mammal vs Reptile');
+P('Semua angka di halaman ini dihitung langsung dari tabel dataset yang sama. Nilai dibulatkan 6 angka desimal di langkah hitung, dan Information Gain ditampilkan 4 angka desimal.');
+
+H('A. Dataset dan Parent');
+T(COLS,R.map(x=>[x.n,x.t,x.h,x.b,x.l,x.s]));
+H4('Pemeriksaan jumlah data');
+ct(all);
+FB('P(Mammal) = 6/10 = 0.6','P(Reptile) = 4/10 = 0.4');
+P('Ini menjadi <b>Parent Node</b>.');
+H4('Gini Parent');
+FB.apply(null,gL(all,'Parent'));
+B(S('Gini','Parent')+' = '+N(all.g));
+H4('Entropy Parent');
+FB.apply(null,eL(all,'Parent'));
+B(S('Entropy','Parent')+' = '+N(all.e));
+
+H('B. Rumus');
+FB('Gini = 1 − Σ p<sub>i</sub>²','Gini Index (weighted) = Σ (N<sub>j</sub>/N) × Gini<sub>j</sub>');
+FB('Entropy = −Σ p<sub>i</sub> '+L+'(p<sub>i</sub>)','Weighted Entropy = Σ (N<sub>j</sub>/N) × Entropy<sub>j</sub>','IG = '+S('Entropy','Parent')+' − Weighted Entropy');
+P('Node murni (satu kelas saja) punya Gini = 0 dan Entropy = 0. Suku 0 '+L+'(0) dianggap 0. Gini Index dan Weighted Entropy makin kecil makin bagus, Information Gain makin besar makin bagus.');
+
+var res=[];
+SP.forEach(sp=>{
+if(sp.h2)H(sp.h2);
+if(sp.intro)P(sp.intro);
+if(sp.h3)H3(sp.h3);
+var gs=sp.g.map(q=>{var rows=R.filter(q[1]);return{name:q[0],rows:rows,s:st(rows)}});
+PRE('10 DATA → '+sp.a+'\n'+gs.map((g,i)=>(i<gs.length-1?'├─ ':'└─ ')+g.name+'  ('+g.s.n+' data: '+g.s.m+' Mammal, '+g.s.r+' Reptile)').join('\n'));
+gs.forEach(g=>{
+H4('Langkah '+(++k)+'. Child: '+g.name+' (baris '+g.rows.map(x=>x.n).join(', ')+')');
+rt(g.rows,sp.col);ct(g.s);
+FB.apply(null,gL(g.s,g.name.replace(/ /g,'')));
+FB.apply(null,eL(g.s,g.name.replace(/ /g,'')));
+});
+var sn=gs.reduce((a,g)=>a+g.s.n,0),sm=gs.reduce((a,g)=>a+g.s.m,0),sr=gs.reduce((a,g)=>a+g.s.r,0);
+o.push('<p class="ok">Cek: total child '+gs.map(g=>g.s.n).join(' + ')+' = '+sn+'; Mammal '+gs.map(g=>g.s.m).join(' + ')+' = '+sm+'; Reptile '+gs.map(g=>g.s.r).join(' + ')+' = '+sr+' '+((sn==10&&sm==6&&sr==4)?'✔':'✘')+'</p>');
+H4('Weighted Gini dan Weighted Entropy');
+T(['Child','Jumlah','Gini','Entropy','Bobot'],gs.map(g=>[g.name,g.s.n,N(g.s.g),N(g.s.e),g.s.n+'/10 = '+N(g.s.n/10)]));
+var gi=gs.reduce((a,g)=>a+g.s.n/10*g.s.g,0),we=gs.reduce((a,g)=>a+g.s.n/10*g.s.e,0),ig=all.e-we;
+FB('Gini Index = '+gs.map(g=>'('+g.s.n+'/10)('+N(g.s.g)+')').join(' + '),'= '+gs.map(g=>N(g.s.n/10*g.s.g)).join(' + ')+' = '+N(gi));
+FB('Weighted Entropy = '+gs.map(g=>'('+g.s.n+'/10)('+N(g.s.e)+')').join(' + '),'= '+gs.map(g=>N(g.s.n/10*g.s.e)).join(' + ')+' = '+N(we));
+FB('IG = '+N(all.e)+' − '+N(we)+' = '+ig.toFixed(4));
+B('Gini Index = '+N(gi)+' &nbsp;|&nbsp; Weighted Entropy = '+N(we)+' &nbsp;|&nbsp; IG = '+ig.toFixed(4));
+res.push({id:sp.id,gi:gi,we:we,ig:ig});
+});
+
+H('G. Rekapitulasi');
+var mg=Math.min.apply(null,res.map(r=>r.gi)),mi=Math.max.apply(null,res.map(r=>r.ig));
+T(['Split','Gini Index','Weighted Entropy','Information Gain'],res.map(r=>{var x=[r.id,N(r.gi),N(r.we),r.ig.toFixed(4)];if(Math.abs(r.gi-mg)<1e-9&&Math.abs(r.ig-mi)<1e-9)x.cls='best';return x}));
+P('Pembanding: '+S('Gini','Parent')+' = '+N(all.g)+' dan '+S('Entropy','Parent')+' = '+N(all.e)+'. Baris yang ditebalkan adalah split terbaik (Gini Index terkecil dan IG terbesar).');
+P('Jika tiap atribut diambil split terbaiknya, urutan dari terbaik ke terburuk sama di Gini maupun Entropy: <b>Legs, Hair, Breathes, Toothed</b>.');
+
+H('H. Hasil Akhir Decision Tree');
+P('<b>Legs menjadi root</b>: Gini Index = 0 (terkecil) dan IG = '+N(all.e)+' (sama dengan Entropy Parent, nilai maksimum yang mungkin). Semua child murni, jadi langsung menjadi leaf dan tidak perlu split lagi.');
+H4('Multiway');
+PRE('               Legs\n           /     |     \\\n          0      2      4\n          |      |      |\n       Reptile Reptile Mammal');
+H4('Binary opsi C');
+PRE('               Legs\n             /       \\\n          {4}         {0, 2}\n           |             |\n        Mammal        Reptile');
+o.push('<div class="warn"><b>Catatan</b><br>Selisih di angka desimal ke-6 atau lebih antara hitungan kalkulator dan halaman ini berasal dari pembulatan, bukan kesalahan. Pakai 4 angka desimal di jawaban akhir tugas supaya konsisten.</div>');
+document.getElementById('m').innerHTML=o.join('');
+</script>
+</body>
+</html>
